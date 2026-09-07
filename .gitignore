@@ -1,0 +1,10 @@
+.gradle/
+.idea/
+local.properties
+**/build/
+*.iml
+app/libs/*.aar
+app/src/main/assets/models/zh/*.onnx
+app/src/main/assets/models/en/*.onnx
+app/src/main/assets/models/uz/*.onnx
+app/src/main/assets/models/ru/vosk-model-small-ru-0.22/
