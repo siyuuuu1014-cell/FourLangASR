@@ -22,6 +22,8 @@ import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
 import com.example.fourlangasr.translation.PlaceholderTranslationEngine
+import com.example.fourlangasr.tts.AndroidSystemTtsEngine
+import com.example.fourlangasr.tts.TtsEngine
 import com.example.fourlangasr.vad.VadEngine
 import com.example.fourlangasr.speaker.SpeakerManager
 import com.example.fourlangasr.lid.LidEngine
@@ -129,6 +131,65 @@ class MainActivity : AppCompatActivity() {
     private val translationEngine =
         PlaceholderTranslationEngine()
 
+    /*
+     * TTS v0.1（Android 系统 TextToSpeech）。
+     *
+     * post-ASR pipeline：
+     * ASR 文本 → Translation abstraction → TTS
+     * 朗读的是 translation result 的 outputText / speechLanguage。
+     *
+     * 回调线程不保证是主线程，UI 更新经 runOnUiThread；
+     * 销毁后 conversationActive == false，回调不再触碰 UI 文案。
+     */
+    private val ttsListener =
+        object : TtsEngine.Listener {
+
+            override fun onSpeakStart() {
+
+                runOnUiThread {
+
+                    if (
+                        conversationActive
+                    ) {
+
+                        showStatus(
+                            "TTS 播放中…"
+                        )
+                    }
+                }
+            }
+
+            override fun onSpeakDone() {
+
+                runOnUiThread {
+
+                    if (
+                        conversationActive
+                    ) {
+
+                        showStatus(
+                            "继续监听…"
+                        )
+                    }
+                }
+            }
+
+            override fun onSpeakError(
+                reason: String,
+            ) {
+
+                runOnUiThread {
+
+                    showStatus(
+                        "TTS: $reason"
+                    )
+                }
+            }
+        }
+
+    private lateinit var ttsEngine:
+            TtsEngine
+
     private var lastAsrText: String = ""
 
     /**
@@ -205,6 +266,16 @@ class MainActivity : AppCompatActivity() {
                 asrManager = asrManager,
                 codeSwitchRecovery =
                     codeSwitchRecovery,
+            )
+
+        /*
+         * TTS v0.1：系统 TextToSpeech，异步初始化。
+         * 生命周期跟随 Activity（onDestroy 统一 release）。
+         */
+        ttsEngine =
+            AndroidSystemTtsEngine(
+                applicationContext,
+                ttsListener,
             )
 
         /*
@@ -558,12 +629,30 @@ class MainActivity : AppCompatActivity() {
             val target =
                 selectedTarget()
 
-            textTranslation.text =
+            val result =
                 translationEngine.translate(
                     text = lastAsrText,
                     source = source,
                     target = target,
                 )
+
+            /*
+             * 翻译模型未接入时显示原文并明确提示，
+             * 避免用户误以为已完成翻译。
+             */
+            textTranslation.text =
+                if (
+                    result.translated ||
+                    result.outputText.isBlank()
+                ) {
+
+                    result.outputText
+
+                } else {
+
+                    result.outputText +
+                            "\n（翻译模型未接入，当前朗读 ASR 原文）"
+                }
         }
     }
 
@@ -1070,6 +1159,16 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        /*
+         * TTS 防回灌 gate：
+         * 播放期间麦克风仍在采集，但这些帧不得进入 VAD——
+         * 否则扬声器声音会触发 VAD → ASR → 又朗读，形成循环。
+         * AudioRecord 本身继续运行，不反复启停。
+         */
+        if (ttsEngine.isSpeaking) {
+            return
+        }
+
         try {
 
             /*
@@ -1308,6 +1407,14 @@ class MainActivity : AppCompatActivity() {
             }
 
             showAsrResult(
+                pipeline
+            )
+
+            /*
+             * post-ASR pipeline：
+             * 识别文本 → Translation abstraction → TTS。
+             */
+            speakPipelineResult(
                 pipeline
             )
 
@@ -1589,6 +1696,55 @@ class MainActivity : AppCompatActivity() {
 
     /**
      * ============================================================
+     * post-ASR pipeline：
+     * ASR 最终文本 → Translation abstraction → TTS
+     * ============================================================
+     *
+     * actual source language 取 pipeline.routedLanguage：
+     * AUTO  模式 = LID 路由最终选择的语言；
+     * MANUAL 模式 = 用户锁定语言。
+     * 两者在 ConversationPipeline.processSegment 里统一折叠为
+     * routedLanguage，这里不重新从 UI spinner 猜测。
+     *
+     * 朗读语言一律取 translation result 的 speechLanguage：
+     * 真实翻译接入前 passthrough 保证 speechLanguage == sourceLanguage
+     * （中文 ASR 永远用中文 voice，即使 targetLanguage 选了 EN）。
+     */
+    private fun speakPipelineResult(
+        pipeline: PipelineResult,
+    ) {
+
+        val text =
+            pipeline.displayText
+
+        if (
+            text.isBlank()
+        ) {
+
+            return
+        }
+
+        val target =
+            selectedTarget()
+
+        val translation =
+            translationEngine.translate(
+                text = text,
+                source =
+                    pipeline.routedLanguage,
+                target = target,
+            )
+
+        ttsEngine.speak(
+            text =
+                translation.outputText,
+            language =
+                translation.speechLanguage,
+        )
+    }
+
+    /**
+     * ============================================================
      * 模型加载指标
      * ============================================================
      */
@@ -1731,6 +1887,12 @@ class MainActivity : AppCompatActivity() {
          * 最后释放当前 ASR。
          */
         asrManager.release()
+
+        /*
+         * TTS（Android 系统引擎）：stop + shutdown。
+         * 追加在现有 release 序列末尾，不改动已有顺序。
+         */
+        ttsEngine.release()
 
         super.onDestroy()
     }
