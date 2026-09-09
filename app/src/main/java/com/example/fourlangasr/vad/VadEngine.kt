@@ -19,6 +19,18 @@ class VadEngine(
          * = 32 ms
          */
         const val WINDOW_SIZE = 512
+
+        /*
+         * Silero VAD 参数。
+         * MainActivity 的指标面板直接引用这些常量。
+         */
+        const val SPEECH_PROB_THRESHOLD = 0.5F
+
+        const val END_SILENCE_SEC = 0.6F
+
+        const val MIN_SPEECH_SEC = 0.25F
+
+        const val MAX_SPEECH_SEC = 15.0F
     }
 
     private val vad: Vad
@@ -32,26 +44,26 @@ class VadEngine(
                 /*
                  * 语音概率阈值
                  */
-                threshold = 0.5F,
+                threshold = SPEECH_PROB_THRESHOLD,
 
                 /*
                  * 连续静音约 0.6 秒：
                  * 判断当前一句结束。
                  */
-                minSilenceDuration = 0.6F,
+                minSilenceDuration = END_SILENCE_SEC,
 
                 /*
                  * 小于约 0.25 秒的声音，
                  * 不作为有效语音。
                  */
-                minSpeechDuration = 0.25F,
+                minSpeechDuration = MIN_SPEECH_SEC,
 
                 windowSize = WINDOW_SIZE,
 
                 /*
                  * 防止一句话无限增长。
                  */
-                maxSpeechDuration = 15.0F,
+                maxSpeechDuration = MAX_SPEECH_SEC,
             )
 
         val config =

@@ -316,12 +316,12 @@ class LidEngine(
 
         val fourWayLogits =
             FloatArray(
-                TARGETS.size
+                LidTarget.entries.size
             ) {
                 i ->
 
                 logits[
-                    TARGETS[i].index
+                    LidTarget.entries[i].classIndex
                 ]
             }
 
@@ -331,13 +331,13 @@ class LidEngine(
             )
 
         val ranking =
-            TARGETS.indices
+            LidTarget.entries.indices
                 .map {
                     i ->
 
                     TargetScore(
                         code =
-                            TARGETS[i].code,
+                            LidTarget.entries[i].code,
                         probability =
                             fourWayProbabilities[i],
                     )
@@ -362,12 +362,12 @@ class LidEngine(
 
         for (
             target
-            in TARGETS
+            in LidTarget.entries
         ) {
 
             targetMass +=
                 fullProbabilities[
-                    target.index
+                    target.classIndex
                 ]
         }
 
@@ -552,11 +552,6 @@ class LidEngine(
         val mode: String,
     )
 
-    private data class Target(
-        val code: String,
-        val index: Int,
-    )
-
     private data class TargetScore(
         val code: String,
         val probability: Float,
@@ -585,27 +580,11 @@ class LidEngine(
         private const val MIN_EXPECTED_MODEL_BYTES =
             80_000_000L
 
+        /*
+         * VoxLingua107 输出 107 类 logits。
+         * 四个目标语种的索引见 lid/LidTarget.kt。
+         */
         private const val NUM_CLASSES =
             107
-
-        private val TARGETS =
-            listOf(
-                Target(
-                    code = "zh",
-                    index = 106,
-                ),
-                Target(
-                    code = "en",
-                    index = 20,
-                ),
-                Target(
-                    code = "ru",
-                    index = 77,
-                ),
-                Target(
-                    code = "uz",
-                    index = 101,
-                ),
-            )
     }
 }
