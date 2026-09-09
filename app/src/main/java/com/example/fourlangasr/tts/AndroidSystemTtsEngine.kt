@@ -145,17 +145,28 @@ class AndroidSystemTtsEngine(
         }
 
     /*
-     * Google TTS fallback 引擎（懒创建）：
+     * Fallback 引擎池（懒创建，按包名缓存）：
      * 系统默认引擎缺少某语言语音（如俄语）时，
-     * 若已安装 Google TTS 则用它朗读。
+     * 依次尝试手机里所有已安装的 TTS 引擎
+     * （Google TTS、讯飞等自带多语言 voice 的引擎）。
      */
-    private var fallbackTts:
-            TextToSpeech? =
-        null
+    private val fallbackEngines =
+        mutableMapOf<
+                String,
+                FallbackEngine
+                >()
 
-    @Volatile
-    private var fallbackReady =
-        false
+    /**
+     * 一个 fallback 引擎实例（init 异步完成，ready 前不可用）。
+     */
+    private class FallbackEngine(
+        val tts: TextToSpeech,
+    ) {
+
+        @Volatile
+        var ready =
+            false
+    }
 
     override val isReady: Boolean
         get() = ready
@@ -298,46 +309,11 @@ class AndroidSystemTtsEngine(
                     language
                 )
 
-            var activeEngine:
-                    TextToSpeech =
-                engine
-
-            var langResult =
-                engine.setLanguage(
-                    locale
+            val (activeEngine, langResult) =
+                resolveEngineForLocale(
+                    primary = engine,
+                    locale = locale,
                 )
-
-            if (
-                langResult <
-                TextToSpeech.LANG_AVAILABLE
-            ) {
-
-                ensureGoogleFallback()
-                    ?.let { fallback ->
-
-                        if (
-                            fallbackReady
-                        ) {
-
-                            val fbResult =
-                                fallback.setLanguage(
-                                    locale
-                                )
-
-                            if (
-                                fbResult >=
-                                TextToSpeech.LANG_AVAILABLE
-                            ) {
-
-                                activeEngine =
-                                    fallback
-
-                                langResult =
-                                    fbResult
-                            }
-                        }
-                    }
-            }
 
             val offline =
                 activeEngine
@@ -398,53 +374,19 @@ class AndroidSystemTtsEngine(
 
         /*
          * 引擎选择：默认引擎优先；它不支持该语言时，
-         * 若已安装 Google TTS（支持俄语等多语言语音包）则 fallback。
+         * 自动尝试所有已安装的其它 TTS 引擎
+         * （Google TTS / 讯飞等自带多语言 voice 的引擎）。
          */
         val locale =
             localeFor(
                 language
             )
 
-        var engine:
-                TextToSpeech =
-            primary
-
-        var langResult =
-            primary.setLanguage(
-                locale
+        val (engine, langResult) =
+            resolveEngineForLocale(
+                primary = primary,
+                locale = locale,
             )
-
-        if (
-            langResult <
-            TextToSpeech.LANG_AVAILABLE
-        ) {
-
-            ensureGoogleFallback()
-                ?.let { fallback ->
-
-                    if (
-                        fallbackReady
-                    ) {
-
-                        val fbResult =
-                            fallback.setLanguage(
-                                locale
-                            )
-
-                        if (
-                            fbResult >=
-                            TextToSpeech.LANG_AVAILABLE
-                        ) {
-
-                            engine =
-                                fallback
-
-                            langResult =
-                                fbResult
-                        }
-                    }
-                }
-        }
 
         Log.d(
             TAG,
@@ -570,103 +512,200 @@ class AndroidSystemTtsEngine(
         ready =
             false
 
-        fallbackTts
-            ?.shutdown()
+        synchronized(
+            fallbackEngines
+        ) {
 
-        fallbackTts =
-            null
+            fallbackEngines
+                .values
+                .forEach {
+                    engine ->
 
-        fallbackReady =
-            false
+                    engine
+                        .tts
+                        .shutdown()
+                }
+
+            fallbackEngines.clear()
+        }
     }
 
     /**
-     * 懒创建 Google TTS 实例（fallback 引擎）。
+     * 为某个 Locale 选择可用的引擎。
      *
-     * 仅当 Google TTS 已安装时可用；init 异步完成，
-     * 完成前 fallbackReady == false（本句会走缺失提示，
-     * 下一句自动重试即可）。
+     * @return (引擎, setLanguage 结果)；结果 >= 0 才可用。
      */
-    private fun ensureGoogleFallback():
-            TextToSpeech? {
+    private fun resolveEngineForLocale(
+        primary: TextToSpeech,
+        locale: Locale,
+    ): Pair<TextToSpeech, Int> {
 
-        fallbackTts
-            ?.let {
-                return it
-            }
+        var engine =
+            primary
 
-        val installed =
-            try {
-
-                appContext
-                    .packageManager
-                    .getPackageInfo(
-                        GOOGLE_TTS_PACKAGE,
-                        0,
-                    )
-
-                true
-
-            } catch (
-                _: Throwable
-            ) {
-
-                false
-            }
+        var result =
+            primary.setLanguage(
+                locale
+            )
 
         if (
-            !installed
+            result >=
+            TextToSpeech.LANG_AVAILABLE
         ) {
+
+            return engine to result
+        }
+
+        /*
+         * 默认引擎不支持该语言：逐个尝试已安装的其它 TTS 引擎
+         * （Google TTS / 讯飞等自带多语言 voice 的引擎）。
+         * init 是异步的，本句可能全部未 ready 而失败，
+         * 下一句会自动重试。
+         */
+        for (
+        fallback
+        in ensureFallbackEngines()
+        ) {
+
+            if (
+                !fallback.ready
+            ) {
+
+                continue
+            }
+
+            val fbResult =
+                fallback
+                    .tts
+                    .setLanguage(
+                        locale
+                    )
+
+            if (
+                fbResult >=
+                TextToSpeech.LANG_AVAILABLE
+            ) {
+
+                Log.d(
+                    TAG,
+                    "fallback engine picked: " +
+                            fallback.tts.voice
+                                ?.name
+                                ?: "?"
+                )
+
+                return fallback.tts to fbResult
+            }
+        }
+
+        return engine to result
+    }
+
+    /**
+     * 懒创建所有已安装的其它 TTS 引擎（排除系统默认引擎）。
+     */
+    @Synchronized
+    private fun ensureFallbackEngines():
+            List<FallbackEngine> {
+
+        val primary =
+            tts
+                ?: return emptyList()
+
+        val defaultEngine =
+            primary
+                .getDefaultEngine()
+
+        val installed =
+            primary
+                .getEngines()
+
+        for (
+        info
+        in installed
+        ) {
+
+            val pkg =
+                info.name
+
+            if (
+                pkg ==
+                defaultEngine ||
+                fallbackEngines.containsKey(
+                    pkg
+                )
+            ) {
+
+                continue
+            }
+
+            val engine =
+                TextToSpeech(
+                    appContext,
+                    { status ->
+
+                        val fb =
+                            fallbackEngines[
+                                pkg
+                            ]
+                                ?: return@TextToSpeech
+
+                        if (
+                            status ==
+                            TextToSpeech.SUCCESS
+                        ) {
+
+                            Log.d(
+                                TAG,
+                                "fallback engine ready: $pkg " +
+                                        "(${info.label})"
+                            )
+
+                            fb
+                                .tts
+                                .setOnUtteranceProgressListener(
+                                    progressListener
+                                )
+
+                            fb.ready =
+                                true
+
+                        } else {
+
+                            Log.w(
+                                TAG,
+                                "fallback engine init failed: " +
+                                        "$pkg status=$status"
+                            )
+
+                            fb.ready =
+                                false
+                        }
+                    },
+                    pkg,
+                )
+
+            fallbackEngines[
+                pkg
+            ] =
+                FallbackEngine(
+                    engine
+                )
 
             Log.d(
                 TAG,
-                "google tts not installed, skip fallback"
+                "fallback engine creating: $pkg (${info.label})"
             )
-
-            return null
         }
 
-        val engine =
-            TextToSpeech(
-                appContext,
-                { status ->
+        synchronized(
+            fallbackEngines
+        ) {
 
-                    if (
-                        status ==
-                        TextToSpeech.SUCCESS
-                    ) {
-
-                        Log.d(
-                            TAG,
-                            "google fallback init OK"
-                        )
-
-                        fallbackTts
-                            ?.setOnUtteranceProgressListener(
-                                progressListener
-                            )
-
-                        fallbackReady =
-                            true
-
-                    } else {
-
-                        Log.w(
-                            TAG,
-                            "google fallback init failed: $status"
-                        )
-
-                        fallbackReady =
-                            false
-                    }
-                },
-                GOOGLE_TTS_PACKAGE,
-            )
-
-        fallbackTts =
-            engine
-
-        return engine
+            return fallbackEngines
+                .values
+                .toList()
+        }
     }
 
     private fun localeFor(
