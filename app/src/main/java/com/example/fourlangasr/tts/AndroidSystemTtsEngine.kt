@@ -55,6 +55,108 @@ class AndroidSystemTtsEngine(
     private val utteranceCounter =
         AtomicInteger(0)
 
+    /*
+     * 共享进度监听：主引擎与 Google fallback 引擎都挂同一个实例，
+     * isSpeaking 状态机全局唯一，utterance 事件统一上报。
+     */
+    private val progressListener =
+        object :
+            UtteranceProgressListener() {
+
+            override fun onStart(
+                utteranceId: String?
+            ) {
+
+                isSpeaking =
+                    true
+
+                Log.d(
+                    TAG,
+                    "onStart: $utteranceId"
+                )
+
+                listener.onSpeakStart()
+            }
+
+            override fun onDone(
+                utteranceId: String?
+            ) {
+
+                isSpeaking =
+                    false
+
+                Log.d(
+                    TAG,
+                    "onDone: $utteranceId"
+                )
+
+                listener.onSpeakDone()
+            }
+
+            /*
+             * QUEUE_FLUSH 打断旧 utterance 时回调的是
+             * onStop 而不是 onDone：必须复位 isSpeaking，
+             * 否则极端情况下 VAD gate 会永久卡住。
+             * 不通知 UI（若随后有新 utterance，onStart 会通知）。
+             */
+            override fun onStop(
+                utteranceId: String?,
+                interrupted: Boolean,
+            ) {
+
+                isSpeaking =
+                    false
+            }
+
+            override fun onError(
+                utteranceId: String?
+            ) {
+
+                isSpeaking =
+                    false
+
+                Log.w(
+                    TAG,
+                    "onError: $utteranceId"
+                )
+
+                listener.onSpeakError(
+                    "TTS playback error"
+                )
+            }
+
+            override fun onError(
+                utteranceId: String?,
+                errorCode: Int,
+            ) {
+
+                isSpeaking =
+                    false
+
+                Log.w(
+                    TAG,
+                    "onError: $utteranceId code=$errorCode"
+                )
+
+                listener.onSpeakError(
+                    "TTS playback error ($errorCode)"
+                )
+            }
+        }
+
+    /*
+     * Google TTS fallback 引擎（懒创建）：
+     * 系统默认引擎缺少某语言语音（如俄语）时，
+     * 若已安装 Google TTS 则用它朗读。
+     */
+    private var fallbackTts:
+            TextToSpeech? =
+        null
+
+    @Volatile
+    private var fallbackReady =
+        false
+
     override val isReady: Boolean
         get() = ready
 
@@ -97,89 +199,7 @@ class AndroidSystemTtsEngine(
                 )
 
                 engine.setOnUtteranceProgressListener(
-                    object :
-                        UtteranceProgressListener() {
-
-                        override fun onStart(
-                            utteranceId: String?
-                        ) {
-
-                            isSpeaking =
-                                true
-
-                            Log.d(
-                                TAG,
-                                "onStart: $utteranceId"
-                            )
-
-                            listener.onSpeakStart()
-                        }
-
-                        override fun onDone(
-                            utteranceId: String?
-                        ) {
-
-                            isSpeaking =
-                                false
-
-                            Log.d(
-                                TAG,
-                                "onDone: $utteranceId"
-                            )
-
-                            listener.onSpeakDone()
-                        }
-
-                        /*
-                         * QUEUE_FLUSH 打断旧 utterance 时回调的是
-                         * onStop 而不是 onDone：必须复位 isSpeaking，
-                         * 否则极端情况下 VAD gate 会永久卡住。
-                         * 不通知 UI（若随后有新 utterance，onStart 会通知）。
-                         */
-                        override fun onStop(
-                            utteranceId: String?,
-                            interrupted: Boolean,
-                        ) {
-
-                            isSpeaking =
-                                false
-                        }
-
-                        override fun onError(
-                            utteranceId: String?
-                        ) {
-
-                            isSpeaking =
-                                false
-
-                            Log.w(
-                                TAG,
-                                "onError: $utteranceId"
-                            )
-
-                            listener.onSpeakError(
-                                "TTS playback error"
-                            )
-                        }
-
-                        override fun onError(
-                            utteranceId: String?,
-                            errorCode: Int,
-                        ) {
-
-                            isSpeaking =
-                                false
-
-                            Log.w(
-                                TAG,
-                                "onError: $utteranceId code=$errorCode"
-                            )
-
-                            listener.onSpeakError(
-                                "TTS playback error ($errorCode)"
-                            )
-                        }
-                    }
+                    progressListener
                 )
 
                 ready =
@@ -257,6 +277,7 @@ class AndroidSystemTtsEngine(
          * 与 speak 完全一致的实测路径：
          * setLanguage 返回 >= 0（AVAILABLE/COUNTRY_AVAILABLE/
          * COUNTRY_VAR_AVAILABLE）且激活 voice 不依赖网络。
+         * 默认引擎不支持的语种再试 Google fallback。
          *
          * setLanguage 会切走引擎当前语音，但每次 speak 前都会
          * 重新 setLanguage，因此没有副作用。
@@ -277,13 +298,50 @@ class AndroidSystemTtsEngine(
                     language
                 )
 
-            val langResult =
+            var activeEngine:
+                    TextToSpeech =
+                engine
+
+            var langResult =
                 engine.setLanguage(
                     locale
                 )
 
+            if (
+                langResult <
+                TextToSpeech.LANG_AVAILABLE
+            ) {
+
+                ensureGoogleFallback()
+                    ?.let { fallback ->
+
+                        if (
+                            fallbackReady
+                        ) {
+
+                            val fbResult =
+                                fallback.setLanguage(
+                                    locale
+                                )
+
+                            if (
+                                fbResult >=
+                                TextToSpeech.LANG_AVAILABLE
+                            ) {
+
+                                activeEngine =
+                                    fallback
+
+                                langResult =
+                                    fbResult
+                            }
+                        }
+                    }
+            }
+
             val offline =
-                engine.voice
+                activeEngine
+                    .voice
                     ?.isNetworkConnectionRequired !=
                     true
 
@@ -296,7 +354,8 @@ class AndroidSystemTtsEngine(
                 TAG,
                 "availability ${language.code}: " +
                         "setLanguage=$langResult " +
-                        "voice=${engine.voice?.name ?: "none"} " +
+                        "fallback=${activeEngine !== engine} " +
+                        "voice=${activeEngine.voice?.name ?: "none"} " +
                         "offline=$offline -> $available"
             )
 
@@ -314,11 +373,11 @@ class AndroidSystemTtsEngine(
         language: AppLanguage,
     ): Boolean {
 
-        val engine =
+        val primary =
             tts
 
         if (
-            engine == null ||
+            primary == null ||
             !ready
         ) {
 
@@ -338,22 +397,60 @@ class AndroidSystemTtsEngine(
         }
 
         /*
-         * 切换 voice 并检查离线可用性。
+         * 引擎选择：默认引擎优先；它不支持该语言时，
+         * 若已安装 Google TTS（支持俄语等多语言语音包）则 fallback。
          */
         val locale =
             localeFor(
                 language
             )
 
-        val langResult =
-            engine.setLanguage(
+        var engine:
+                TextToSpeech =
+            primary
+
+        var langResult =
+            primary.setLanguage(
                 locale
             )
+
+        if (
+            langResult <
+            TextToSpeech.LANG_AVAILABLE
+        ) {
+
+            ensureGoogleFallback()
+                ?.let { fallback ->
+
+                    if (
+                        fallbackReady
+                    ) {
+
+                        val fbResult =
+                            fallback.setLanguage(
+                                locale
+                            )
+
+                        if (
+                            fbResult >=
+                            TextToSpeech.LANG_AVAILABLE
+                        ) {
+
+                            engine =
+                                fallback
+
+                            langResult =
+                                fbResult
+                        }
+                    }
+                }
+        }
 
         Log.d(
             TAG,
             "speak lang=${language.code} locale=$locale " +
                     "setLanguage=$langResult " +
+                    "fallback=${engine !== primary} " +
                     "voice=${engine.voice?.name ?: "none"} " +
                     "network=${engine.voice?.isNetworkConnectionRequired}"
         )
@@ -472,6 +569,104 @@ class AndroidSystemTtsEngine(
 
         ready =
             false
+
+        fallbackTts
+            ?.shutdown()
+
+        fallbackTts =
+            null
+
+        fallbackReady =
+            false
+    }
+
+    /**
+     * 懒创建 Google TTS 实例（fallback 引擎）。
+     *
+     * 仅当 Google TTS 已安装时可用；init 异步完成，
+     * 完成前 fallbackReady == false（本句会走缺失提示，
+     * 下一句自动重试即可）。
+     */
+    private fun ensureGoogleFallback():
+            TextToSpeech? {
+
+        fallbackTts
+            ?.let {
+                return it
+            }
+
+        val installed =
+            try {
+
+                appContext
+                    .packageManager
+                    .getPackageInfo(
+                        GOOGLE_TTS_PACKAGE,
+                        0,
+                    )
+
+                true
+
+            } catch (
+                _: Throwable
+            ) {
+
+                false
+            }
+
+        if (
+            !installed
+        ) {
+
+            Log.d(
+                TAG,
+                "google tts not installed, skip fallback"
+            )
+
+            return null
+        }
+
+        val engine =
+            TextToSpeech(
+                appContext,
+                { status ->
+
+                    if (
+                        status ==
+                        TextToSpeech.SUCCESS
+                    ) {
+
+                        Log.d(
+                            TAG,
+                            "google fallback init OK"
+                        )
+
+                        fallbackTts
+                            ?.setOnUtteranceProgressListener(
+                                progressListener
+                            )
+
+                        fallbackReady =
+                            true
+
+                    } else {
+
+                        Log.w(
+                            TAG,
+                            "google fallback init failed: $status"
+                        )
+
+                        fallbackReady =
+                            false
+                    }
+                },
+                GOOGLE_TTS_PACKAGE,
+            )
+
+        fallbackTts =
+            engine
+
+        return engine
     }
 
     private fun localeFor(
@@ -514,5 +709,12 @@ class AndroidSystemTtsEngine(
          */
         private const val TAG =
             "FourLangTTS"
+
+        /*
+         * Google TTS 引擎包名：支持俄语等多语言离线语音包，
+         * 作为默认引擎的语言 fallback。
+         */
+        const val GOOGLE_TTS_PACKAGE =
+            "com.google.android.tts"
     }
 }

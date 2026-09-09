@@ -10,11 +10,14 @@
     <!--
         Android 11+ 包可见性：允许 App 发现系统 TTS engine。
         不新增任何权限（TTS 不需要 INTERNET）。
+        com.google.android.tts 声明用于检测/直达 Google TTS 的
+        语音数据安装界面（系统引擎缺俄语等多语言语音时）。
     -->
     <queries>
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
+        <package android:name="com.google.android.tts" />
     </queries>
 
     <application

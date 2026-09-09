@@ -798,11 +798,25 @@ class MainActivity : AppCompatActivity() {
     /**
      * 打开系统 TTS 语音入口。
      *
-     * 优先 ACTION_INSTALL_TTS_DATA（引擎的语音数据下载页），
-     * 引擎不支持时退回系统"文字转语音"设置页。
-     * 系统 voice 无法由 App 注入——只能引导用户安装引擎语音包。
+     * 优先级：
+     * 1. Google TTS 的语音数据安装页（支持俄语等多语言语音包；
+     *    系统默认引擎如 ColorOS 只提供中文语音，装不了俄语）；
+     * 2. 默认引擎的 ACTION_INSTALL_TTS_DATA；
+     * 3. 系统"文字转语音"设置页。
+     *
+     * 系统 voice 无法由 App 注入——只能引导用户安装/切换引擎语音包。
      */
     private fun openTtsVoiceSettings() {
+
+        val googleIntent =
+            Intent(
+                TextToSpeech.Engine
+                    .ACTION_INSTALL_TTS_DATA
+            )
+                .setPackage(
+                    AndroidSystemTtsEngine
+                        .GOOGLE_TTS_PACKAGE
+                )
 
         val installIntent =
             Intent(
@@ -821,6 +835,16 @@ class MainActivity : AppCompatActivity() {
 
         val target =
             if (
+                googleIntent
+                    .resolveActivity(
+                        packageManager
+                    ) !=
+                null
+            ) {
+
+                googleIntent
+
+            } else if (
                 installIntent
                     .resolveActivity(
                         packageManager
@@ -863,6 +887,26 @@ class MainActivity : AppCompatActivity() {
                 "打开语音设置失败：${e.message}"
             )
         }
+    }
+
+    /**
+     * Google TTS 是否已安装（它能提供俄语等多语言离线语音包）。
+     */
+    private fun isGoogleTtsInstalled():
+            Boolean {
+
+        return Intent(
+            TextToSpeech.Engine
+                .ACTION_INSTALL_TTS_DATA
+        )
+            .setPackage(
+                AndroidSystemTtsEngine
+                    .GOOGLE_TTS_PACKAGE
+            )
+            .resolveActivity(
+                packageManager
+            ) !=
+            null
     }
 
     private fun updateSpeechRateButton() {
@@ -977,6 +1021,24 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
+        val guide =
+            if (
+                isGoogleTtsInstalled()
+            ) {
+
+                "系统默认引擎可能缺少该语言语音。\n" +
+                        "Google TTS 支持俄语等语音包——" +
+                        "点击下方按钮前往下载。"
+
+            } else {
+
+                "系统默认引擎缺少该语言语音（如俄语）。\n" +
+                        "请先安装 Google TTS（应用商店搜索 " +
+                        "\"Google 文字转语音\"），安装后回到本页\n" +
+                        "1. 系统设置 → 文字转语音 → 把引擎切换为 Google TTS\n" +
+                        "2. 再点这里下载对应语言的离线语音包。"
+            }
+
         androidx.appcompat.app
             .AlertDialog
             .Builder(
@@ -987,8 +1049,8 @@ class MainActivity : AppCompatActivity() {
             )
             .setMessage(
                 "$reason\n\n" +
-                        "系统语音包需要从 TTS 引擎下载，" +
-                        "App 无法自带安装。"
+                        "$guide\n\n" +
+                        "语音包由 TTS 引擎提供，App 无法自带安装。"
             )
             .setPositiveButton(
                 "去下载语音"
