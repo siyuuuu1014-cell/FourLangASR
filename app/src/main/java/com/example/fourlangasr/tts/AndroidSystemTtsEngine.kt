@@ -220,10 +220,47 @@ class AndroidSystemTtsEngine(
             return emptyMap()
         }
 
-        val voices =
-            engine.voices
-                ?: return emptyMap()
+        /*
+         * 诊断：ColorOS 等引擎的 getVoices() 列表可能与实际
+         * setLanguage 能力不一致（曾出现全 ✗ 但 zh/en 能播）。
+         * 保留日志用于对比，判断以 setLanguage 实测为准。
+         */
+        try {
 
+            val voices =
+                engine.voices
+
+            Log.d(
+                TAG,
+                "availability voices=${voices?.size ?: "null"}: " +
+                        (voices
+                            ?.joinToString(
+                                "; "
+                            ) { v ->
+                                "${v.name}(${v.locale})" +
+                                        "net=${v.isNetworkConnectionRequired}"
+                            }
+                            ?: "")
+            )
+
+        } catch (
+            e: Throwable
+        ) {
+
+            Log.w(
+                TAG,
+                "getVoices failed: ${e.message}"
+            )
+        }
+
+        /*
+         * 与 speak 完全一致的实测路径：
+         * setLanguage 返回 >= 0（AVAILABLE/COUNTRY_AVAILABLE/
+         * COUNTRY_VAR_AVAILABLE）且激活 voice 不依赖网络。
+         *
+         * setLanguage 会切走引擎当前语音，但每次 speak 前都会
+         * 重新 setLanguage，因此没有副作用。
+         */
         val result =
             mutableMapOf<
                     String,
@@ -240,15 +277,28 @@ class AndroidSystemTtsEngine(
                     language
                 )
 
-            val available =
-                voices.any { voice ->
+            val langResult =
+                engine.setLanguage(
+                    locale
+                )
 
-                    voice.locale
-                        ?.language ==
-                        locale.language &&
-                            !voice
-                                .isNetworkConnectionRequired
-                }
+            val offline =
+                engine.voice
+                    ?.isNetworkConnectionRequired !=
+                    true
+
+            val available =
+                langResult >=
+                        TextToSpeech.LANG_AVAILABLE &&
+                        offline
+
+            Log.d(
+                TAG,
+                "availability ${language.code}: " +
+                        "setLanguage=$langResult " +
+                        "voice=${engine.voice?.name ?: "none"} " +
+                        "offline=$offline -> $available"
+            )
 
             result[
                 language.code
