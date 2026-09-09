@@ -305,7 +305,14 @@ class OfflineNeuralTtsEngine(
 
             tts =
                 OfflineTts(
-                    appContext.assets,
+                    /*
+                     * 关键：从文件系统（filesDir 副本）加载模型时
+                     * assetManager 必须传 null——sherpa 会按 asset
+                     * 相对路径解析非空 assetManager 下的所有路径，
+                     * 绝对路径加载会直接 FATAL abort。
+                     * （sherpa-onnx file-utils.cc 的显式要求）
+                     */
+                    null,
                     config,
                 )
 
