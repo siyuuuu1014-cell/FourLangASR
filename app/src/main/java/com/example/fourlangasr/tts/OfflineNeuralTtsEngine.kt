@@ -11,6 +11,7 @@ import com.k2fsa.sherpa.onnx.OfflineTts
 import com.k2fsa.sherpa.onnx.OfflineTtsConfig
 import com.k2fsa.sherpa.onnx.OfflineTtsModelConfig
 import com.k2fsa.sherpa.onnx.OfflineTtsVitsModelConfig
+import java.io.File
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -254,9 +255,7 @@ class OfflineNeuralTtsEngine(
     }
 
     /**
-     * 懒加载：模型直接以 asset 相对路径加载
-     * （与 sherpa-onnx 官方 Android TTS 引擎 APK 的 Piper 用法一致：
-     * espeak-ng-data 同样放 assets 由 native 经 AssetManager 读取）。
+     * 懒加载：assets -> filesDir 复制（仅首次），再建 OfflineTts。
      */
     private fun ensureLoaded():
             OfflineTts? {
@@ -270,6 +269,9 @@ class OfflineNeuralTtsEngine(
 
         try {
 
+            val modelDir =
+                ensureModelFiles()
+
             val config =
                 OfflineTtsConfig(
                     model =
@@ -277,14 +279,23 @@ class OfflineNeuralTtsEngine(
                             vits =
                                 OfflineTtsVitsModelConfig(
                                     model =
-                                        ASSET_ROOT +
-                                                MODEL_ONNX,
+                                        File(
+                                            modelDir,
+                                            MODEL_ONNX,
+                                        )
+                                            .absolutePath,
                                     tokens =
-                                        ASSET_ROOT +
-                                                MODEL_TOKENS,
+                                        File(
+                                            modelDir,
+                                            MODEL_TOKENS,
+                                        )
+                                            .absolutePath,
                                     dataDir =
-                                        ASSET_ROOT +
-                                                ESPEAK_DIR,
+                                        File(
+                                            modelDir,
+                                            ESPEAK_DIR,
+                                        )
+                                            .absolutePath,
                                 ),
                             numThreads = 2,
                             debug = false,
@@ -325,6 +336,274 @@ class OfflineNeuralTtsEngine(
         }
     }
 
+    private fun ensureModelFiles():
+            File {
+
+        val modelDir =
+            File(
+                appContext.filesDir,
+                FILES_SUBDIR,
+            )
+
+        /*
+         * 完整 = onnx + 关键 G2P 文件 + 版本标记一致。
+         * 旧版本 APK 可能已复制过不完整/旧结构的 espeak-ng-data，
+         * 检测到不完整就整体删除重拷，避免 native 层崩溃。
+         */
+        val versionFile =
+            File(
+                modelDir,
+                VERSION_FILE,
+            )
+
+        val espeakCheck =
+            File(
+                modelDir,
+                ESPEAK_DIR,
+            )
+
+        val complete =
+            File(
+                modelDir,
+                MODEL_ONNX,
+            ).isFile &&
+                    File(
+                        espeakCheck,
+                        "phondata",
+                    ).isFile &&
+                    versionFile
+                        .takeIf {
+                            it.isFile
+                        }
+                        ?.readText()
+                        ?.trim() ==
+                    VERSION
+
+        if (
+            complete
+        ) {
+
+            return modelDir
+        }
+
+        Log.d(
+            TAG,
+            "model files incomplete or outdated, re-copying"
+        )
+
+        modelDir
+            .deleteRecursively()
+
+        check(
+            modelDir.mkdirs() ||
+                    modelDir.isDirectory
+        ) {
+            "Unable to create ${modelDir.absolutePath}"
+        }
+
+        copyAsset(
+            ASSET_ROOT + MODEL_ONNX,
+            File(
+                modelDir,
+                MODEL_ONNX,
+            ),
+        )
+
+        copyAsset(
+            ASSET_ROOT + MODEL_TOKENS,
+            File(
+                modelDir,
+                MODEL_TOKENS,
+            ),
+        )
+
+        val espeakDir =
+            File(
+                modelDir,
+                ESPEAK_DIR,
+            )
+
+        /*
+         * espeak-ng-data 是深目录（lang/、voices/ 等数百文件），
+         * 必须递归复制；只拷第一层会导致 espeak 加载失败。
+         */
+        copyAssetDir(
+            ASSET_ROOT + ESPEAK_DIR,
+            espeakDir,
+        )
+
+        /*
+         * 加载前校验关键 G2P 数据文件存在；
+         * 缺失时给出明确错误而不是让 native 层崩溃。
+         */
+        val required =
+            listOf(
+                "phondata",
+                "phonindex",
+                "phontab",
+                "intonations",
+                "ru_dict",
+            )
+
+        val missing =
+            required.filter { name ->
+
+                !File(
+                    espeakDir,
+                    name,
+                ).isFile
+            }
+
+        if (
+            missing.isNotEmpty()
+        ) {
+
+            throw IllegalStateException(
+                "espeak-ng-data incomplete, missing: " +
+                        missing
+            )
+        }
+
+        /*
+         * 复制完整后写入版本标记。
+         */
+        versionFile.writeText(
+            VERSION
+        )
+
+        Log.d(
+            TAG,
+            "model files ready in ${modelDir.absolutePath}"
+        )
+
+        return modelDir
+    }
+
+    /**
+     * 递归复制 assets 目录到 filesDir。
+     *
+     * AssetManager.list 对文件路径的返回值在不同版本语义不一
+     * （null 或空数组都可能），两种都按文件尝试复制；
+     * 对目录递归。复制失败只记日志，由后续关键文件校验兜底。
+     */
+    private fun copyAssetDir(
+        assetDir: String,
+        targetDir: File,
+    ) {
+
+        val children =
+            appContext
+                .assets
+                .list(
+                    assetDir
+                )
+
+        if (
+            children == null
+        ) {
+
+            return
+        }
+
+        check(
+            targetDir.mkdirs() ||
+                    targetDir.isDirectory
+        ) {
+            "Unable to create ${targetDir.absolutePath}"
+        }
+
+        for (
+        name
+        in children
+        ) {
+
+            val assetChild =
+                "$assetDir/$name"
+
+            val fileChild =
+                File(
+                    targetDir,
+                    name,
+                )
+
+            val grandchildren =
+                appContext
+                    .assets
+                    .list(
+                        assetChild
+                    )
+
+            val isDirectory =
+                grandchildren !=
+                        null &&
+                        grandchildren
+                            .isNotEmpty()
+
+            if (
+                isDirectory
+            ) {
+
+                copyAssetDir(
+                    assetChild,
+                    fileChild,
+                )
+
+            } else {
+
+                /*
+                 * null = 文件（标准语义）；空数组 = 部分版本的
+                 * 文件语义，同样按文件复制（open 失败则跳过，
+                 * 关键文件由 ensureModelFiles 校验）。
+                 */
+                try {
+
+                    copyAsset(
+                        assetChild,
+                        fileChild,
+                    )
+
+                } catch (
+                    e: Throwable
+                ) {
+
+                    Log.w(
+                        TAG,
+                        "copy failed (may be empty dir): " +
+                                "$assetChild - ${e.message}"
+                    )
+                }
+            }
+        }
+    }
+
+    private fun copyAsset(
+        assetPath: String,
+        target: File,
+    ) {
+
+        appContext
+            .assets
+            .open(
+                assetPath
+            )
+            .use { input ->
+
+                target
+                    .outputStream()
+                    .use { output ->
+
+                        input.copyTo(
+                            output,
+                            bufferSize =
+                                256 * 1024,
+                        )
+                    }
+            }
+    }
+
+    /**
+     * 播放合成音频（阻塞至播完或被打断）。
+     */
     private fun play(
         audio: GeneratedAudio,
         myGeneration: Int,
@@ -470,5 +749,18 @@ class OfflineNeuralTtsEngine(
 
         private const val ESPEAK_DIR =
             "espeak-ng-data"
+
+        /*
+         * filesDir 模型副本的版本标记：
+         * 资产或复制逻辑变化时递增，强制重拷。
+         */
+        private const val FILES_SUBDIR =
+            "tts_ru"
+
+        private const val VERSION =
+            "2"
+
+        private const val VERSION_FILE =
+            ".version"
     }
 }
