@@ -810,10 +810,13 @@ class MainActivity : AppCompatActivity() {
                     .ACTION_INSTALL_TTS_DATA
             )
 
+        /*
+         * 系统 TTS 设置页没有公开 SDK 常量，
+         * action 是固定字符串 com.android.settings.TTS_SETTINGS。
+         */
         val settingsIntent =
             Intent(
-                TextToSpeech.Engine
-                    .ACTION_TTS_SETTINGS
+                "com.android.settings.TTS_SETTINGS"
             )
 
         val target =
