@@ -363,37 +363,14 @@ class OfflineNeuralTtsEngine(
                 ESPEAK_DIR,
             )
 
-        check(
-            espeakDir.mkdirs() ||
-                    espeakDir.isDirectory
-        ) {
-            "Unable to create ${espeakDir.absolutePath}"
-        }
-
-        val entries =
-            appContext
-                .assets
-                .list(
-                    ASSET_ROOT + ESPEAK_DIR
-                )
-                ?: emptyArray()
-
-        for (
-        name
-        in entries
-        ) {
-
-            copyAsset(
-                ASSET_ROOT +
-                        ESPEAK_DIR +
-                        "/" +
-                        name,
-                File(
-                    espeakDir,
-                    name,
-                ),
-            )
-        }
+        /*
+         * espeak-ng-data 是深目录（lang/、voices/ 等数百文件），
+         * 必须递归复制；只拷第一层会导致 espeak 加载失败。
+         */
+        copyAssetDir(
+            ASSET_ROOT + ESPEAK_DIR,
+            espeakDir,
+        )
 
         Log.d(
             TAG,
@@ -401,6 +378,81 @@ class OfflineNeuralTtsEngine(
         )
 
         return modelDir
+    }
+
+    /**
+     * 递归复制 assets 目录到 filesDir。
+     */
+    private fun copyAssetDir(
+        assetDir: String,
+        targetDir: File,
+    ) {
+
+        val children =
+            appContext
+                .assets
+                .list(
+                    assetDir
+                )
+
+        if (
+            children == null
+        ) {
+
+            return
+        }
+
+        check(
+            targetDir.mkdirs() ||
+                    targetDir.isDirectory
+        ) {
+            "Unable to create ${targetDir.absolutePath}"
+        }
+
+        for (
+        name
+        in children
+        ) {
+
+            val assetChild =
+                "$assetDir/$name"
+
+            val fileChild =
+                File(
+                    targetDir,
+                    name,
+                )
+
+            /*
+             * AssetManager.list 对目录返回子项数组，对文件返回 null。
+             */
+            val grandchildren =
+                appContext
+                    .assets
+                    .list(
+                        assetChild
+                    )
+
+            if (
+                grandchildren ==
+                null
+            ) {
+
+                copyAsset(
+                    assetChild,
+                    fileChild,
+                )
+
+            } else if (
+                grandchildren.isNotEmpty()
+            ) {
+
+                copyAssetDir(
+                    assetChild,
+                    fileChild,
+                )
+            }
+        }
     }
 
     private fun copyAsset(
@@ -531,8 +583,10 @@ class OfflineNeuralTtsEngine(
 
         } finally {
 
-            track.release()
-
+            /*
+             * stopPlayback() 可能已释放本 track：
+             * 只在仍归属本引擎时释放，避免二次 release。
+             */
             if (
                 audioTrack ===
                 track
@@ -540,6 +594,13 @@ class OfflineNeuralTtsEngine(
 
                 audioTrack =
                     null
+
+                try {
+
+                    track.release()
+
+                } catch (_: Throwable) {
+                }
             }
         }
 
