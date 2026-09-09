@@ -62,8 +62,7 @@ falseIslandRate <= 5%
 那是 EXP6 的事，本实验如实报告即可。
 
 结果（60 条全量，zh/zh/en = 30/15/15）
---------------------------------------
-[Stage 1] ZH CTC 触发信号
+--------------------------------------[Stage 1] ZH CTC 触发信号
   positive_zh_en: 25/30 至少 1 个 <unk>
   negative_zh    :  0/15 <unk>            <- 纯中文零触发
   negative_en    : 14/15 <unk>            <- 纯英文几乎全 unk（诊断用）
@@ -123,3 +122,20 @@ unk_exp5_regions.csv      每个触发区域：时间范围、EN 验证文本
 unk_exp5_summary.csv      每个 pad 配置的汇总指标
 
 最后打印 RECOMMENDED CONFIG。
+
+Whisper 验证器对比（EXP5.2，2026-09-09）
+----------------------------------------
+验证器从 GigaSpeech 换成 sherpa-onnx Whisper 的基准
+（diag_whisper_verifier.py；同一 ZH unk 触发 + run 分组 pad 0.6 + trim）：
+
+  验证器                strict  relax  PC 耗时/region
+  GigaSpeech (当前安卓)  12/25   18/25   ~0.05 s
+  Whisper-tiny int8      12/25   13/25   ~0.07 s
+  Whisper-base int8       9/25   10/25   ~0.13 s
+
+结论：Whisper 不优于 GigaSpeech，且越大越差。Whisper 是通用整句
+转写模型，把区域当完整语音处理，输出流畅的整句幻觉
+（"smile and feel it hot"、"i'll be back with my app"），
+目标词反而被淹没；GigaSpeech transducer 对短孤词更聚焦。
+另注意 Whisper 会在回填中混入中文字符（"project上面"），
+安卓集成还需字符过滤。维持 GigaSpeech 验证器不变。
