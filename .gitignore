@@ -19,6 +19,8 @@ crash.txt
 
 # Python virtualenvs and model conversion workspaces.
 .venv*/
+__pycache__/
+*.pyc
 
 # Experiment model inputs (large, re-downloadable/re-convertible).
 experiments/**/models/
