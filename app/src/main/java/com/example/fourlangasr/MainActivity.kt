@@ -45,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRelease: Button
     private lateinit var btnTranslate: Button
     private lateinit var btnAutoSpeak: Button
+    private lateinit var btnSpeechRate: Button
+    private lateinit var textTtsAvailability: TextView
 
     private lateinit var textStatus: TextView
     private lateinit var textResult: TextView
@@ -187,6 +189,19 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
             }
+
+            override fun onEngineReady(
+                availability:
+                    Map<String, Boolean>,
+            ) {
+
+                runOnUiThread {
+
+                    updateTtsAvailability(
+                        availability
+                    )
+                }
+            }
         }
 
     private lateinit var ttsEngine:
@@ -199,6 +214,19 @@ class MainActivity : AppCompatActivity() {
      */
     private var autoSpeakEnabled =
         true
+
+    /*
+     * 语速选项（0.75x / 1.0x / 1.25x），默认 1.0x。
+     */
+    private val speechRateOptions =
+        floatArrayOf(
+            0.75f,
+            1.0f,
+            1.25f,
+        )
+
+    private var speechRateIndex =
+        1
 
     private var lastAsrText: String = ""
 
@@ -700,6 +728,102 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+
+        /*
+         * ========================================================
+         * 语速控制（0.75x / 1.0x / 1.25x 循环）。
+         * ========================================================
+         */
+
+        updateSpeechRateButton()
+
+        btnSpeechRate.setOnClickListener {
+
+            speechRateIndex =
+                (speechRateIndex + 1) %
+                        speechRateOptions.size
+
+            ttsEngine.setSpeechRate(
+                speechRateOptions[
+                    speechRateIndex
+                ]
+            )
+
+            updateSpeechRateButton()
+        }
+    }
+
+    private fun updateSpeechRateButton() {
+
+        btnSpeechRate.text =
+            "语速：" +
+                    speechRateOptions[
+                        speechRateIndex
+                    ] +
+                    "x"
+    }
+
+    /**
+     * 显示四语离线 voice 可用性（✓ 可朗读 / ✗ 缺 voice）。
+     * 空 map = 引擎未就绪或不可用。
+     */
+    private fun updateTtsAvailability(
+        availability:
+            Map<String, Boolean>,
+    ) {
+
+        if (
+            availability.isEmpty()
+        ) {
+
+            textTtsAvailability.text =
+                "朗读语音：不可用或初始化中"
+
+            return
+        }
+
+        val builder =
+            StringBuilder(
+                "朗读语音："
+            )
+
+        AppLanguage.entries
+            .forEachIndexed {
+                index,
+                language ->
+
+                if (
+                    index > 0
+                ) {
+
+                    builder.append(
+                        "  "
+                    )
+                }
+
+                builder
+                    .append(
+                        language.code
+                    )
+                    .append(
+                        if (
+                            availability[
+                                language.code
+                            ] ==
+                            true
+                        ) {
+
+                            "✓"
+
+                        } else {
+
+                            "✗"
+                        }
+                    )
+            }
+
+        textTtsAvailability.text =
+            builder.toString()
     }
 
     private fun updateAutoSpeakButton() {
@@ -758,6 +882,16 @@ class MainActivity : AppCompatActivity() {
         btnAutoSpeak =
             findViewById(
                 R.id.btnAutoSpeak
+            )
+
+        btnSpeechRate =
+            findViewById(
+                R.id.btnSpeechRate
+            )
+
+        textTtsAvailability =
+            findViewById(
+                R.id.textTtsAvailability
             )
 
         textStatus =
@@ -1543,6 +1677,11 @@ class MainActivity : AppCompatActivity() {
         vadSpeechActive =
             false
 
+        /*
+         * 结束对话即停止正在播放的朗读。
+         */
+        ttsEngine.stop()
+
         btnRecord.isEnabled =
             false
 
@@ -1826,6 +1965,14 @@ class MainActivity : AppCompatActivity() {
                 translation.outputText,
             language =
                 translation.speechLanguage,
+        )
+
+        /*
+         * 每次朗读后刷新 voice 可用性显示：
+         * 用户中途安装/更换语音包后能及时反映。
+         */
+        updateTtsAvailability(
+            ttsEngine.voiceAvailability()
         )
     }
 

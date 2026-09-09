@@ -81,6 +81,21 @@
             android:text="自动朗读：开" />
 
         <TextView
+            android:id="@+id/textTtsAvailability"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="朗读语音：初始化中…"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnSpeechRate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="语速：1.0x" />
+
+        <TextView
             android:id="@+id/textStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

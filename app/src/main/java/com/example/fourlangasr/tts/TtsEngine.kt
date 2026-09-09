@@ -34,6 +34,26 @@ interface TtsEngine {
     ): Boolean
 
     /**
+     * 设置朗读语速（0.5 ~ 2.0，默认 1.0）。
+     * 对后续 speak 生效。
+     */
+    fun setSpeechRate(
+        rate: Float,
+    )
+
+    /**
+     * 当前语速。
+     */
+    val speechRate: Float
+
+    /**
+     * 系统 voice 可用性预检：AppLanguage.code -> 是否存在
+     * 不依赖网络的离线 voice。未初始化完成时返回空 map。
+     */
+    fun voiceAvailability():
+            Map<String, Boolean>
+
+    /**
      * 停止当前播放并复位状态。
      */
     fun stop()
@@ -52,6 +72,14 @@ interface TtsEngine {
 
         fun onSpeakError(
             reason: String,
+        )
+
+        /**
+         * 底层引擎异步初始化完成，附当时的 voice 可用性。
+         */
+        fun onEngineReady(
+            availability:
+                Map<String, Boolean>,
         )
     }
 }

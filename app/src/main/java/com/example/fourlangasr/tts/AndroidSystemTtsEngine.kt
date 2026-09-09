@@ -34,6 +34,11 @@ class AndroidSystemTtsEngine(
         false
         private set
 
+    @Volatile
+    override var speechRate =
+        1.0f
+        private set
+
     private var tts:
             TextToSpeech? =
         null
@@ -77,6 +82,10 @@ class AndroidSystemTtsEngine(
                     Log.w(
                         TAG,
                         "init failed: status=$status"
+                    )
+
+                    listener.onEngineReady(
+                        emptyMap()
                     )
 
                     return@TextToSpeech
@@ -178,7 +187,76 @@ class AndroidSystemTtsEngine(
 
                 initError =
                     null
+
+                listener.onEngineReady(
+                    voiceAvailability()
+                )
             }
+    }
+
+    override fun setSpeechRate(
+        rate: Float,
+    ) {
+
+        speechRate =
+            rate
+                .coerceIn(
+                    0.5f,
+                    2.0f
+                )
+    }
+
+    override fun voiceAvailability():
+            Map<String, Boolean> {
+
+        val engine =
+            tts
+                ?: return emptyMap()
+
+        if (
+            !ready
+        ) {
+
+            return emptyMap()
+        }
+
+        val voices =
+            engine.voices
+                ?: return emptyMap()
+
+        val result =
+            mutableMapOf<
+                    String,
+                    Boolean
+                    >()
+
+        for (
+        language
+        in AppLanguage.entries
+        ) {
+
+            val locale =
+                localeFor(
+                    language
+                )
+
+            val available =
+                voices.any { voice ->
+
+                    voice.locale
+                        ?.language ==
+                        locale.language &&
+                            !voice
+                                .isNetworkConnectionRequired
+                }
+
+            result[
+                language.code
+            ] =
+                available
+        }
+
+        return result
     }
 
     override fun speak(
@@ -268,7 +346,7 @@ class AndroidSystemTtsEngine(
             }
 
         engine.setSpeechRate(
-            1.0f
+            speechRate
         )
 
         engine.setPitch(
