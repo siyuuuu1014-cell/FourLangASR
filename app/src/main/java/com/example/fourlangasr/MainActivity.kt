@@ -19,6 +19,10 @@ import com.example.fourlangasr.model.AsrResult
 import com.example.fourlangasr.model.LoadResult
 import com.example.fourlangasr.translation.PlaceholderTranslationEngine
 import com.example.fourlangasr.vad.VadEngine
+import com.example.fourlangasr.speaker.SpeakerManager
+import com.example.fourlangasr.speaker.SpeakerResult
+import com.example.fourlangasr.lid.LidEngine
+import com.example.fourlangasr.lid.LidResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
@@ -43,6 +47,46 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var asrManager: AsrManager
     private lateinit var audioRecorder: AudioRecorder
+    private lateinit var speakerManager: SpeakerManager
+    private lateinit var lidEngine: LidEngine
+
+    /*
+     * v0.4 自动语言路由。
+     *
+     * source spinner 暂时保留：
+     * - 对话开始前仍可手动选择初始/Debug 语言
+     * - 对话中会自动显示最近一次 LID 路由语言
+     */
+    private data class PipelineResult(
+        val speaker: SpeakerResult,
+        val lid: LidResult,
+        val routedLanguage: AppLanguage,
+        val asr: AsrResult,
+        val switchedAsr: Boolean,
+        val asrLoadMs: Long?,
+    )
+
+    private enum class SourceMode {
+        AUTO,
+        MANUAL,
+    }
+
+    /*
+     * v0.5:
+     * AUTO   -> run VoxLingua LID and route zh/en/ru/uz automatically.
+     * MANUAL -> completely skip LID and lock to spinnerSource.
+     */
+    @Volatile
+    private var sourceMode =
+        SourceMode.AUTO
+
+    /*
+     * v0.3 观察模式：
+     * 每次“开始对话”都会清空本次会话的 Speaker 1~4，
+     * 但 Speaker ONNX 模型本身会复用，不会每句重新加载。
+     */
+    private val conversationTranscript =
+        StringBuilder()
 
     /*
      * Silero VAD。
@@ -132,6 +176,21 @@ class MainActivity : AppCompatActivity() {
                 sampleRate = 16000,
             )
 
+        speakerManager =
+            SpeakerManager(
+                applicationContext.assets
+            )
+
+        /*
+         * IMPORTANT:
+         * LID uses LiteRT/TFLite, not ONNX Runtime Java.
+         * This keeps it isolated from sherpa-onnx's native ORT.
+         */
+        lidEngine =
+            LidEngine(
+                applicationContext
+            )
+
         /*
          * ========================================================
          * 语言 Spinner
@@ -187,6 +246,18 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (languageSwitchInProgress) {
+
+                    return@SimpleItemSelectedListener
+                }
+
+                /*
+                 * AUTO mode keeps spinner disabled for the user.
+                 * Programmatic LID updates must not trigger model switching here.
+                 */
+                if (
+                    sourceMode ==
+                    SourceMode.AUTO
+                ) {
 
                     return@SimpleItemSelectedListener
                 }
@@ -287,6 +358,67 @@ class MainActivity : AppCompatActivity() {
             }
 
         /*
+         * AUTO mode still needs one initial ASR loaded as a safe fallback
+         * before the first LID result arrives. Start with the current
+         * spinner selection (ZH by default).
+         */
+        lifecycleScope.launch {
+
+            try {
+
+                val initialLanguage =
+                    selectedSource()
+
+                if (
+                    asrManager.loadedLanguage !=
+                    initialLanguage
+                ) {
+
+                    val loadResult =
+                        withContext(
+                            Dispatchers.IO
+                        ) {
+
+                            asrManager.switchLanguage(
+                                initialLanguage
+                            )
+                        }
+
+                    showLoadMetrics(
+                        loadResult
+                    )
+                }
+
+                btnRecord.isEnabled =
+                    true
+
+                btnRelease.isEnabled =
+                    true
+
+                showStatus(
+                    "自动检测模式已就绪；当前备用源语言：" +
+                            selectedSource().displayName
+                )
+
+            } catch (
+                e: Throwable
+            ) {
+
+                btnRecord.isEnabled =
+                    false
+
+                btnRelease.isEnabled =
+                    false
+
+                showStatus(
+                    "初始 ASR 模型加载失败：\n" +
+                            "${e.javaClass.simpleName}: " +
+                            "${e.message}"
+                )
+            }
+        }
+
+        /*
          * ========================================================
          * 原来的加载按钮。
          *
@@ -297,9 +429,28 @@ class MainActivity : AppCompatActivity() {
          * ========================================================
          */
 
+        /*
+         * v0.5:
+         * Reuse the old hidden Debug load button as the source-mode switch.
+         * This avoids changing activity_main.xml.
+         */
+        btnLoad.visibility =
+            View.VISIBLE
+
+        updateSourceModeUi()
+
         btnLoad.setOnClickListener {
 
-            loadSelectedLanguage()
+            if (conversationActive) {
+
+                showStatus(
+                    "请先结束当前对话再切换源语言模式。"
+                )
+
+                return@setOnClickListener
+            }
+
+            toggleSourceMode()
         }
 
         /*
@@ -355,6 +506,8 @@ class MainActivity : AppCompatActivity() {
                 ) {
 
                     asrManager.release()
+                    speakerManager.release()
+                    lidEngine.release()
                 }
 
                 btnRecord.isEnabled =
@@ -364,7 +517,7 @@ class MainActivity : AppCompatActivity() {
                     false
 
                 showStatus(
-                    "ASR 模型已释放。"
+                    "ASR + Speaker + LID 模型已释放。"
                 )
 
                 setBusy(
@@ -467,6 +620,81 @@ class MainActivity : AppCompatActivity() {
 
         spinnerTarget.selectedItem
                 as AppLanguage
+
+    private fun toggleSourceMode() {
+
+        if (
+            conversationActive
+        ) {
+            return
+        }
+
+        sourceMode =
+            if (
+                sourceMode ==
+                SourceMode.AUTO
+            ) {
+                SourceMode.MANUAL
+            } else {
+                SourceMode.AUTO
+            }
+
+        updateSourceModeUi()
+
+        if (
+            sourceMode ==
+            SourceMode.MANUAL
+        ) {
+
+            /*
+             * If AUTO loaded the TFLite LID, release it when switching
+             * to MANUAL so manual mode truly saves memory.
+             */
+            lifecycleScope.launch {
+
+                withContext(
+                    Dispatchers.IO
+                ) {
+
+                    lidEngine.release()
+                }
+
+                showStatus(
+                    "已切换为手动源语言。请选择语言后开始对话。"
+                )
+            }
+
+        } else {
+
+            showStatus(
+                "已切换为自动检测源语言。当前源语言仅作为短句/LID失败备用。"
+            )
+        }
+    }
+
+    private fun updateSourceModeUi() {
+
+        if (
+            sourceMode ==
+            SourceMode.AUTO
+        ) {
+
+            btnLoad.text =
+                "源语言模式：自动检测"
+
+            spinnerSource.isEnabled =
+                false
+
+        } else {
+
+            btnLoad.text =
+                "源语言模式：手动锁定"
+
+            spinnerSource.isEnabled =
+                !conversationActive &&
+                        !languageSwitchInProgress
+        }
+    }
 
     /**
      * ============================================================
@@ -624,7 +852,14 @@ class MainActivity : AppCompatActivity() {
                 false
 
             showStatus(
-                "正在启动语音检测…"
+                if (
+                    sourceMode ==
+                    SourceMode.AUTO
+                ) {
+                    "正在启动 VAD + Speaker + LID…"
+                } else {
+                    "正在启动 VAD + Speaker（手动源语言）…"
+                }
             )
 
             try {
@@ -653,10 +888,33 @@ class MainActivity : AppCompatActivity() {
                 ) {
 
                     vad.reset()
+
+                    /*
+                     * Speaker 模型第一次开始对话时加载，
+                     * 后续会话复用模型；每次新会话只清空 Speaker profiles。
+                     */
+                    speakerManager.load()
+                    speakerManager.resetProfiles()
+
+                    /*
+                     * AUTO:
+                     *   load/reuse the ~82 MB TFLite LID model.
+                     *
+                     * MANUAL:
+                     *   do not load LID at all. This saves inference time and
+                     *   allows the user to lock one ASR for the whole session.
+                     */
+                    if (
+                        sourceMode ==
+                        SourceMode.AUTO
+                    ) {
+
+                        lidEngine.load()
+                    }
                 }
 
                 /*
-                 * 创建串行 ASR Worker。
+                 * 创建串行 Speaker + ASR Worker。
                  */
                 startRecognitionWorker()
 
@@ -666,16 +924,26 @@ class MainActivity : AppCompatActivity() {
                 vadSpeechActive =
                     false
 
+                conversationTranscript.clear()
+
                 textResult.text =
                     "等待讲话…"
 
                 textMetrics.text =
                     """
                     VAD          : Silero
+                    Speaker      : 3D-Speaker ERes2Net
+                    Source mode  : ${sourceMode.name}
+                    LID          : ${if (sourceMode == SourceMode.AUTO) "VoxLingua107 TFLite" else "SKIPPED (manual lock)"}
+                    LID input    : ${if (sourceMode == SourceMode.AUTO) "fixed 5.0 s / 80000" else "N/A"}
+                    Auto route   : ${if (sourceMode == SourceMode.AUTO) "ZH / EN / RU / UZ" else "OFF"}
                     Sample rate  : 16000 Hz
                     Window       : 512 samples
                     Frame        : 32 ms
                     End silence  : ~0.6 s
+                    Spk score    : >= 0.45
+                    Spk margin   : >= 0.12
+                    Max speakers : 4
                     """.trimIndent()
 
                 /*
@@ -741,10 +1009,16 @@ class MainActivity : AppCompatActivity() {
                             null
 
                 spinnerSource.isEnabled =
-                    true
+                    sourceMode ==
+                        SourceMode.MANUAL
 
                 spinnerTarget.isEnabled =
                     true
+
+                btnLoad.isEnabled =
+                    true
+
+                updateSourceModeUi()
 
                 btnRelease.isEnabled =
                     asrManager.loadedLanguage !=
@@ -945,40 +1219,216 @@ class MainActivity : AppCompatActivity() {
             samples.size /
                     16000.0f
 
+        /*
+         * Capture this on the main coroutine before Dispatchers.IO.
+         * It is used only when the utterance is too short for reliable LID
+         * or if LID inference fails.
+         */
+        val modeForSegment =
+            sourceMode
+
+        val fallbackLanguage =
+            asrManager.loadedLanguage
+                ?: selectedSource()
+
+        val manualLanguage =
+            selectedSource()
+
         showStatus(
             String.format(
                 Locale.US,
-                "检测到 %.2f 秒语音，正在离线识别…",
+                if (
+                    modeForSegment ==
+                    SourceMode.AUTO
+                ) {
+                    "检测到 %.2f 秒语音，正在执行 Speaker + LID + ASR…"
+                } else {
+                    "检测到 %.2f 秒语音，手动源语言模式：Speaker + ASR…"
+                },
                 duration,
             )
         )
 
         try {
 
-            val result =
+            val pipeline =
                 withContext(
                     Dispatchers.IO
                 ) {
 
-                    asrManager.transcribe(
-                        samples = samples,
-                        sampleRate = 16000,
+                    /*
+                     * Existing serial Channel guarantees only one utterance
+                     * enters this native/ML pipeline at a time.
+                     *
+                     * 1. Speaker -> who?
+                     * 2. LID     -> zh / en / ru / uz
+                     * 3. Router  -> switch ASR only if language changed
+                     * 4. ASR     -> text
+                     */
+                    val speakerResult =
+                        speakerManager.identify(
+                            samples = samples,
+                            sampleRate = 16000,
+                        )
+
+                    val lidResult =
+                        if (
+                            modeForSegment ==
+                            SourceMode.MANUAL
+                        ) {
+
+                            /*
+                             * True manual lock:
+                             * no LID inference, no automatic source detection.
+                             */
+                            LidResult.manualLocked(
+                                languageCode =
+                                    manualLanguage.code,
+                            )
+
+                        } else if (
+                            duration >=
+                            LidEngine.MIN_AUDIO_SEC
+                        ) {
+
+                            try {
+
+                                lidEngine.identify(
+                                    samples = samples,
+                                    sampleRate = 16000,
+                                )
+
+                            } catch (
+                                e: Throwable
+                            ) {
+
+                                /*
+                                 * LID failure must never destroy ASR.
+                                 * Keep the already loaded/manual fallback.
+                                 */
+                                LidResult.errorFallback(
+                                    languageCode =
+                                        fallbackLanguage.code,
+                                    error =
+                                        e,
+                                )
+                            }
+
+                        } else {
+
+                            LidResult.shortFallback(
+                                languageCode =
+                                    fallbackLanguage.code,
+                            )
+                        }
+
+                    val routedLanguage =
+                        if (
+                            modeForSegment ==
+                            SourceMode.MANUAL
+                        ) {
+
+                            manualLanguage
+
+                        } else {
+
+                            appLanguageFromLidCode(
+                                lidResult.languageCode
+                            )
+                        }
+
+                    val switchedAsr =
+                        asrManager.loadedLanguage !=
+                                routedLanguage
+
+                    val asrLoadMs =
+                        if (
+                            switchedAsr
+                        ) {
+
+                            asrManager
+                                .switchLanguage(
+                                    routedLanguage
+                                )
+                                .loadMs
+
+                        } else {
+
+                            null
+                        }
+
+                    val asrResult =
+                        asrManager.transcribe(
+                            samples = samples,
+                            sampleRate = 16000,
+                        )
+
+                    PipelineResult(
+                        speaker =
+                            speakerResult,
+                        lid =
+                            lidResult,
+                        routedLanguage =
+                            routedLanguage,
+                        asr =
+                            asrResult,
+                        switchedAsr =
+                            switchedAsr,
+                        asrLoadMs =
+                            asrLoadMs,
                     )
                 }
 
+            /*
+             * Show the detected language in the existing source spinner.
+             * Its listener returns immediately while conversationActive=true,
+             * so this does NOT trigger a second switch.
+             */
+            if (
+                modeForSegment ==
+                    SourceMode.AUTO &&
+                spinnerSource
+                    .selectedItemPosition !=
+                    pipeline.routedLanguage.ordinal
+            ) {
+
+                spinnerSource.setSelection(
+                    pipeline.routedLanguage.ordinal
+                )
+            }
+
             showAsrResult(
-                result
+                result =
+                    pipeline.asr,
+                speaker =
+                    pipeline.speaker,
+                lid =
+                    pipeline.lid,
+                routedLanguage =
+                    pipeline.routedLanguage,
+                switchedAsr =
+                    pipeline.switchedAsr,
+                asrLoadMs =
+                    pipeline.asrLoadMs,
             )
 
             btnTranslate.isEnabled =
-                result.text.isNotBlank()
+                pipeline.asr.text
+                    .isNotBlank()
 
             if (
                 conversationActive
             ) {
 
                 showStatus(
-                    "识别完成，继续监听下一句…"
+                    "识别完成：" +
+                            pipeline
+                                .routedLanguage
+                                .code
+                                .uppercase(
+                                    Locale.US
+                                ) +
+                            "，继续监听下一句…"
                 )
             }
 
@@ -987,10 +1437,39 @@ class MainActivity : AppCompatActivity() {
         ) {
 
             showStatus(
-                "识别失败：\n" +
+                "Speaker / LID / ASR 处理失败：\n" +
                         "${e.javaClass.simpleName}: " +
                         "${e.message}"
             )
+        }
+    }
+
+    private fun appLanguageFromLidCode(
+        code: String,
+    ): AppLanguage {
+
+        return when (
+            code.lowercase(
+                Locale.US
+            )
+        ) {
+
+            "zh" ->
+                AppLanguage.ZH
+
+            "en" ->
+                AppLanguage.EN
+
+            "ru" ->
+                AppLanguage.RU
+
+            "uz" ->
+                AppLanguage.UZ
+
+            else ->
+                error(
+                    "Unsupported LID code: $code"
+                )
         }
     }
 
@@ -1157,13 +1636,16 @@ class MainActivity : AppCompatActivity() {
                             null
 
                 spinnerSource.isEnabled =
-                    true
+                    sourceMode ==
+                        SourceMode.MANUAL
 
                 spinnerTarget.isEnabled =
                     true
 
                 btnLoad.isEnabled =
                     true
+
+                updateSourceModeUi()
 
                 btnRelease.isEnabled =
                     asrManager.loadedLanguage !=
@@ -1179,13 +1661,18 @@ class MainActivity : AppCompatActivity() {
      */
 
     private fun showAsrResult(
-        result: AsrResult
+        result: AsrResult,
+        speaker: SpeakerResult,
+        lid: LidResult,
+        routedLanguage: AppLanguage,
+        switchedAsr: Boolean,
+        asrLoadMs: Long?,
     ) {
 
         lastAsrText =
             result.text
 
-        textResult.text =
+        val spokenText =
             if (
                 result.text.isBlank()
             ) {
@@ -1197,32 +1684,152 @@ class MainActivity : AppCompatActivity() {
                 result.text
             }
 
+        /*
+         * v0.4 transcript:
+         * [Speaker N][ZH/EN/RU/UZ] text
+         */
+        conversationTranscript
+            .append("[")
+            .append(
+                speaker.label
+            )
+            .append("]")
+            .append("[")
+            .append(
+                routedLanguage
+                    .code
+                    .uppercase(
+                        Locale.US
+                    )
+            )
+            .append("] ")
+            .append(
+                spokenText
+            )
+            .append("\n")
+
+        textResult.text =
+            conversationTranscript
+                .toString()
+                .trimEnd()
+
+        val speakerScoreText =
+            formatMetric(
+                speaker.bestScore
+            )
+
+        val speakerMarginText =
+            formatMetric(
+                speaker.margin
+            )
+
+        val lidConfidenceText =
+            formatMetric(
+                lid.confidence
+            )
+
+        val lidMarginText =
+            formatMetric(
+                lid.margin
+            )
+
+        val lidMassText =
+            formatMetric(
+                lid.targetMass
+            )
+
+        val routeText =
+            if (
+                switchedAsr
+            ) {
+
+                "SWITCH -> " +
+                        routedLanguage
+                            .code
+                            .uppercase(
+                                Locale.US
+                            )
+
+            } else {
+
+                "REUSE " +
+                        routedLanguage
+                            .code
+                            .uppercase(
+                                Locale.US
+                            )
+            }
+
+        val loadText =
+            if (
+                asrLoadMs != null
+            ) {
+
+                "${asrLoadMs} ms"
+
+            } else {
+
+                "0 ms"
+            }
+
         textMetrics.text =
             String.format(
                 Locale.US,
                 """
+                Speaker      : %s
+                Speaker mode : %s
+                Spk score    : %s
+                Spk margin   : %s
+                Profiles     : %d / %d
+                LID          : %s
+                LID mode     : %s
+                LID window   : %s
+                LID conf4    : %s
+                LID margin   : %s
+                LID 4-mass   : %s
+                LID infer    : %d ms
+                ASR route    : %s
+                ASR load     : %s
                 Language     : %s
                 Audio        : %.3f s
-                Inference    : %d ms
-                RTF          : %.4f
-                Speed        : %.2fx realtime
+                ASR infer    : %d ms
+                ASR RTF      : %.4f
+                ASR speed    : %.2fx realtime
                 PSS before   : %.1f MB
                 PSS after    : %.1f MB
                 PSS delta    : %+.1f MB
                 """.trimIndent(),
-                asrManager
-                    .loadedLanguage
-                    ?.code
-                    ?: "?",
+                speaker.label,
+                speaker.reason,
+                speakerScoreText,
+                speakerMarginText,
+                speaker.profileCount,
+                SpeakerManager.MAX_SPEAKERS,
+                lid.languageCode
+                    .uppercase(
+                        Locale.US
+                    ),
+                lid.reason,
+                lid.windowMode,
+                lidConfidenceText,
+                lidMarginText,
+                lidMassText,
+                lid.inferenceMs,
+                routeText,
+                loadText,
+                routedLanguage.code,
                 result.audioDurationSec,
                 result.inferenceMs,
                 result.rtf,
                 if (
                     result.rtf > 0f
                 ) {
+
                     1.0f /
                             result.rtf
+
                 } else {
+
                     0f
                 },
                 result.pssBeforeMb,
@@ -1230,6 +1837,26 @@ class MainActivity : AppCompatActivity() {
                 result.pssAfterMb -
                         result.pssBeforeMb,
             )
+    }
+
+    private fun formatMetric(
+        value: Float,
+    ): String {
+
+        return if (
+            value.isFinite()
+        ) {
+
+            String.format(
+                Locale.US,
+                "%.4f",
+                value,
+            )
+
+        } else {
+
+            "N/A"
+        }
     }
 
     /**
@@ -1283,7 +1910,9 @@ class MainActivity : AppCompatActivity() {
 
         spinnerSource.isEnabled =
             !busy &&
-                    !conversationActive
+                    !conversationActive &&
+                    sourceMode ==
+                    SourceMode.MANUAL
 
         spinnerTarget.isEnabled =
             !busy
@@ -1362,6 +1991,18 @@ class MainActivity : AppCompatActivity() {
 
         vadEngine =
             null
+
+        /*
+         * 释放 Speaker native 模型。
+         * SpeakerManager 内部对 identify/release 做了同步保护。
+         */
+        speakerManager.release()
+
+        /*
+         * Release LiteRT LID.
+         * This does not touch sherpa-onnx / ONNX Runtime.
+         */
+        lidEngine.release()
 
         /*
          * 最后释放当前 ASR。

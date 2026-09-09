@@ -45,7 +45,10 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
+    // VoxLingua LID runtime. Java Interpreter API; compatible with Kotlin 1.9 project.
+    implementation 'org.tensorflow:tensorflow-lite:2.16.1'
+    // VoxLingua107 LID runtime; separate from sherpa ONNX Runtime.
+implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.activity:activity-ktx:1.8.2'
     implementation 'com.google.android.material:material:1.11.0'

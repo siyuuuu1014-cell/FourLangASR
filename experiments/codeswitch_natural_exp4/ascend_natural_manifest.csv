@@ -1,0 +1,61 @@
+﻿category,split,id,file,duration_sec,language_label,transcription,english_words,english_word_count,chinese_char_count,speaker_id,session_id,topic
+negative_en,validation,00002,audio\negative_en\ascend_negative_en_001_validation_00002.wav,1.740,en,like year three,,,,20,4,technology
+negative_en,validation,00003,audio\negative_en\ascend_negative_en_002_validation_00003.wav,3.500,en,i have a phone but it's not a smart phone at that time,,,,20,4,technology
+positive_zh_en,validation,00004,audio\positive_zh_en\ascend_positive_zh_en_001_validation_00004.wav,6.020,mixed,就是其实主要的功能就是打电话然后跟parents联系,parents,1,19,20,4,technology
+negative_zh,validation,00006,audio\negative_zh\ascend_negative_zh_001_validation_00006.wav,2.680,zh,然后现在就是,,,,20,4,technology
+negative_zh,validation,00009,audio\negative_zh\ascend_negative_zh_002_validation_00009.wav,2.140,zh,也可以看到路上有,,,,20,4,technology
+positive_zh_en,validation,00011,audio\positive_zh_en\ascend_positive_zh_en_002_validation_00011.wav,3.560,mixed,但至于小朋友他们要不要use smart phone呢,use smart phone,3,12,20,4,technology
+negative_zh,validation,00012,audio\negative_zh\ascend_negative_zh_003_validation_00012.wav,2.620,zh,如果要是一个二分法的话,,,,20,4,technology
+negative_zh,validation,00013,audio\negative_zh\ascend_negative_zh_004_validation_00013.wav,2.720,zh,嗯我觉得在如果,,,,20,4,technology
+negative_zh,validation,00014,audio\negative_zh\ascend_negative_zh_005_validation_00014.wav,3.130,zh,撇出其其他情况这样去家里的,,,,20,4,technology
+negative_en,validation,00017,audio\negative_en\ascend_negative_en_003_validation_00017.wav,4.020,en,and the reasons are as the following the first one is,,,,20,4,technology
+negative_zh,validation,00019,audio\negative_zh\ascend_negative_zh_006_validation_00019.wav,3.960,zh,因为小朋友常常会有个心理就是,,,,20,4,technology
+negative_zh,validation,00020,audio\negative_zh\ascend_negative_zh_007_validation_00020.wav,3.480,zh,妈妈爸爸你看别人都有我也要有,,,,20,4,technology
+positive_zh_en,validation,00021,audio\positive_zh_en\ascend_positive_zh_en_003_validation_00021.wav,2.840,mixed,那如果有smart phone的话其实,smart phone,2,8,20,4,technology
+positive_zh_en,validation,00023,audio\positive_zh_en\ascend_positive_zh_en_004_validation_00023.wav,2.720,mixed,共同的topic可以聊,topic,1,6,20,4,technology
+negative_zh,validation,00025,audio\negative_zh\ascend_negative_zh_008_validation_00025.wav,5.140,zh,呃他自己看到别人有那他自己也有的话其实心里,,,,20,4,technology
+negative_zh,validation,00026,audio\negative_zh\ascend_negative_zh_009_validation_00026.wav,2.780,zh,比较不会怎么不平衡,,,,20,4,technology
+positive_zh_en,validation,00028,audio\positive_zh_en\ascend_positive_zh_en_005_validation_00028.wav,3.580,mixed,然后再来就是smart phone它的功能有的时候,smart phone,2,14,20,4,technology
+positive_zh_en,validation,00030,audio\positive_zh_en\ascend_positive_zh_en_006_validation_00030.wav,1.920,mixed,是一个positive的,positive,1,4,20,4,technology
+negative_zh,validation,00031,audio\negative_zh\ascend_negative_zh_010_validation_00031.wav,2.910,zh,例如就是主要一些比较,,,,20,4,technology
+negative_zh,validation,00032,audio\negative_zh\ascend_negative_zh_011_validation_00032.wav,4.440,zh,基本的功能就是它可以在有需要的时候跟家长,,,,20,4,technology
+negative_zh,validation,00033,audio\negative_zh\ascend_negative_zh_012_validation_00033.wav,2.360,zh,或者是老师可以联系上,,,,20,4,technology
+positive_zh_en,validation,00035,audio\positive_zh_en\ascend_positive_zh_en_007_validation_00035.wav,5.690,mixed,呃在跟friends上面去他们要有他们自己的沟通管道,friends,1,19,20,4,technology
+negative_zh,validation,00036,audio\negative_zh\ascend_negative_zh_013_validation_00036.wav,2.200,zh,这样子然后有的时候现在,,,,20,4,technology
+negative_zh,validation,00038,audio\negative_zh\ascend_negative_zh_014_validation_00038.wav,2.060,zh,帮助他们学习这样子,,,,20,4,technology
+negative_zh,validation,00039,audio\negative_zh\ascend_negative_zh_015_validation_00039.wav,1.800,zh,这个是好还是不好,,,,20,4,technology
+negative_en,validation,00046,audio\negative_en\ascend_negative_en_004_validation_00046.wav,4.000,en,so do you have any solutions to this situation,,,,20,4,technology
+negative_en,validation,00047,audio\negative_en\ascend_negative_en_005_validation_00047.wav,5.130,en,[UNK] after some stories [UNK] if you go to a school you have to,,,,20,4,technology
+negative_en,validation,00052,audio\negative_en\ascend_negative_en_006_validation_00052.wav,3.900,en,candy crush is my favourite games on smartphone,,,,20,4,technology
+negative_en,validation,00053,audio\negative_en\ascend_negative_en_007_validation_00053.wav,2.420,en,yes I like candy crush a lot,,,,20,4,technology
+positive_zh_en,validation,00062,audio\positive_zh_en\ascend_positive_zh_en_008_validation_00062.wav,2.480,mixed,玩smart phone什么时候不可以,smart phone,2,8,20,4,technology
+positive_zh_en,validation,00067,audio\positive_zh_en\ascend_positive_zh_en_009_validation_00067.wav,2.940,mixed,像不像有一款app它好像是可以,app,1,12,20,4,technology
+positive_zh_en,validation,00078,audio\positive_zh_en\ascend_positive_zh_en_010_validation_00078.wav,2.540,mixed,你需要用某个app那怎么办,app,1,10,20,4,technology
+negative_en,validation,00079,audio\negative_en\ascend_negative_en_008_validation_00079.wav,4.020,en,so what the purpose of playing this game,,,,20,4,technology
+negative_en,validation,00081,audio\negative_en\ascend_negative_en_009_validation_00081.wav,1.960,en,do you play online games,,,,20,4,technology
+positive_zh_en,validation,00083,audio\positive_zh_en\ascend_positive_zh_en_011_validation_00083.wav,3.460,mixed,我以前也会玩一种online game叫做,online game,2,10,20,4,technology
+negative_en,validation,00092,audio\negative_en\ascend_negative_en_010_validation_00092.wav,1.740,en,you do it first alright,,,,12,1,persona
+negative_en,validation,00096,audio\negative_en\ascend_negative_en_011_validation_00096.wav,2.420,en,and previously i studied i,,,,12,1,persona
+negative_en,validation,00097,audio\negative_en\ascend_negative_en_012_validation_00097.wav,5.470,en,study my UG in uh mainland of china Northeast Forestry University in Harbin,,,,12,1,persona
+negative_en,validation,00098,audio\negative_en\ascend_negative_en_013_validation_00098.wav,1.880,en,[UNK] far away from Hong Kong,,,,12,1,persona
+negative_en,validation,00099,audio\negative_en\ascend_negative_en_014_validation_00099.wav,4.180,en,and i started my study in HKUST,,,,12,1,persona
+negative_en,validation,00100,audio\negative_en\ascend_negative_en_015_validation_00100.wav,1.560,en,uh from uh,,,,12,1,persona
+positive_zh_en,validation,00142,audio\positive_zh_en\ascend_positive_zh_en_012_validation_00142.wav,7.100,mixed,在一些比较大公司比如像C R P或者说像一些金融公司他们下面会有一些这样的部门去做他们自己的,C R P,3,41,12,1,persona
+positive_zh_en,validation,00158,audio\positive_zh_en\ascend_positive_zh_en_013_validation_00158.wav,3.800,mixed,就是是一个base line你要依靠他依据他去做一些事情,base line,2,19,12,1,persona
+positive_zh_en,validation,00378,audio\positive_zh_en\ascend_positive_zh_en_014_validation_00378.wav,5.950,mixed,呃摄像机去record呃去长曝光它然后才能拍出来那样的照片,record,1,23,7,1,persona
+positive_zh_en,validation,00403,audio\positive_zh_en\ascend_positive_zh_en_015_validation_00403.wav,4.800,mixed,然后我养成一个去一个国家就给自己寄一张postcard的习惯,postcard,1,22,7,1,persona
+positive_zh_en,validation,00406,audio\positive_zh_en\ascend_positive_zh_en_016_validation_00406.wav,4.740,mixed,应该是去过多少个国家和地区就有多少个postcard但好像有,postcard,1,22,7,1,persona
+positive_zh_en,validation,00427,audio\positive_zh_en\ascend_positive_zh_en_017_validation_00427.wav,4.960,mixed,呃有一些group work你觉得可以去就没有必要去做的吗,group work,2,19,12,2,education
+positive_zh_en,validation,00428,audio\positive_zh_en\ascend_positive_zh_en_018_validation_00428.wav,6.160,mixed,那你做过的一些group work你觉得可以被啊删掉或者要更改的,group work,2,22,12,2,education
+positive_zh_en,validation,00435,audio\positive_zh_en\ascend_positive_zh_en_019_validation_00435.wav,2.740,mixed,的professor会给一些比较,professor,1,7,12,2,education
+positive_zh_en,validation,00441,audio\positive_zh_en\ascend_positive_zh_en_020_validation_00441.wav,4.140,mixed,就是它会它呃它有那个课有一个project是从,project,1,16,12,2,education
+positive_zh_en,validation,00444,audio\positive_zh_en\ascend_positive_zh_en_021_validation_00444.wav,2.430,mixed,在这个诶the whole project 上面,the whole project,3,6,12,2,education
+positive_zh_en,validation,00454,audio\positive_zh_en\ascend_positive_zh_en_022_validation_00454.wav,3.600,mixed,我们这个project part的是写了一万多一万多字,project part,2,15,12,2,education
+positive_zh_en,validation,00466,audio\positive_zh_en\ascend_positive_zh_en_023_validation_00466.wav,4.560,mixed,所以我们在每一个topic上面其实不是说很深入的去做这件事情,topic,1,25,12,2,education
+positive_zh_en,validation,00469,audio\positive_zh_en\ascend_positive_zh_en_024_validation_00469.wav,2.820,mixed,呃我们的topic是,topic,1,5,12,2,education
+positive_zh_en,validation,00508,audio\positive_zh_en\ascend_positive_zh_en_025_validation_00508.wav,3.980,mixed,所以你要尤其我们要给一些proposal或者一些,proposal,1,16,12,2,education
+positive_zh_en,validation,00511,audio\positive_zh_en\ascend_positive_zh_en_026_validation_00511.wav,3.270,mixed,不仅仅要考虑technology方面的可行性你要考虑,technology,1,16,12,2,education
+positive_zh_en,validation,00516,audio\positive_zh_en\ascend_positive_zh_en_027_validation_00516.wav,4.350,mixed,挺难去做一些比较reasonable的一些分析的我觉得,reasonable,1,17,12,2,education
+positive_zh_en,validation,00559,audio\positive_zh_en\ascend_positive_zh_en_028_validation_00559.wav,3.740,mixed,读t它们或者去写成报告或者是做一些东西对,t,1,19,12,2,education
+positive_zh_en,validation,00567,audio\positive_zh_en\ascend_positive_zh_en_029_validation_00567.wav,3.560,mixed,很明显的一个phenomenon的就是他们,phenomenon,1,11,12,2,education
+positive_zh_en,validation,00570,audio\positive_zh_en\ascend_positive_zh_en_030_validation_00570.wav,5.880,mixed,平时就是我们做pre的时候他们尽量就是,pre,1,16,12,2,education
