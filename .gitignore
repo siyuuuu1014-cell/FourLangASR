@@ -8,3 +8,30 @@ app/src/main/assets/models/zh/*.onnx
 app/src/main/assets/models/en/*.onnx
 app/src/main/assets/models/uz/*.onnx
 app/src/main/assets/models/ru/vosk-model-small-ru-0.22/
+
+# LID / speaker runtime models bundled into the app (large binaries).
+app/src/main/assets/*.tflite
+app/src/main/assets/speaker_embedding.onnx
+
+# Debug dumps and filesystem backup files (use git history instead).
+crash.txt
+*.before_*
+
+# Python virtualenvs and model conversion workspaces.
+.venv*/
+
+# Experiment model inputs (large, re-downloadable/re-convertible).
+experiments/**/models/
+experiments/**/converted_tf/
+
+# Experiment datasets.
+experiments/**/audio/
+experiments/**/positive/
+experiments/**/negative/
+experiments/**/speaker_data_*/
+
+# AMI corpus resources inside the speaker experiment dir; keep only
+# scripts and result CSVs under version control.
+experiments/speaker_exp1/*
+!experiments/speaker_exp1/*.py
+!experiments/speaker_exp1/*.csv
