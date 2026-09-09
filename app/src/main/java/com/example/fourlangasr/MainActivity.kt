@@ -1,8 +1,10 @@
 package com.example.fourlangasr
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -187,6 +189,30 @@ class MainActivity : AppCompatActivity() {
                     showStatus(
                         "TTS: $reason"
                     )
+
+                    /*
+                     * 缺离线语音时首次弹窗引导下载，
+                     * 之后只显示状态提示，不重复打扰。
+                     */
+                    if (
+                        !voiceMissingDialogShown &&
+                        (
+                            reason.contains(
+                                "voice missing"
+                            ) ||
+                                reason.contains(
+                                    "not supported"
+                                )
+                            )
+                    ) {
+
+                        voiceMissingDialogShown =
+                            true
+
+                        showVoiceMissingDialog(
+                            reason
+                        )
+                    }
                 }
             }
 
@@ -227,6 +253,13 @@ class MainActivity : AppCompatActivity() {
 
     private var speechRateIndex =
         1
+
+    /*
+     * 缺语音对话框只弹一次（Activity 生命周期内），
+     * 避免每句 RU/UZ 都打断用户。
+     */
+    private var voiceMissingDialogShown =
+        false
 
     private var lastAsrText: String = ""
 
@@ -751,6 +784,82 @@ class MainActivity : AppCompatActivity() {
 
             updateSpeechRateButton()
         }
+
+        /*
+         * 朗读语音可用性行：点击打开系统语音安装/设置页，
+         * 用于下载缺失的离线语音（如 Google TTS 的俄语包）。
+         */
+        textTtsAvailability.setOnClickListener {
+
+            openTtsVoiceSettings()
+        }
+    }
+
+    /**
+     * 打开系统 TTS 语音入口。
+     *
+     * 优先 ACTION_INSTALL_TTS_DATA（引擎的语音数据下载页），
+     * 引擎不支持时退回系统"文字转语音"设置页。
+     * 系统 voice 无法由 App 注入——只能引导用户安装引擎语音包。
+     */
+    private fun openTtsVoiceSettings() {
+
+        val installIntent =
+            Intent(
+                TextToSpeech.Engine
+                    .ACTION_INSTALL_TTS_DATA
+            )
+
+        val settingsIntent =
+            Intent(
+                TextToSpeech.Engine
+                    .ACTION_TTS_SETTINGS
+            )
+
+        val target =
+            if (
+                installIntent
+                    .resolveActivity(
+                        packageManager
+                    ) !=
+                null
+            ) {
+
+                installIntent
+
+            } else if (
+                settingsIntent
+                    .resolveActivity(
+                        packageManager
+                    ) !=
+                null
+            ) {
+
+                settingsIntent
+
+            } else {
+
+                showStatus(
+                    "未找到语音设置入口，请到系统设置 → 文字转语音中下载离线语音。"
+                )
+
+                return
+            }
+
+        try {
+
+            startActivity(
+                target
+            )
+
+        } catch (
+            e: Throwable
+        ) {
+
+            showStatus(
+                "打开语音设置失败：${e.message}"
+            )
+        }
     }
 
     private fun updateSpeechRateButton() {
@@ -766,6 +875,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * 显示四语离线 voice 可用性（✓ 可朗读 / ✗ 缺 voice）。
      * 空 map = 引擎未就绪或不可用。
+     * 行本身可点击：打开系统语音下载/设置页。
      */
     private fun updateTtsAvailability(
         availability:
@@ -787,6 +897,9 @@ class MainActivity : AppCompatActivity() {
                 "朗读语音："
             )
 
+        var hasMissing =
+            false
+
         AppLanguage.entries
             .forEachIndexed {
                 index,
@@ -801,16 +914,27 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
 
+                val available =
+                    availability[
+                        language.code
+                    ] ==
+                    true
+
+                if (
+                    !available
+                ) {
+
+                    hasMissing =
+                        true
+                }
+
                 builder
                     .append(
                         language.code
                     )
                     .append(
                         if (
-                            availability[
-                                language.code
-                            ] ==
-                            true
+                            available
                         ) {
 
                             "✓"
@@ -822,8 +946,58 @@ class MainActivity : AppCompatActivity() {
                     )
             }
 
+        if (
+            hasMissing
+        ) {
+
+            builder.append(
+                "（点此下载缺失语音）"
+            )
+        }
+
         textTtsAvailability.text =
             builder.toString()
+    }
+
+    /**
+     * 缺离线语音时的引导对话框。
+     */
+    private fun showVoiceMissingDialog(
+        reason: String,
+    ) {
+
+        if (
+            isFinishing ||
+            isDestroyed
+        ) {
+
+            return
+        }
+
+        androidx.appcompat.app
+            .AlertDialog
+            .Builder(
+                this
+            )
+            .setTitle(
+                "缺少离线朗读语音"
+            )
+            .setMessage(
+                "$reason\n\n" +
+                        "系统语音包需要从 TTS 引擎下载，" +
+                        "App 无法自带安装。"
+            )
+            .setPositiveButton(
+                "去下载语音"
+            ) { _, _ ->
+
+                openTtsVoiceSettings()
+            }
+            .setNegativeButton(
+                "取消",
+                null,
+            )
+            .show()
     }
 
     private fun updateAutoSpeakButton() {
