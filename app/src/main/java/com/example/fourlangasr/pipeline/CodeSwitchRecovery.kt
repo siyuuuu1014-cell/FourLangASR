@@ -647,11 +647,13 @@ class CodeSwitchRecovery(
             "<unk>"
 
         /*
-         * PC 校准值（codeswitch_unk_exp5）：
-         * pad 0.45 s 与 0.60 s 检出率持平，取小值省算力。
+         * PC 校准（codeswitch_unk_exp5 diag_backfill_strategy）：
+         * pad 越大回填质量越高 —— 0.6 s 严格词级命中 48% vs
+         * 0.45 s 的 36%（检测命中率两者持平，但回填文本完整性
+         * 0.6 明显更好，EN 需要更多上下文才能输出完整词）。
          */
         const val REGION_PAD_SEC =
-            0.45f
+            0.60f
 
         const val MERGE_GAP_SEC =
             0.2f
