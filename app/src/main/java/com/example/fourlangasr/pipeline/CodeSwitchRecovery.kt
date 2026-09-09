@@ -336,9 +336,11 @@ class CodeSwitchRecovery(
             )
 
         val cleaned =
-            result.text
-                .trim()
-                .lowercase()
+            trimEdgeFillers(
+                result.text
+                    .trim()
+                    .lowercase()
+            )
 
         if (
             !containsContentWord(
@@ -350,6 +352,74 @@ class CodeSwitchRecovery(
         }
 
         return cleaned
+    }
+
+    /**
+     * 循环裁掉回填文本首尾的常见 EN 幻觉填充词。
+     *
+     * pad 区域会把词两侧的紧邻中文包进来，EN 把中文尾音
+     * 幻觉成填充词（真机样本："and a plan"、"missa review is"、
+     * "you know sir"）。只裁首/尾、只裁高频填充词，
+     * 不碰中间内容（"wait a minute" 的 a 在中间，安全）。
+     */
+    private fun trimEdgeFillers(
+        text: String,
+    ): String {
+
+        var result =
+            text.trim()
+
+        var changed =
+            true
+
+        while (changed) {
+
+            changed =
+                false
+
+            val tokens =
+                result.split(
+                    " "
+                )
+
+            if (
+                tokens.size >= 2
+            ) {
+
+                if (
+                    tokens.first() in
+                    EDGE_FILLERS
+                ) {
+
+                    result =
+                        tokens
+                            .drop(1)
+                            .joinToString(
+                                " "
+                            )
+
+                    changed =
+                        true
+
+                } else if (
+                    tokens.last() in
+                    EDGE_FILLERS
+                ) {
+
+                    result =
+                        tokens
+                            .dropLast(1)
+                            .joinToString(
+                                " "
+                            )
+
+                    changed =
+                        true
+                }
+            }
+        }
+
+        return result
     }
 
     /**
@@ -699,6 +769,16 @@ class CodeSwitchRecovery(
                 "yeah", "ah", "we", "were", "what", "when", "which",
                 "who", "will", "with", "you", "your", "s", "t",
                 "ve", "re", "gonna", "got",
+            )
+        /*
+         * 回填文本首尾可裁的填充/幻觉词（全小写）。
+         */
+        private val EDGE_FILLERS =
+            setOf(
+                "a", "an", "and", "is", "are", "was", "were",
+                "the", "yeah", "um", "uh", "oh", "well", "sir",
+                "that", "it's", "your", "you", "know", "so",
+                "just", "like", "of", "to", "in", "on",
             )
     }
 }
