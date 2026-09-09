@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRecord: Button
     private lateinit var btnRelease: Button
     private lateinit var btnTranslate: Button
+    private lateinit var btnAutoSpeak: Button
 
     private lateinit var textStatus: TextView
     private lateinit var textResult: TextView
@@ -189,6 +190,14 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var ttsEngine:
             TtsEngine
+
+    /*
+     * 自动朗读开关（默认开）。
+     * 关闭后识别照常，只是不再自动 TTS；
+     * 关闭动作同时停止正在播放的语音。
+     */
+    private var autoSpeakEnabled =
+        true
 
     private var lastAsrText: String = ""
 
@@ -654,6 +663,57 @@ class MainActivity : AppCompatActivity() {
                             "\n（翻译模型未接入，当前朗读 ASR 原文）"
                 }
         }
+
+        /*
+         * ========================================================
+         * 自动朗读开关（TTS v0.1）。
+         * ========================================================
+         */
+
+        updateAutoSpeakButton()
+
+        btnAutoSpeak.setOnClickListener {
+
+            autoSpeakEnabled =
+                !autoSpeakEnabled
+
+            updateAutoSpeakButton()
+
+            if (
+                !autoSpeakEnabled
+            ) {
+
+                /*
+                 * 关闭时立刻停掉正在播放的语音。
+                 */
+                ttsEngine.stop()
+
+                showStatus(
+                    "自动朗读已关闭。"
+                )
+
+            } else {
+
+                showStatus(
+                    "自动朗读已开启。"
+                )
+            }
+        }
+    }
+
+    private fun updateAutoSpeakButton() {
+
+        btnAutoSpeak.text =
+            if (
+                autoSpeakEnabled
+            ) {
+
+                "自动朗读：开"
+
+            } else {
+
+                "自动朗读：关"
+            }
     }
 
     /**
@@ -692,6 +752,11 @@ class MainActivity : AppCompatActivity() {
         btnTranslate =
             findViewById(
                 R.id.btnTranslate
+            )
+
+        btnAutoSpeak =
+            findViewById(
+                R.id.btnAutoSpeak
             )
 
         textStatus =
@@ -1713,6 +1778,17 @@ class MainActivity : AppCompatActivity() {
     private fun speakPipelineResult(
         pipeline: PipelineResult,
     ) {
+
+        /*
+         * 自动朗读开关关闭时跳过 TTS，
+         * 识别与文本显示不受影响。
+         */
+        if (
+            !autoSpeakEnabled
+        ) {
+
+            return
+        }
 
         val text =
             pipeline.displayText
