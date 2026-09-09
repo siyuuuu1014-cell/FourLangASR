@@ -3,6 +3,7 @@ package com.example.fourlangasr.tts
 import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
+import android.util.Log
 import com.example.fourlangasr.model.AppLanguage
 import java.util.Locale
 import java.util.concurrent.atomic.AtomicInteger
@@ -73,8 +74,18 @@ class AndroidSystemTtsEngine(
                     ready =
                         false
 
+                    Log.w(
+                        TAG,
+                        "init failed: status=$status"
+                    )
+
                     return@TextToSpeech
                 }
+
+                Log.d(
+                    TAG,
+                    "init OK, engine=${engine.voice?.name ?: "?"}"
+                )
 
                 engine.setOnUtteranceProgressListener(
                     object :
@@ -87,6 +98,11 @@ class AndroidSystemTtsEngine(
                             isSpeaking =
                                 true
 
+                            Log.d(
+                                TAG,
+                                "onStart: $utteranceId"
+                            )
+
                             listener.onSpeakStart()
                         }
 
@@ -96,6 +112,11 @@ class AndroidSystemTtsEngine(
 
                             isSpeaking =
                                 false
+
+                            Log.d(
+                                TAG,
+                                "onDone: $utteranceId"
+                            )
 
                             listener.onSpeakDone()
                         }
@@ -122,6 +143,11 @@ class AndroidSystemTtsEngine(
                             isSpeaking =
                                 false
 
+                            Log.w(
+                                TAG,
+                                "onError: $utteranceId"
+                            )
+
                             listener.onSpeakError(
                                 "TTS playback error"
                             )
@@ -134,6 +160,11 @@ class AndroidSystemTtsEngine(
 
                             isSpeaking =
                                 false
+
+                            Log.w(
+                                TAG,
+                                "onError: $utteranceId code=$errorCode"
+                            )
 
                             listener.onSpeakError(
                                 "TTS playback error ($errorCode)"
@@ -191,12 +222,25 @@ class AndroidSystemTtsEngine(
                 locale
             )
 
+        Log.d(
+            TAG,
+            "speak lang=${language.code} locale=$locale " +
+                    "setLanguage=$langResult " +
+                    "voice=${engine.voice?.name ?: "none"} " +
+                    "network=${engine.voice?.isNetworkConnectionRequired}"
+        )
+
         if (
             langResult ==
             TextToSpeech.LANG_MISSING_DATA ||
             langResult ==
             TextToSpeech.LANG_NOT_SUPPORTED
         ) {
+
+            Log.w(
+                TAG,
+                "speak rejected: no offline voice for ${language.code}"
+            )
 
             listener.onSpeakError(
                 "TTS voice missing/unsupported for " +
@@ -252,6 +296,11 @@ class AndroidSystemTtsEngine(
             isSpeaking =
                 false
 
+            Log.e(
+                TAG,
+                "speak() returned ERROR for $utteranceId"
+            )
+
             listener.onSpeakError(
                 "TTS speak failed"
             )
@@ -265,6 +314,11 @@ class AndroidSystemTtsEngine(
          */
         isSpeaking =
             true
+
+        Log.d(
+            TAG,
+            "speak submitted: $utteranceId"
+        )
 
         return true
     }
@@ -323,5 +377,14 @@ class AndroidSystemTtsEngine(
             else ->
                 Locale.US
         }
+    }
+
+    companion object {
+
+        /*
+         * logcat 过滤：adb logcat -s FourLangTTS
+         */
+        private const val TAG =
+            "FourLangTTS"
     }
 }

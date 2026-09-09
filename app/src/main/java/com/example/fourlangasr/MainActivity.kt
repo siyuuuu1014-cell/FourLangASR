@@ -3,6 +3,7 @@ package com.example.fourlangasr
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -1778,6 +1779,13 @@ class MainActivity : AppCompatActivity() {
     private fun speakPipelineResult(
         pipeline: PipelineResult,
     ) {
+
+        Log.d(
+            "FourLangTTS",
+            "speakPipelineResult lang=${pipeline.routedLanguage.code} " +
+                    "text='${pipeline.displayText.take(40)}' " +
+                    "autoSpeak=$autoSpeakEnabled"
+        )
 
         /*
          * 自动朗读开关关闭时跳过 TTS，
