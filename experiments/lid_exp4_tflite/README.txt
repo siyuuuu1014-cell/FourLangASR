@@ -1,4 +1,5 @@
 LID EXP4 - VoxLingua ONNX -> LiteRT/TFLite
+(状态: 已完成，转换模型已集成进 Android App)
 
 Goal
 ----
@@ -11,38 +12,27 @@ Why
 The direct ONNX Runtime Java approach conflicted with sherpa's ORT native runtime.
 LiteRT/TFLite uses a separate runtime, avoiding libonnxruntime.so conflicts.
 
-Files
------
-convert_voxlingua_to_tflite.ps1
-run_lid_exp4_tflite.py
+Files (current)
+---------------
+run_lid_exp4_tfbackend.py
+  PC benchmark: TFLite backend vs ONNX on the same 80 test clips
+  (reads the ONNX model from ../lid_exp1-3/models/voxlingua107 and the
+  converted TFLite from ./converted_tf, audio from ../speaker_exp4).
 
-Install these two files into:
-D:\dev\projects\FourLangAsrMobile\experiments\lid_exp4_tflite\
+lid_exp4_tfbackend_results.csv / lid_exp4_tfbackend_summary.csv
+  Benchmark output. Overall 79/80 = 98.75%, TFLite/ONNX agreement 100%,
+  TFLite RTF (5 s clip, PC) ~0.16.
 
-Run
----
-1.
-cd D:\dev\projects\FourLangAsrMobile\experiments\lid_exp4_tflite
+The original conversion scripts (convert_voxlingua_*.ps1,
+run_lid_exp4_tflite.py, run_lid_exp4_static5s.py) were removed after the
+conversion completed. The converted model now ships as
+  app/src/main/assets/voxlingua107_float32.tflite
+and is loaded by
+  app/src/main/java/com/example/fourlangasr/lid/LidEngine.kt
+(true static 5 s model, input [1, 80000], output [1, 107];
+ the four target class indices live in lid/LidTarget.kt).
 
-2.
-& .\convert_voxlingua_to_tflite.ps1 `
-  -ProjectRoot "D:\dev\projects\FourLangAsrMobile"
-
-3. If conversion says CONVERSION DONE:
-.\.venv_convert\Scripts\python.exe .\run_lid_exp4_tflite.py
-
-Pass criteria
--------------
-Prefer:
-- TFLite 4-way overall >= 95%
-- Uzbek >= 90%
-- ONNX/TFLite prediction agreement >= 95%
-
-Best case:
-- TFLite stays near ONNX 79/80 = 98.75%
-
-Important
----------
-Do NOT change the Android project yet.
-Do NOT add LiteRT dependencies yet.
-First prove the converted TFLite model on the same 80 test clips.
+Pass criteria (met)
+-------------------
+- TFLite 4-way overall >= 95%            -> 98.75%
+- ONNX/TFLite prediction agreement >= 95% -> 100%
