@@ -363,6 +363,13 @@ class MainActivity : AppCompatActivity() {
                 ttsListener,
             )
 
+        /*
+         * 对话开始前预加载离线 TTS 模型：
+         * 避免模型首次加载与 VAD/ASR 等 sherpa native 活动并发
+         * （该并发窗口曾导致 destroyed-mutex 原生崩溃）。
+         */
+        offlineEngine.preload()
+
         ttsEngine =
             TtsManager(
                 systemEngine =

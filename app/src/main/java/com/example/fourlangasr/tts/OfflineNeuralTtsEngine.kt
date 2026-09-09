@@ -60,10 +60,6 @@ class OfflineNeuralTtsEngine(
             OfflineTts? =
         null
 
-    private var audioTrack:
-            AudioTrack? =
-        null
-
     /*
      * 代际计数：speak 新句子会让旧任务过期，
      * 旧任务合成/播放前检查代际后丢弃。
@@ -112,12 +108,16 @@ class OfflineNeuralTtsEngine(
         }
 
         /*
-         * 打断上一句（QUEUE_FLUSH 语义），gate 立即生效。
+         * 打断上一句（QUEUE_FLUSH 语义）：只递增代际，
+         * 播放线程的循环会在 50ms 内自行退出并释放自己的
+         * AudioTrack——AudioTrack 不是线程安全的，绝不在
+         * 其它线程直接 stop/release（曾导致 destroyed-mutex
+         * 原生崩溃）。
          */
-        stopPlayback()
+        generation.incrementAndGet()
 
         val myGeneration =
-            generation.incrementAndGet()
+            generation.get()
 
         isSpeaking =
             true
@@ -215,8 +215,14 @@ class OfflineNeuralTtsEngine(
 
     override fun stop() {
 
+        /*
+         * 只改代际：播放循环自行退出并释放 AudioTrack。
+         * isSpeaking 立即复位，麦克风 gate 马上生效。
+         */
         generation.incrementAndGet()
-        stopPlayback()
+
+        isSpeaking =
+            false
     }
 
     override fun release() {
@@ -230,6 +236,21 @@ class OfflineNeuralTtsEngine(
 
         modelReady =
             false
+    }
+
+    /**
+     * 预加载模型（幂等）。
+     *
+     * 在对话开始前调用（无 VAD/ASR 等 sherpa native 并发活动），
+     * 把模型加载从"识别完成后的 speak 路径"挪出，
+     * 规避加载期与流式识别并发的原生崩溃窗口。
+     */
+    fun preload() {
+
+        executor.execute {
+
+            ensureLoaded()
+        }
     }
 
     /**
@@ -368,9 +389,6 @@ class OfflineNeuralTtsEngine(
                 )
                 .build()
 
-        audioTrack =
-            track
-
         try {
 
             track.write(
@@ -397,31 +415,30 @@ class OfflineNeuralTtsEngine(
                 generation.get()
             ) {
 
-                Thread.sleep(
-                    50
-                )
+                try {
+
+                    Thread.sleep(
+                        50
+                    )
+
+                } catch (
+                    _: InterruptedException
+                ) {
+
+                    break
+                }
             }
 
         } finally {
 
             /*
-             * stopPlayback() 可能已释放本 track：
-             * 只在仍归属本引擎时释放，避免二次 release。
+             * AudioTrack 只在播放线程释放（单线程约束）。
              */
-            if (
-                audioTrack ===
-                track
-            ) {
+            try {
 
-                audioTrack =
-                    null
+                track.release()
 
-                try {
-
-                    track.release()
-
-                } catch (_: Throwable) {
-                }
+            } catch (_: Throwable) {
             }
         }
 
@@ -435,28 +452,6 @@ class OfflineNeuralTtsEngine(
 
             listener.onSpeakDone()
         }
-    }
-
-    private fun stopPlayback() {
-
-        audioTrack
-            ?.let { track ->
-
-                try {
-
-                    track.stop()
-
-                } catch (_: Throwable) {
-                }
-
-                track.release()
-            }
-
-        audioTrack =
-            null
-
-        isSpeaking =
-            false
     }
 
     companion object {
