@@ -94,17 +94,25 @@ class CodeSwitchRecovery(
                     sampleRate.toFloat()
 
         /*
-         * 1. 每个 <unk> 展开成 [ts - pad, ts + pad]，
-         *    相邻（gap <= MERGE_GAP_SEC）区域合并。
+         * 1. <unk> 按间距 <= RUN_MAX_GAP_SEC 分成"词组 run"：
+         *    同一 run 的 unk 是同一个英文词/紧凑词组的连续 token
+         *    （如 "wait a minute"、拼成 "smart phone" 的相邻 unk），
+         *    需要合并成一个区域一起识别。
+         *
+         *    不同 run 之间（如 "先 review 一下今天的 plan" 的 review
+         *    与 plan）绝不合并——真机测试表明跨词合并会把分散的词
+         *    捏成一个大区域，EN 顺带把区域里的中文幻觉成英文
+         *    （EXP5 diag：run 分组在 ASCEND 上与合并版不退化，
+         *    12/25 strict / 18/25 relax，且修复分散多词的位置丢失）。
          */
         val regions =
-            mergeRegions(
+            buildRunRegions(
                 unkTimesSec =
                     unkTimestampsSec,
                 padSec =
                     REGION_PAD_SEC,
-                maxGapSec =
-                    MERGE_GAP_SEC,
+                maxRunGapSec =
+                    RUN_MAX_GAP_SEC,
                 durationSec =
                     durationSec,
             )
@@ -388,70 +396,73 @@ class CodeSwitchRecovery(
     }
 
     /**
-     * 把合并后的时间区域按升序拼成 (start, end) 对。
+     * 把 <unk> 时间戳按"词组 run"分组，每个 run 展开成
+     * [run.first - pad, run.last + pad] 一个区域。
      */
-    private fun mergeRegions(
+    private fun buildRunRegions(
         unkTimesSec: FloatArray,
         padSec: Float,
-        maxGapSec: Float,
+        maxRunGapSec: Float,
         durationSec: Float,
     ): List<FloatArray> {
 
-        val spans =
-            unkTimesSec
-                .map { ts ->
-
-                    floatArrayOf(
-                        (ts -
-                                padSec)
-                            .coerceAtLeast(0f),
-                        (ts +
-                                padSec)
-                            .coerceAtMost(
-                                durationSec
-                            ),
-                    )
-                }
-                .sortedBy {
-                    it[0]
-                }
-
-        val merged =
-            mutableListOf<FloatArray>()
-
-        for (
-        span
-        in spans
+        if (
+            unkTimesSec.isEmpty()
         ) {
 
-            val last =
-                merged.lastOrNull()
-
-            if (
-                last != null &&
-                span[0] <=
-                last[1] +
-                        maxGapSec
-            ) {
-
-                last[1] =
-                    maxOf(
-                        last[1],
-                        span[1],
-                    )
-
-            } else {
-
-                merged.add(
-                    floatArrayOf(
-                        span[0],
-                        span[1],
-                    )
-                )
-            }
+            return emptyList()
         }
 
-        return merged
+        val runs =
+            mutableListOf<
+                    MutableList<Float>
+                    >()
+
+        var current =
+            mutableListOf<Float>()
+
+        runs.add(
+            current
+        )
+
+        for (
+        ts
+        in unkTimesSec
+        ) {
+
+            if (
+                current.isNotEmpty() &&
+                ts -
+                current.last() >
+                maxRunGapSec
+            ) {
+
+                current =
+                    mutableListOf()
+
+                runs.add(
+                    current
+                )
+            }
+
+            current.add(
+                ts
+            )
+        }
+
+        return runs.map { run ->
+
+            floatArrayOf(
+                (run.first() -
+                        padSec)
+                    .coerceAtLeast(0f),
+                (run.last() +
+                        padSec)
+                    .coerceAtMost(
+                        durationSec
+                    ),
+            )
+        }
     }
 
     /**
@@ -655,8 +666,13 @@ class CodeSwitchRecovery(
         const val REGION_PAD_SEC =
             0.60f
 
-        const val MERGE_GAP_SEC =
-            0.2f
+        /*
+         * 两个 <unk> 间距超过此值视为不同英文词：
+         * 各自独立裁剪回填，避免把分散的词捏成一个区域。
+         * "smart phone" 这类紧凑词组通常在此间隔内。
+         */
+        const val RUN_MAX_GAP_SEC =
+            0.35f
 
         const val MIN_REGION_SAMPLES =
             1600 // 0.1 s @ 16 kHz
