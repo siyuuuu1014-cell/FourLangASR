@@ -37,3 +37,4 @@ experiments/**/speaker_data_*/
 experiments/speaker_exp4/*
 !experiments/speaker_exp4/*.py
 !experiments/speaker_exp4/*.csv
+experiments/**/out_wav/
