@@ -1,0 +1,181 @@
+﻿pad_sec,category,id,transcription,zh_text,unk_count,region_count,gt_words,recovered_words,detected,en_texts
+0.3,negative_en,00002,like year three,<unk>,1,1,,,0,YEARS | YEAH | AH
+0.3,negative_en,00003,i have a phone but it's not a smart phone at that time,<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,1,,,0,AH PHONE BUT IT'S NOT A SMARTPHONE AT ALL THAT TIME | FONT BUT IT'S NOT | SMARTPHONE AT ALERT TIME
+0.3,positive_zh_en,00004,就是其实主要的功能就是打电话然后跟parents联系,就是其些主要的功能就是打电后然后跟<unk> 联系,1,1,parents,,0,PARENT | AND SO
+0.3,negative_zh,00006,然后现在就是,然后现在就是,0,0,,,0,
+0.3,negative_zh,00009,也可以看到路上有,也可以看到路上有,0,0,,,0,
+0.3,positive_zh_en,00011,但至于小朋友他们要不要use smart phone呢,至于小朋友他们要不有<unk> 呢,1,1,phone smart use,,0,AH FOR | BUT | UM
+0.3,negative_zh,00012,如果要是一个二分法的话,如果要是一个二分法的话,0,0,,,0,
+0.3,negative_zh,00013,嗯我觉得在如果,我觉得在如果,0,0,,,0,
+0.3,negative_zh,00014,撇出其其他情况这样去家里的,也秋其他情况咱们是家里的,0,0,,,0,
+0.3,negative_en,00017,and the reasons are as the following the first one is,<unk> <unk> <unk> <unk>,4,2,,,0,AND SO | YEAH IT'S | AH FOLLOWING THE FIRST ONE IS | AH FOLLOWING | PRESS ONE DAY
+0.3,negative_zh,00019,因为小朋友常常会有个心理就是,因为小朋友常常会有一个心理就是,0,0,,,0,
+0.3,negative_zh,00020,妈妈爸爸你看别人都有我也要有,妈妈爸爸你看别人都有我也要有,0,0,,,0,
+0.3,positive_zh_en,00021,那如果有smart phone的话其实,那如果有<unk> 的话其实,1,1,phone smart,,0,WONDERFUL | UM YEAH
+0.3,positive_zh_en,00023,共同的topic可以聊,更疼的他配可以聊,0,0,topic,,0,
+0.3,negative_zh,00025,呃他自己看到别人有那他自己也有的话其实心里,他自己看到别人有那他自己也有的话其实心里,0,0,,,0,
+0.3,negative_zh,00026,比较不会怎么不平衡,比较不会这么不平衡,0,0,,,0,
+0.3,positive_zh_en,00028,然后再来就是smart phone它的功能有的时候,然后再来就是<unk> 它的功能有的时候,1,1,phone smart,,0,UM | UM | SO
+0.3,positive_zh_en,00030,是一个positive的,是一个<unk> 的,1,1,positive,,0,IF IT | AH YOU | AND
+0.3,negative_zh,00031,例如就是主要一些比较,内容就是主要一些比较,0,0,,,0,
+0.3,negative_zh,00032,基本的功能就是它可以在有需要的时候跟家长,基本的功能就是它可以在有需要的时候跟家长,0,0,,,0,
+0.3,negative_zh,00033,或者是老师可以联系上,或者是老师可以联系上,0,0,,,0,
+0.3,positive_zh_en,00035,呃在跟friends上面去他们要有他们自己的沟通管道,在跟<unk> 方面是他们有他们自己的沟通管道,1,1,friends,,0,FRENCH | SOME
+0.3,negative_zh,00036,这样子然后有的时候现在,这样钱然后有的时候现在,0,0,,,0,
+0.3,negative_zh,00038,帮助他们学习这样子,帮助他们学习这样子,0,0,,,0,
+0.3,negative_zh,00039,这个是好还是不好,这个是好还是不好,0,0,,,0,
+0.3,negative_en,00046,so do you have any solutions to this situation,现这<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,2,,,0,ANY | AND | ADDITIONS TO SITUATIONS | CHANCE TO | INTIMATION
+0.3,negative_en,00047,[UNK] after some stories [UNK] if you go to a school you have to,哎<unk> <unk> <unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,SOME STORIES THAT IF YOU GO TO SCHOOL YOU HAVE TO | SOME STORIES LIKE IF YOU | AH TO THE SCHOOL YOU HAVE TO
+0.3,negative_en,00052,candy crush is my favourite games on smartphone,<unk> <unk><unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,CANDY CRUSH IS MY FAVORITE GANS ON SMARTPHONE | CANDY CRUSH IS MY FAVORITE | SCANS ON SMARTPHONE
+0.3,negative_en,00053,yes I like candy crush a lot,<unk> <unk><unk> <unk> <unk> <unk> <unk>,7,1,,,0,YES I LIKE CANDY CRUSH A LOT | YES I LIKE CANDY | CRUSH IT A LOT
+0.3,positive_zh_en,00062,玩smart phone什么时候不可以,<unk> 不可以,1,1,phone smart,,0,NEXT | ONE | FUCK
+0.3,positive_zh_en,00067,像不像有一款app它好像是可以,想想有一款<unk> 叉好像是可以,1,1,app,,0,UP | A | BUT
+0.3,positive_zh_en,00078,你需要用某个app那怎么办,你需要用某个<unk><unk> 怎么办,2,1,app,,0,AH PRONOUNCE IT | UM | UM SO
+0.3,negative_en,00079,so what the purpose of playing this game,天花<unk> <unk> <unk> <unk><unk>,5,1,,,0,PURPOSE OF PLAYING THIS | AH PERSON | PLAYING THIS
+0.3,negative_en,00081,do you play online games,对于<unk> <unk>,2,2,,,0,I | LIKE | OH | THIS | MS
+0.3,positive_zh_en,00083,我以前也会玩一种online game叫做,我以前也会玩一种<unk> 叫做,1,1,game online,,0,YEAH MR | DOWN | YEAH
+0.3,negative_en,00092,you do it first alright,<unk>,1,1,,,0,FIRST
+0.3,negative_en,00096,and previously i studied i,<unk>,1,1,,,0,RUSSELL AH | YOU'RE | LA
+0.3,negative_en,00097,study my UG in uh mainland of china Northeast Forestry University in Harbin,大队买<unk> <unk> 呢<unk> <unk> <unk> <unk> <unk>,7,2,,,0,AH MENANA CHINA | I MEAN AND | CHINA | THE STORY UNIVERSITY IN HARBING | FAITH AND FOR YOU KNOW | AH YOU HARVING
+0.3,negative_en,00098,[UNK] far away from Hong Kong,<unk> 二的八康,1,1,,,0,EASIER | OR YOU KNOW | YEAH
+0.3,negative_en,00099,and i started my study in HKUST,<unk> <unk> <unk> <unk> <unk>,5,2,,,0,STARTED MY STUDY | STARTED MY | AH STUDY | IT'S CREOTY | IT | AH AS T
+0.3,negative_en,00100,uh from uh,么,0,0,,,0,
+0.3,positive_zh_en,00142,在一些比较大公司比如像C R P或者说像一些金融公司他们下面会有一些这样的部门去做他们自己的,在一些比较大的公司比方像<unk> 或者说像一些建筑公司他们下面会有一些这样的部门去做他们自己,1,1,c p r,p,1,AH P | AH P | YEAH BUT
+0.3,positive_zh_en,00158,就是是一个base line你要依靠他依据他去做一些事情,就是是一个斯兰你要依靠他依据他去做一些事情,0,0,base line,,0,
+0.3,positive_zh_en,00378,呃摄像机去record呃去长曝光它然后才能拍出来那样的照片,下机去<unk> 去常光然后才能派出来那样的照片,1,1,record,record,1,RECORD | CURTIS
+0.3,positive_zh_en,00403,然后我养成一个去一个国家就给自己寄一张postcard的习惯,然后养成了一个去一个国家就给自己这张<unk> <unk> 的习惯,2,1,postcard,postcard,1,UM POSTCARD | UM POST | HAD
+0.3,positive_zh_en,00406,应该是去过多少个国家和地区就有多少个postcard但好像有,应该是去过多少个国家和地区就有多少个<unk><unk> 但好像有,2,1,postcard,postcard,1,AH POSTCARD | AH PAUSE | AND
+0.3,positive_zh_en,00427,呃有一些group work你觉得可以去就没有必要去做的吗,有一些主播你觉得可以去就没有必要去做的嘛,0,0,group work,,0,
+0.3,positive_zh_en,00428,那你做过的一些group work你觉得可以被啊删掉或者要更改的,对你做过的一些<unk> 你觉得可以被删调或者你就更改什么,1,1,group work,,0,SO GOOGLE
+0.3,positive_zh_en,00435,的professor会给一些比较,的<unk> <unk> 会给一些比较,2,1,professor,,0,AND PROPES ARE | AND | AND WOULD
+0.3,positive_zh_en,00441,就是它会它呃它有那个课有一个project是从,就是他会他他有那个课有一个<unk> 是从,1,1,project,project,1,PROJECT | PROJEC
+0.3,positive_zh_en,00444,在这个诶the whole project 上面,在这个<unk> 上面,1,1,project the whole,,0,AH JASON | BUT YEAH | SOME
+0.3,positive_zh_en,00454,我们这个project part的是写了一万多一万多字,我们这个<unk> <unk> 是写了一万一万多字,2,1,part project,,0,BUT DREDGARA PAUL THAT | BUT DAD | AH THAT SHE
+0.3,positive_zh_en,00466,所以我们在每一个topic上面其实不是说很深入的去做这件事情,所以我们在每一个<unk> 上面其实不是说说很深入的去做这件事,1,1,topic,,0,AH TAKERS UM | YEAH UM
+0.3,positive_zh_en,00469,呃我们的topic是,我们的<unk> 是,1,1,topic,topic,1,TOPIC | LIKE
+0.3,positive_zh_en,00508,所以你要尤其我们要给一些proposal或者一些,为你要尤其是我们要给一些<unk> 或者一些,1,1,proposal,,0,AH PUZZLE | BUT | SO
+0.3,positive_zh_en,00511,不仅仅要考虑technology方面的可行性你要考虑,这仅要考虑<unk> 几方面的可行性你要考虑,1,1,technology,technology,1,TECHNOLOGY | AND | AH
+0.3,positive_zh_en,00516,挺难去做一些比较reasonable的一些分析的我觉得,很难去做一些比较<unk> 的<unk> 的一些分析的我觉得,2,1,reasonable,reasonable,1,REASONABLE AH | REASON | SO THE
+0.3,positive_zh_en,00559,读t它们或者去写成报告或者是做一些东西对,足他们或者去写成报告或者是做一些东西对,0,0,t,,0,
+0.3,positive_zh_en,00567,很明显的一个phenomenon的就是他们,很明显的一个非<unk> 就是他们,1,1,phenomenon,,0,PHENOMEN | YOU KNOW | AND
+0.3,positive_zh_en,00570,平时就是我们做pre的时候他们尽量就是,平时就是我们做的时候他们尽量就是,0,0,pre,,0,
+0.45,negative_en,00002,like year three,<unk>,1,1,,,0,YEAR THREE | YEAH | THREE
+0.45,negative_en,00003,i have a phone but it's not a smart phone at that time,<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,1,,,0,THE PHONE BUT IT'S NOT A SMARTPHONE AT ALL THAT TIME | THE FONT BUT IT'S NOT LIKE | SMARTPHONE AT ALERT TIME
+0.45,positive_zh_en,00004,就是其实主要的功能就是打电话然后跟parents联系,就是其些主要的功能就是打电后然后跟<unk> 联系,1,1,parents,parents,1,AND PARENTS | AND | AND
+0.45,negative_zh,00006,然后现在就是,然后现在就是,0,0,,,0,
+0.45,negative_zh,00009,也可以看到路上有,也可以看到路上有,0,0,,,0,
+0.45,positive_zh_en,00011,但至于小朋友他们要不要use smart phone呢,至于小朋友他们要不有<unk> 呢,1,1,phone smart use,phone smart,1,SMARTPHONE YEAH | LIKE | ONLY
+0.45,negative_zh,00012,如果要是一个二分法的话,如果要是一个二分法的话,0,0,,,0,
+0.45,negative_zh,00013,嗯我觉得在如果,我觉得在如果,0,0,,,0,
+0.45,negative_zh,00014,撇出其其他情况这样去家里的,也秋其他情况咱们是家里的,0,0,,,0,
+0.45,negative_en,00017,and the reasons are as the following the first one is,<unk> <unk> <unk> <unk>,4,2,,,0,AH RECENTS | AH RE | JUST | THE FOLLOWING THE FIRST ONE IS | SO FOLLOWING | PRESS ONE IS
+0.45,negative_zh,00019,因为小朋友常常会有个心理就是,因为小朋友常常会有一个心理就是,0,0,,,0,
+0.45,negative_zh,00020,妈妈爸爸你看别人都有我也要有,妈妈爸爸你看别人都有我也要有,0,0,,,0,
+0.45,positive_zh_en,00021,那如果有smart phone的话其实,那如果有<unk> 的话其实,1,1,phone smart,,0,MY AFOLIO | MY | UM YEAH
+0.45,positive_zh_en,00023,共同的topic可以聊,更疼的他配可以聊,0,0,topic,,0,
+0.45,negative_zh,00025,呃他自己看到别人有那他自己也有的话其实心里,他自己看到别人有那他自己也有的话其实心里,0,0,,,0,
+0.45,negative_zh,00026,比较不会怎么不平衡,比较不会这么不平衡,0,0,,,0,
+0.45,positive_zh_en,00028,然后再来就是smart phone它的功能有的时候,然后再来就是<unk> 它的功能有的时候,1,1,phone smart,phone,1,MICROPHONE | MY | SO AND
+0.45,positive_zh_en,00030,是一个positive的,是一个<unk> 的,1,1,positive,,0,TASTER | TA | AND
+0.45,negative_zh,00031,例如就是主要一些比较,内容就是主要一些比较,0,0,,,0,
+0.45,negative_zh,00032,基本的功能就是它可以在有需要的时候跟家长,基本的功能就是它可以在有需要的时候跟家长,0,0,,,0,
+0.45,negative_zh,00033,或者是老师可以联系上,或者是老师可以联系上,0,0,,,0,
+0.45,positive_zh_en,00035,呃在跟friends上面去他们要有他们自己的沟通管道,在跟<unk> 方面是他们有他们自己的沟通管道,1,1,friends,,0,UM FRENCH FAMILY | UM FRIEND | SOME
+0.45,negative_zh,00036,这样子然后有的时候现在,这样钱然后有的时候现在,0,0,,,0,
+0.45,negative_zh,00038,帮助他们学习这样子,帮助他们学习这样子,0,0,,,0,
+0.45,negative_zh,00039,这个是好还是不好,这个是好还是不好,0,0,,,0,
+0.45,negative_en,00046,so do you have any solutions to this situation,现这<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,1,,,0,HAVE ANY SOLUTIONS TO THE SITUATION | HAVE ANY SOLUTIONS | SITUATIONS
+0.45,negative_en,00047,[UNK] after some stories [UNK] if you go to a school you have to,哎<unk> <unk> <unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,SOME STORIES THAT IF YOU GO TO SCHOOL YOU HAVE TO | SOME STORIES LIKE IF YOU | AH TO A SCHOOL YOU HAVE TO
+0.45,negative_en,00052,candy crush is my favourite games on smartphone,<unk> <unk><unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,CANDY CRUTCH IS MY FAVORITE GANS ON SMARTPHONE | CANDY CRUSH IS MY FAVORITE | GAMS ON SMARTPHONE
+0.45,negative_en,00053,yes I like candy crush a lot,<unk> <unk><unk> <unk> <unk> <unk> <unk>,7,1,,,0,YES I LIKE CANDY CRUSH A LOT | YES I LIKE CANDY | CRUSH IT A LOT
+0.45,positive_zh_en,00062,玩smart phone什么时候不可以,<unk> 不可以,1,1,phone smart,phone smart,1,AND SMARTPHONE | AND SMILE
+0.45,positive_zh_en,00067,像不像有一款app它好像是可以,想想有一款<unk> 叉好像是可以,1,1,app,,0,APT | AT | BUT
+0.45,positive_zh_en,00078,你需要用某个app那怎么办,你需要用某个<unk><unk> 怎么办,2,1,app,app,1,AH AT PRONOUNCEABLE BUT | AH APP | UM
+0.45,negative_en,00079,so what the purpose of playing this game,天花<unk> <unk> <unk> <unk><unk>,5,1,,,0,PURPOSE OF PLAYING THIS | PURPOSE OF | PLAYING THIS
+0.45,negative_en,00081,do you play online games,对于<unk> <unk>,2,1,,,0,PLAY UNLIKENS | WENT ON | AH GIMS
+0.45,positive_zh_en,00083,我以前也会玩一种online game叫做,我以前也会玩一种<unk> 叫做,1,1,game online,,0,AH CAN STILL | AGAIN | YEAH
+0.45,negative_en,00092,you do it first alright,<unk>,1,1,,,0,AH FIRST | FOR
+0.45,negative_en,00096,and previously i studied i,<unk>,1,1,,,0,AND PREVIOUSLY | AND PEOPLE
+0.45,negative_en,00097,study my UG in uh mainland of china Northeast Forestry University in Harbin,大队买<unk> <unk> 呢<unk> <unk> <unk> <unk> <unk>,7,1,,,0,AH MINANA CHINA NORTHEASTERN FLORIDA UNIVERSITY IN HARVING | AH MI NANO CHINA NORTHEAST | AND FOREST UNIVERSITY IN HARBON
+0.45,negative_en,00098,[UNK] far away from Hong Kong,<unk> 二的八康,1,1,,,0,IT'S ALREADY UM | BUT YOU KNOW | BUT IF UM
+0.45,negative_en,00099,and i started my study in HKUST,<unk> <unk> <unk> <unk> <unk>,5,1,,,0,AH STARTED MY STUDY IN HQUE | AH STARTED MY STUDY | IN ITS CURIOSITY
+0.45,negative_en,00100,uh from uh,么,0,0,,,0,
+0.45,positive_zh_en,00142,在一些比较大公司比如像C R P或者说像一些金融公司他们下面会有一些这样的部门去做他们自己的,在一些比较大的公司比方像<unk> 或者说像一些建筑公司他们下面会有一些这样的部门去做他们自己,1,1,c p r,p,1,YEAH P WHO | YEAH UM | PUT A
+0.45,positive_zh_en,00158,就是是一个base line你要依靠他依据他去做一些事情,就是是一个斯兰你要依靠他依据他去做一些事情,0,0,base line,,0,
+0.45,positive_zh_en,00378,呃摄像机去record呃去长曝光它然后才能拍出来那样的照片,下机去<unk> 去常光然后才能派出来那样的照片,1,1,record,record,1,RECORD | RIGHT | CURT
+0.45,positive_zh_en,00403,然后我养成一个去一个国家就给自己寄一张postcard的习惯,然后养成了一个去一个国家就给自己这张<unk> <unk> 的习惯,2,1,postcard,postcard,1,YEAH UM POSTCARD | YEAH UM POST | HI THERE
+0.45,positive_zh_en,00406,应该是去过多少个国家和地区就有多少个postcard但好像有,应该是去过多少个国家和地区就有多少个<unk><unk> 但好像有,2,1,postcard,postcard,1,AH POSTCARD | BUT OPPOSED | YEAH AND
+0.45,positive_zh_en,00427,呃有一些group work你觉得可以去就没有必要去做的吗,有一些主播你觉得可以去就没有必要去做的嘛,0,0,group work,,0,
+0.45,positive_zh_en,00428,那你做过的一些group work你觉得可以被啊删掉或者要更改的,对你做过的一些<unk> 你觉得可以被删调或者你就更改什么,1,1,group work,,0,AH SQL PROGRAM AND | AH SHAKE | AND
+0.45,positive_zh_en,00435,的professor会给一些比较,的<unk> <unk> 会给一些比较,2,1,professor,professor,1,AH PROFESSOR | AH MEMBER | AND OKAY
+0.45,positive_zh_en,00441,就是它会它呃它有那个课有一个project是从,就是他会他他有那个课有一个<unk> 是从,1,1,project,project,1,A PROJECTED | A PROJEC | THAT
+0.45,positive_zh_en,00444,在这个诶the whole project 上面,在这个<unk> 上面,1,1,project the whole,,0,FOR JACK SHAM YEAH | CORRECT | SHAMIR
+0.45,positive_zh_en,00454,我们这个project part的是写了一万多一万多字,我们这个<unk> <unk> 是写了一万一万多字,2,1,part project,project,1,AH PROJECTIVE POD THAT SHOULD | AH PROJECT | AH THAT'S JUST YEAH
+0.45,positive_zh_en,00466,所以我们在每一个topic上面其实不是说很深入的去做这件事情,所以我们在每一个<unk> 上面其实不是说说很深入的去做这件事,1,1,topic,topic,1,AH TALPESAMI AND | AH TOPIC | YEAH ARMY AND
+0.45,positive_zh_en,00469,呃我们的topic是,我们的<unk> 是,1,1,topic,topic,1,TOPICS | POPPY | LIKE SO
+0.45,positive_zh_en,00508,所以你要尤其我们要给一些proposal或者一些,为你要尤其是我们要给一些<unk> 或者一些,1,1,proposal,proposal,1,PROPOSAL BUT | PROPA | SO OVERALL
+0.45,positive_zh_en,00511,不仅仅要考虑technology方面的可行性你要考虑,这仅要考虑<unk> 几方面的可行性你要考虑,1,1,technology,technology,1,AH TECHNOLOGY FOR ME | AND TAKE A | AH FROM YEAH
+0.45,positive_zh_en,00516,挺难去做一些比较reasonable的一些分析的我觉得,很难去做一些比较<unk> 的<unk> 的一些分析的我觉得,2,1,reasonable,reasonable,1,AH REASONABLE THAT YOU | AH REASONABLE | SO THAT
+0.45,positive_zh_en,00559,读t它们或者去写成报告或者是做一些东西对,足他们或者去写成报告或者是做一些东西对,0,0,t,,0,
+0.45,positive_zh_en,00567,很明显的一个phenomenon的就是他们,很明显的一个非<unk> 就是他们,1,1,phenomenon,phenomenon,1,PHENOMENON | FINAL | AND
+0.45,positive_zh_en,00570,平时就是我们做pre的时候他们尽量就是,平时就是我们做的时候他们尽量就是,0,0,pre,,0,
+0.6,negative_en,00002,like year three,<unk>,1,1,,,0,YEAR THREE | YEAH | AH THREE
+0.6,negative_en,00003,i have a phone but it's not a smart phone at that time,<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,1,,,0,AH THE PHONE BUT IT'S NOT A SMARTPHONE AT ALL THE TIME | AH THE FONT BUT IT'S NOT | A SMARTPHONE OUTLET TIME
+0.6,positive_zh_en,00004,就是其实主要的功能就是打电话然后跟parents联系,就是其些主要的功能就是打电后然后跟<unk> 联系,1,1,parents,parents,1,UM PARENTS | AND | AND SCREW
+0.6,negative_zh,00006,然后现在就是,然后现在就是,0,0,,,0,
+0.6,negative_zh,00009,也可以看到路上有,也可以看到路上有,0,0,,,0,
+0.6,positive_zh_en,00011,但至于小朋友他们要不要use smart phone呢,至于小朋友他们要不有<unk> 呢,1,1,phone smart use,phone smart,1,SMARTPHONE | SMART | UM YEAH
+0.6,negative_zh,00012,如果要是一个二分法的话,如果要是一个二分法的话,0,0,,,0,
+0.6,negative_zh,00013,嗯我觉得在如果,我觉得在如果,0,0,,,0,
+0.6,negative_zh,00014,撇出其其他情况这样去家里的,也秋其他情况咱们是家里的,0,0,,,0,
+0.6,negative_en,00017,and the reasons are as the following the first one is,<unk> <unk> <unk> <unk>,4,1,,,0,THE REASONS ARE AS THE FOLLOWING THE FIRST ONE IS | THE REASONS ARE AS WELL | UM THE FIRST ONE IS
+0.6,negative_zh,00019,因为小朋友常常会有个心理就是,因为小朋友常常会有一个心理就是,0,0,,,0,
+0.6,negative_zh,00020,妈妈爸爸你看别人都有我也要有,妈妈爸爸你看别人都有我也要有,0,0,,,0,
+0.6,positive_zh_en,00021,那如果有smart phone的话其实,那如果有<unk> 的话其实,1,1,phone smart,smart,1,SO SMART FOIL | AH SMART | SO WELL
+0.6,positive_zh_en,00023,共同的topic可以聊,更疼的他配可以聊,0,0,topic,,0,
+0.6,negative_zh,00025,呃他自己看到别人有那他自己也有的话其实心里,他自己看到别人有那他自己也有的话其实心里,0,0,,,0,
+0.6,negative_zh,00026,比较不会怎么不平衡,比较不会这么不平衡,0,0,,,0,
+0.6,positive_zh_en,00028,然后再来就是smart phone它的功能有的时候,然后再来就是<unk> 它的功能有的时候,1,1,phone smart,phone smart,1,SMARTPHONE | SMILE | SO ONHA
+0.6,positive_zh_en,00030,是一个positive的,是一个<unk> 的,1,1,positive,,0,AH STATE | TRUSTE | THAT
+0.6,negative_zh,00031,例如就是主要一些比较,内容就是主要一些比较,0,0,,,0,
+0.6,negative_zh,00032,基本的功能就是它可以在有需要的时候跟家长,基本的功能就是它可以在有需要的时候跟家长,0,0,,,0,
+0.6,negative_zh,00033,或者是老师可以联系上,或者是老师可以联系上,0,0,,,0,
+0.6,positive_zh_en,00035,呃在跟friends上面去他们要有他们自己的沟通管道,在跟<unk> 方面是他们有他们自己的沟通管道,1,1,friends,,0,CONFRONT FAMILY | COME FROM | FAMILY
+0.6,negative_zh,00036,这样子然后有的时候现在,这样钱然后有的时候现在,0,0,,,0,
+0.6,negative_zh,00038,帮助他们学习这样子,帮助他们学习这样子,0,0,,,0,
+0.6,negative_zh,00039,这个是好还是不好,这个是好还是不好,0,0,,,0,
+0.6,negative_en,00046,so do you have any solutions to this situation,现这<unk> <unk> <unk> <unk> <unk> <unk> <unk>,7,1,,,0,HAVE ANY SOLUTIONS TO THE SITUATION | HAVE ANY SOLUTIONS | TO SITUATIONS
+0.6,negative_en,00047,[UNK] after some stories [UNK] if you go to a school you have to,哎<unk> <unk> <unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,AH SOME STORIES THAT IF YOU GO TO SCHOOL YOU HAVE TO | AH SOME STORIES LET IF YOU | AH TO SCHOOL YOU HAVE TO
+0.6,negative_en,00052,candy crush is my favourite games on smartphone,<unk> <unk><unk> <unk> <unk> <unk> <unk> <unk>,8,1,,,0,CANDY CRUTCH IS MY FAVORITE GANS ON SMARTPHONE | CANDY CRUSH IS MY FAVORITE | GAMS ON SMARTPHONE
+0.6,negative_en,00053,yes I like candy crush a lot,<unk> <unk><unk> <unk> <unk> <unk> <unk>,7,1,,,0,YES I LIKE CANDY CRUSH A LOT | YES I LIKE CANDY | CRUSH IT A LOT
+0.6,positive_zh_en,00062,玩smart phone什么时候不可以,<unk> 不可以,1,1,phone smart,phone smart,1,ONE SMARTPHONES | UM SMART | POINT SO
+0.6,positive_zh_en,00067,像不像有一款app它好像是可以,想想有一款<unk> 叉好像是可以,1,1,app,app,1,LIKE MY APP TOWN | LIKE WELL | TAL YEAH
+0.6,positive_zh_en,00078,你需要用某个app那怎么办,你需要用某个<unk><unk> 怎么办,2,1,app,,0,GO OUT PRONOUNCE AND MOBILE | UM
+0.6,negative_en,00079,so what the purpose of playing this game,天花<unk> <unk> <unk> <unk><unk>,5,1,,,0,AH PURPOSE OF PLAYING THIS GAME | AH PURPOSE OF | PLAYING THIS GAME
+0.6,negative_en,00081,do you play online games,对于<unk> <unk>,2,1,,,0,AH PLAY ON LICHENS | AH PLAN | LIKE HIMS
+0.6,positive_zh_en,00083,我以前也会玩一种online game叫做,我以前也会玩一种<unk> 叫做,1,1,game online,,0,AND I CAN STILL DO | LIKE IT | OUT
+0.6,negative_en,00092,you do it first alright,<unk>,1,1,,,0,IT'S THE FIRST | IT'S A FRIEND
+0.6,negative_en,00096,and previously i studied i,<unk>,1,1,,,0,UM PREVIOUSLY I | UM PEOPLE | I
+0.6,negative_en,00097,study my UG in uh mainland of china Northeast Forestry University in Harbin,大队买<unk> <unk> 呢<unk> <unk> <unk> <unk> <unk>,7,1,,,0,AND MINCHINA NORTHEAST AND FLORESA UNIVERSITY IN HARVING | AND MINANA CHINA NORTH | ST FLORIDA UNIVERSITY IN HARVING
+0.6,negative_en,00098,[UNK] far away from Hong Kong,<unk> 二的八康,1,1,,,0,IT'S ALREADY FIVE | IT | WOW
+0.6,negative_en,00099,and i started my study in HKUST,<unk> <unk> <unk> <unk> <unk>,5,1,,,0,I STARTED MY STUDY IN HQUITY | I STARTED MY STUDY | ITS CURIOSITY
+0.6,negative_en,00100,uh from uh,么,0,0,,,0,
+0.6,positive_zh_en,00142,在一些比较大公司比如像C R P或者说像一些金融公司他们下面会有一些这样的部门去做他们自己的,在一些比较大的公司比方像<unk> 或者说像一些建筑公司他们下面会有一些这样的部门去做他们自己,1,1,c p r,,0,AH THE RP WHATEVER | AH THEY ARE | WHATEVER SO
+0.6,positive_zh_en,00158,就是是一个base line你要依靠他依据他去做一些事情,就是是一个斯兰你要依靠他依据他去做一些事情,0,0,base line,,0,
+0.6,positive_zh_en,00378,呃摄像机去record呃去长曝光它然后才能拍出来那样的照片,下机去<unk> 去常光然后才能派出来那样的照片,1,1,record,record,1,RECORD | TO | KURT
+0.6,positive_zh_en,00403,然后我养成一个去一个国家就给自己寄一张postcard的习惯,然后养成了一个去一个国家就给自己这张<unk> <unk> 的习惯,2,1,postcard,postcard,1,YEAH UM POSTCARDUS | YEAH POST | CURTIS YEAH
+0.6,positive_zh_en,00406,应该是去过多少个国家和地区就有多少个postcard但好像有,应该是去过多少个国家和地区就有多少个<unk><unk> 但好像有,2,1,postcard,,0,AH THE POST KAIDA HOUSE YEAH | AH THE POST | YEAH AND
+0.6,positive_zh_en,00427,呃有一些group work你觉得可以去就没有必要去做的吗,有一些主播你觉得可以去就没有必要去做的嘛,0,0,group work,,0,
+0.6,positive_zh_en,00428,那你做过的一些group work你觉得可以被啊删掉或者要更改的,对你做过的一些<unk> 你觉得可以被删调或者你就更改什么,1,1,group work,,0,AH THE APROGRAM AND YEAH | AH THE | AND
+0.6,positive_zh_en,00435,的professor会给一些比较,的<unk> <unk> 会给一些比较,2,1,professor,professor,1,AH PROFESSOR OKAY | AH | AND OKAY
+0.6,positive_zh_en,00441,就是它会它呃它有那个课有一个project是从,就是他会他他有那个课有一个<unk> 是从,1,1,project,project,1,AH YOU COULD PROJECT | AH WE GET PROJEC
+0.6,positive_zh_en,00444,在这个诶the whole project 上面,在这个<unk> 上面,1,1,project the whole,project,1,AH PROJECTION | AH SHAM YEAH
+0.6,positive_zh_en,00454,我们这个project part的是写了一万多一万多字,我们这个<unk> <unk> 是写了一万一万多字,2,1,part project,part,1,UM REAL PROGRATOR PART THAT YOU SEE THAT | NILE | AH THAT SHOULD SEE IT
+0.6,positive_zh_en,00466,所以我们在每一个topic上面其实不是说很深入的去做这件事情,所以我们在每一个<unk> 上面其实不是说说很深入的去做这件事,1,1,topic,topic,1,A TOPICS ARMY AND | YEAH AMEN
+0.6,positive_zh_en,00469,呃我们的topic是,我们的<unk> 是,1,1,topic,topic,1,TOPIC SIR | PAUL | LIKE SO
+0.6,positive_zh_en,00508,所以你要尤其我们要给一些proposal或者一些,为你要尤其是我们要给一些<unk> 或者一些,1,1,proposal,proposal,1,AH PROPOSAL BUT | AH PRO | SO OPRA
+0.6,positive_zh_en,00511,不仅仅要考虑technology方面的可行性你要考虑,这仅要考虑<unk> 几方面的可行性你要考虑,1,1,technology,technology,1,CALLED IT TECHNOLOGY FOR ME AND | AH RETAKE | AH FOLLOW ME AND
+0.6,positive_zh_en,00516,挺难去做一些比较reasonable的一些分析的我觉得,很难去做一些比较<unk> 的<unk> 的一些分析的我觉得,2,1,reasonable,reasonable,1,AH REASONABLE THAT YOU FINISH | YEAH REASON | SO THE EASY
+0.6,positive_zh_en,00559,读t它们或者去写成报告或者是做一些东西对,足他们或者去写成报告或者是做一些东西对,0,0,t,,0,
+0.6,positive_zh_en,00567,很明显的一个phenomenon的就是他们,很明显的一个非<unk> 就是他们,1,1,phenomenon,phenomenon,1,AH PHENOMENON | AH | AND ANDREW
+0.6,positive_zh_en,00570,平时就是我们做pre的时候他们尽量就是,平时就是我们做的时候他们尽量就是,0,0,pre,,0,
