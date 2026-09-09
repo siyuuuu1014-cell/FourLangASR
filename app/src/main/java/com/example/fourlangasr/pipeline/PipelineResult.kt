@@ -15,4 +15,21 @@ data class PipelineResult(
     val asr: AsrResult,
     val switchedAsr: Boolean,
     val asrLoadMs: Long?,
-)
+
+    /*
+     * code-switch 回填（ZH 主语言且有 <unk> 时非空处理）。
+     * recoveredText 优先用于显示。
+     */
+    val recovery: RecoveryResult,
+) {
+
+    /**
+     * 显示用文本：有回填用回填结果，否则用 ASR 原文。
+     */
+    val displayText: String
+        get() =
+            recovery.recoveredText
+                .ifEmpty {
+                    asr.text
+                }
+}

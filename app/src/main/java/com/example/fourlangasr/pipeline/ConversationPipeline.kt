@@ -19,6 +19,7 @@ class ConversationPipeline(
     private val speakerManager: SpeakerManager,
     private val lidEngine: LidEngine,
     private val asrManager: AsrManager,
+    private val codeSwitchRecovery: CodeSwitchRecovery,
 ) {
 
     fun processSegment(
@@ -136,6 +137,37 @@ class ConversationPipeline(
                 sampleRate = 16000,
             )
 
+        /*
+         * 5. Code-switch 回填（仅 ZH 主语言）。
+         *
+         * 中文句子夹英文词时 ZH CTC 会输出 <unk>，
+         * 懒加载的 EN 验证模型按时间戳裁片段识别并回填。
+         * 无 <unk> 时 recover 零成本返回原文。
+         */
+        val recovery =
+            if (
+                routedLanguage ==
+                AppLanguage.ZH
+            ) {
+
+                codeSwitchRecovery.recover(
+                    samples = samples,
+                    sampleRate = 16000,
+                    zhText = asrResult.text,
+                    unkTimestampsSec =
+                        asrResult.unkTimestampsSec,
+                )
+
+            } else {
+
+                RecoveryResult(
+                    recoveredText =
+                        asrResult.text,
+                    regionCount = 0,
+                    enTexts = emptyList(),
+                )
+            }
+
         return PipelineResult(
             speaker = speakerResult,
             lid = lidResult,
@@ -143,6 +175,7 @@ class ConversationPipeline(
             asr = asrResult,
             switchedAsr = switchedAsr,
             asrLoadMs = asrLoadMs,
+            recovery = recovery,
         )
     }
 

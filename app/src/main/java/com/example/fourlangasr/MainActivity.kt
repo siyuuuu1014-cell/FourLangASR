@@ -17,6 +17,7 @@ import com.example.fourlangasr.audio.AudioRecorder
 import com.example.fourlangasr.model.AppLanguage
 import com.example.fourlangasr.model.LoadResult
 import com.example.fourlangasr.pipeline.ConversationPipeline
+import com.example.fourlangasr.pipeline.CodeSwitchRecovery
 import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
@@ -50,9 +51,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var audioRecorder: AudioRecorder
     private lateinit var speakerManager: SpeakerManager
     private lateinit var lidEngine: LidEngine
+    private lateinit var codeSwitchRecovery:
+            CodeSwitchRecovery
 
     /*
-     * 单句识别管线（Speaker -> LID -> 路由 -> ASR）。
+     * 单句识别管线（Speaker -> LID -> 路由 -> ASR -> code-switch 回填）。
      * 逻辑在 pipeline 包中，Activity 只负责 UI 与生命周期。
      */
     private lateinit var conversationPipeline:
@@ -186,11 +189,22 @@ class MainActivity : AppCompatActivity() {
                 applicationContext
             )
 
+        /*
+         * EXP5/EXP6 code-switch 回填：EN 模型懒加载，
+         * 首次遇到中文句中的 <unk> 才真正加载。
+         */
+        codeSwitchRecovery =
+            CodeSwitchRecovery(
+                applicationContext.assets
+            )
+
         conversationPipeline =
             ConversationPipeline(
                 speakerManager = speakerManager,
                 lidEngine = lidEngine,
                 asrManager = asrManager,
+                codeSwitchRecovery =
+                    codeSwitchRecovery,
             )
 
         /*
@@ -510,6 +524,7 @@ class MainActivity : AppCompatActivity() {
                     asrManager.release()
                     speakerManager.release()
                     lidEngine.release()
+                    codeSwitchRecovery.release()
                 }
 
                 btnRecord.isEnabled =
@@ -519,7 +534,7 @@ class MainActivity : AppCompatActivity() {
                     false
 
                 showStatus(
-                    "ASR + Speaker + LID 模型已释放。"
+                    "ASR + Speaker + LID + Code-switch 模型已释放。"
                 )
 
                 setBusy(
@@ -1519,8 +1534,11 @@ class MainActivity : AppCompatActivity() {
         pipeline: PipelineResult,
     ) {
 
+        /*
+         * code-switch 回填后文本优先。
+         */
         lastAsrText =
-            pipeline.asr.text
+            pipeline.displayText
 
         val spokenText =
             if (
@@ -1531,7 +1549,7 @@ class MainActivity : AppCompatActivity() {
 
             } else {
 
-                pipeline.asr.text
+                pipeline.displayText
             }
 
         /*
@@ -1703,6 +1721,11 @@ class MainActivity : AppCompatActivity() {
          * This does not touch sherpa-onnx / ONNX Runtime.
          */
         lidEngine.release()
+
+        /*
+         * 释放 code-switch EN 验证模型（懒加载的 EN recognizer）。
+         */
+        codeSwitchRecovery.release()
 
         /*
          * 最后释放当前 ASR。

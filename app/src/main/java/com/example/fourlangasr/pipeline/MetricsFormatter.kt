@@ -87,6 +87,40 @@ object MetricsFormatter {
                 "0 ms"
             }
 
+        val recovery =
+            pipeline.recovery
+
+        val codeSwitchText =
+            if (
+                pipeline.routedLanguage
+                    .code == "zh" &&
+                recovery.regionCount > 0
+            ) {
+
+                val enLoadText =
+                    recovery
+                        .enLoadMs
+                        ?.let {
+                            " [en-load ${it} ms]"
+                        }
+                        ?: ""
+
+                "${recovery.regionCount} region(s): " +
+                        recovery
+                            .enTexts
+                            .joinToString(
+                                " | "
+                            )
+                            .ifEmpty {
+                                "(no content word)"
+                            } +
+                        enLoadText
+
+            } else {
+
+                "OFF"
+            }
+
         return String.format(
             Locale.US,
             """
@@ -109,6 +143,7 @@ object MetricsFormatter {
             ASR infer    : %d ms
             ASR RTF      : %.4f
             ASR speed    : %.2fx realtime
+            Code-switch  : %s
             PSS before   : %.1f MB
             PSS after    : %.1f MB
             PSS delta    : %+.1f MB
@@ -135,22 +170,23 @@ object MetricsFormatter {
             asr.audioDurationSec,
             asr.inferenceMs,
             asr.rtf,
-            if (
-                asr.rtf > 0f
-            ) {
+                if (
+                    asr.rtf > 0f
+                ) {
 
-                1.0f /
-                        asr.rtf
+                    1.0f /
+                            asr.rtf
 
-            } else {
+                } else {
 
-                0f
-            },
-            asr.pssBeforeMb,
-            asr.pssAfterMb,
-            asr.pssAfterMb -
-                    asr.pssBeforeMb,
-        )
+                    0f
+                },
+                codeSwitchText,
+                asr.pssBeforeMb,
+                asr.pssAfterMb,
+                asr.pssAfterMb -
+                        asr.pssBeforeMb,
+            )
     }
 
     fun loadMetrics(

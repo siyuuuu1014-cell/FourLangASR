@@ -83,8 +83,36 @@ class ChineseSherpaEngine(
             r.decode(stream)
         }
 
-        val text = r.getResult(stream).text.trim()
+        val result = r.getResult(stream)
+        val text = result.text.trim()
         val elapsedMs = (System.nanoTime() - start) / 1_000_000
+
+        /*
+         * EXP5/EXP6: token 级时间戳作为 code-switch 触发信号。
+         * timestamps 单位为秒（与 sherpa-onnx 1.13.7 PC 版一致）。
+         */
+        val tokens = result.tokens
+        val timestamps = result.timestamps
+        val unkTimes: FloatArray =
+            if (
+                timestamps.size ==
+                tokens.size
+            ) {
+
+                tokens.indices
+                    .filter { i ->
+                        tokens[i] ==
+                                "<unk>"
+                    }
+                    .map { i ->
+                        timestamps[i]
+                    }
+                    .toFloatArray()
+
+            } else {
+
+                FloatArray(0)
+            }
 
         stream.release()
 
@@ -99,6 +127,7 @@ class ChineseSherpaEngine(
             rtf = rtf,
             pssBeforeMb = pssBefore,
             pssAfterMb = pssAfter,
+            unkTimestampsSec = unkTimes,
         )
     }
 
