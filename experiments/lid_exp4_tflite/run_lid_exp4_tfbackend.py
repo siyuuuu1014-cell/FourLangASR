@@ -14,7 +14,7 @@ PROJECT_ROOT = BASE_DIR.parent.parent
 ONNX_MODEL = (
     PROJECT_ROOT
     / "experiments"
-    / "lid_exp1"
+    / "lid_exp1-3"
     / "models"
     / "voxlingua107"
     / "voxlingua107.onnx"
@@ -25,7 +25,7 @@ TFLITE_DIR = BASE_DIR / "converted_tf"
 DATA_DIR = (
     PROJECT_ROOT
     / "experiments"
-    / "speaker_exp1"
+    / "speaker_exp4"
     / "speaker_data_exp4"
 )
 

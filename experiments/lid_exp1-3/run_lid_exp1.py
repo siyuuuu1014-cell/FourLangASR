@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent
 MODEL_DIR = BASE_DIR / "models" / "sherpa-onnx-whisper-tiny"
 ENCODER = MODEL_DIR / "tiny-encoder.int8.onnx"
 DECODER = MODEL_DIR / "tiny-decoder.int8.onnx"
-DATA_DIR = BASE_DIR.parent / "speaker_exp1" / "speaker_data_exp4"
+DATA_DIR = BASE_DIR.parent / "speaker_exp4" / "speaker_data_exp4"
 RESULTS_CSV = BASE_DIR / "lid_exp1_results.csv"
 SUMMARY_CSV = BASE_DIR / "lid_exp1_summary.csv"
 

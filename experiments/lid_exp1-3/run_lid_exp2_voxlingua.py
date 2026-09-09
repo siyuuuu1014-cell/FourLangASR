@@ -15,7 +15,7 @@ LANG_MAP_PATH = MODEL_DIR / "lang_map.json"
 
 DATA_DIR = (
     BASE_DIR.parent
-    / "speaker_exp1"
+    / "speaker_exp4"
     / "speaker_data_exp4"
 )
 
