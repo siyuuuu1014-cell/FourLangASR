@@ -324,15 +324,54 @@ class OfflineNeuralTtsEngine(
                 FILES_SUBDIR,
             )
 
-        if (
+        /*
+         * 完整 = onnx + 关键 G2P 文件 + 版本标记一致。
+         * 旧版本 APK 可能已复制过不完整/旧结构的 espeak-ng-data，
+         * 检测到不完整就整体删除重拷，避免 native 层崩溃。
+         */
+        val versionFile =
+            File(
+                modelDir,
+                VERSION_FILE,
+            )
+
+        val espeakCheck =
+            File(
+                modelDir,
+                ESPEAK_DIR,
+            )
+
+        val complete =
             File(
                 modelDir,
                 MODEL_ONNX,
-            ).isFile
+            ).isFile &&
+                    File(
+                        espeakCheck,
+                        "phondata",
+                    ).isFile &&
+                    versionFile
+                        .takeIf {
+                            it.isFile
+                        }
+                        ?.readText()
+                        ?.trim() ==
+                    VERSION
+
+        if (
+            complete
         ) {
 
             return modelDir
         }
+
+        Log.d(
+            TAG,
+            "model files incomplete or outdated, re-copying"
+        )
+
+        modelDir
+            .deleteRecursively()
 
         check(
             modelDir.mkdirs() ||
@@ -372,6 +411,45 @@ class OfflineNeuralTtsEngine(
             espeakDir,
         )
 
+        /*
+         * 加载前校验关键 G2P 数据文件存在；
+         * 缺失时给出明确错误而不是让 native 层崩溃。
+         */
+        val required =
+            listOf(
+                "phondata",
+                "phonindex",
+                "phontab",
+                "intonations",
+                "ru_dict",
+            )
+
+        val missing =
+            required.filter { name ->
+
+                !File(
+                    espeakDir,
+                    name,
+                ).isFile
+            }
+
+        if (
+            missing.isNotEmpty()
+        ) {
+
+            throw IllegalStateException(
+                "espeak-ng-data incomplete, missing: " +
+                        missing
+            )
+        }
+
+        /*
+         * 复制完整后写入版本标记。
+         */
+        versionFile.writeText(
+            VERSION
+        )
+
         Log.d(
             TAG,
             "model files ready in ${modelDir.absolutePath}"
@@ -382,6 +460,10 @@ class OfflineNeuralTtsEngine(
 
     /**
      * 递归复制 assets 目录到 filesDir。
+     *
+     * AssetManager.list 对文件路径的返回值在不同版本语义不一
+     * （null 或空数组都可能），两种都按文件尝试复制；
+     * 对目录递归。复制失败只记日志，由后续关键文件校验兜底。
      */
     private fun copyAssetDir(
         assetDir: String,
@@ -423,9 +505,6 @@ class OfflineNeuralTtsEngine(
                     name,
                 )
 
-            /*
-             * AssetManager.list 对目录返回子项数组，对文件返回 null。
-             */
             val grandchildren =
                 appContext
                     .assets
@@ -433,24 +512,45 @@ class OfflineNeuralTtsEngine(
                         assetChild
                     )
 
+            val isDirectory =
+                grandchildren !=
+                        null &&
+                        grandchildren
+                            .isNotEmpty()
+
             if (
-                grandchildren ==
-                null
-            ) {
-
-                copyAsset(
-                    assetChild,
-                    fileChild,
-                )
-
-            } else if (
-                grandchildren.isNotEmpty()
+                isDirectory
             ) {
 
                 copyAssetDir(
                     assetChild,
                     fileChild,
                 )
+
+            } else {
+
+                /*
+                 * null = 文件（标准语义）；空数组 = 部分版本的
+                 * 文件语义，同样按文件复制（open 失败则跳过，
+                 * 关键文件由 ensureModelFiles 校验）。
+                 */
+                try {
+
+                    copyAsset(
+                        assetChild,
+                        fileChild,
+                    )
+
+                } catch (
+                    e: Throwable
+                ) {
+
+                    Log.w(
+                        TAG,
+                        "copy failed (may be empty dir): " +
+                                "$assetChild - ${e.message}"
+                    )
+                }
             }
         }
     }
@@ -657,5 +757,15 @@ class OfflineNeuralTtsEngine(
 
         private const val ESPEAK_DIR =
             "espeak-ng-data"
+
+        /*
+         * filesDir 模型副本的版本标记：
+         * 资产或复制逻辑变化时递增，强制重拷。
+         */
+        private const val VERSION =
+            "2"
+
+        private const val VERSION_FILE =
+            ".version"
     }
 }
