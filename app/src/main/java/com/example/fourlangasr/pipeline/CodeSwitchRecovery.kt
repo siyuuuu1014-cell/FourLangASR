@@ -183,8 +183,11 @@ class CodeSwitchRecovery(
     /**
      * 用 EN 模型验证一个音频区域，返回清理后的英文文本。
      *
-     * 只输出包含实词的文本（见 [containsContentWord]）。
-     * EN GigaSpeech 对纯中文语音也会幻觉英文实词（EXP6：15/15），
+     * 中文语境里的孤词对 EN 模型很难一次认准。与 PC EXP5 最终配置
+     * 对齐：区域较长时把"整窗 + 左半窗 + 右半窗"各识别一次，
+     * 取实词最多的结果。三个都只有停用词/空则返回 ""。
+     *
+     * 注意：EN GigaSpeech 对纯中文语音也会幻觉英文实词（EXP6：15/15），
      * 因此本类的精度不依赖 EN 文本内容，而依赖调用方只在本区域
      * 确实存在 <unk> 触发时才调用（EXP6 结论）。
      */
@@ -206,6 +209,100 @@ class CodeSwitchRecovery(
                 .coerceAtMost(
                     samples.size
                 )
+
+        if (
+            endSample -
+            startSample <
+            MIN_REGION_SAMPLES
+        ) {
+
+            return ""
+        }
+
+        /*
+         * 候选窗口：整窗；区域 >= 0.5 s 时再加左/右半窗。
+         */
+        val candidates =
+            mutableListOf<
+                    IntRange
+                    >()
+
+        candidates.add(
+            startSample until
+                    endSample
+        )
+
+        if (
+            endSample -
+            startSample >=
+            HALF_WINDOW_MIN_SAMPLES
+        ) {
+
+            val mid =
+                (startSample +
+                        endSample) /
+                        2
+
+            candidates.add(
+                startSample until
+                        mid
+            )
+
+            candidates.add(
+                mid until
+                        endSample
+            )
+        }
+
+        /*
+         * 每个候选独立识别 + 停用词过滤。
+         */
+        val cleanedTexts =
+            candidates.mapNotNull {
+                range ->
+
+                val cleaned =
+                    decodeRegion(
+                        samples = samples,
+                        sampleRate =
+                            sampleRate,
+                        startSample =
+                            range.first,
+                        endSample =
+                            range.last +
+                                    1,
+                    )
+
+                cleaned.takeIf {
+                    it.isNotEmpty()
+                }
+            }
+
+        /*
+         * 取实词最多的候选；平手取更长文本。
+         */
+        return cleanedTexts
+            .maxWithOrNull(
+                compareBy(
+                    {
+                        contentWordCount(
+                            it
+                        )
+                    },
+                    {
+                        it.length
+                    },
+                )
+            )
+            ?: ""
+    }
+
+    private fun decodeRegion(
+        samples: FloatArray,
+        sampleRate: Int,
+        startSample: Int,
+        endSample: Int,
+    ): String {
 
         if (
             endSample -
@@ -254,27 +351,40 @@ class CodeSwitchRecovery(
         text: String,
     ): Boolean {
 
-        for (
-            token
-            in text.split(
+        return contentTokens(
+            text
+        ).isNotEmpty()
+    }
+
+    /**
+     * 提取文本中的英文实词（去掉停用词与单字母）。
+     */
+    private fun contentTokens(
+        text: String,
+    ): List<String> {
+
+        return text
+            .split(
                 Regex(
                     "[^a-z']+"
                 )
             )
-        ) {
+            .filter { token ->
 
-            if (
                 token.length >=
-                2 &&
-                token !in
-                STOP_WORDS
-            ) {
-
-                return true
+                        2 &&
+                        token !in
+                        STOP_WORDS
             }
-        }
+    }
 
-        return false
+    private fun contentWordCount(
+        text: String,
+    ): Int {
+
+        return contentTokens(
+            text
+        ).size
     }
 
     /**
@@ -548,6 +658,12 @@ class CodeSwitchRecovery(
 
         const val MIN_REGION_SAMPLES =
             1600 // 0.1 s @ 16 kHz
+
+        /*
+         * 区域 >= 0.5 s 时启用多候选（整窗 + 左右半窗）识别。
+         */
+        const val HALF_WINDOW_MIN_SAMPLES =
+            8000 // 0.5 s @ 16 kHz
 
         /*
          * EN GigaSpeech 对中文/静音段的常见幻觉功能词。
