@@ -1476,14 +1476,6 @@ class MainActivity : AppCompatActivity() {
                 pipeline
             )
 
-            /*
-             * post-ASR pipeline：
-             * 识别文本 → Translation abstraction → TTS。
-             */
-            speakPipelineResult(
-                pipeline
-            )
-
             btnTranslate.isEnabled =
                 pipeline.asr.text
                     .isNotBlank()
@@ -1503,6 +1495,16 @@ class MainActivity : AppCompatActivity() {
                             "，继续监听下一句…"
                 )
             }
+
+            /*
+             * post-ASR pipeline（放在识别完成状态之后触发）：
+             * 识别文本 → Translation abstraction → TTS。
+             * TTS 的失败提示由此成为最后写入的状态，
+             * 不会被"识别完成…"覆盖。
+             */
+            speakPipelineResult(
+                pipeline
+            )
 
         } catch (
             e: Throwable
