@@ -26,7 +26,9 @@ import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
 import com.example.fourlangasr.translation.PlaceholderTranslationEngine
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
+import com.example.fourlangasr.tts.OfflineNeuralTtsEngine
 import com.example.fourlangasr.tts.TtsEngine
+import com.example.fourlangasr.tts.TtsManager
 import com.example.fourlangasr.vad.VadEngine
 import com.example.fourlangasr.speaker.SpeakerManager
 import com.example.fourlangasr.lid.LidEngine
@@ -223,8 +225,13 @@ class MainActivity : AppCompatActivity() {
 
                 runOnUiThread {
 
+                    /*
+                     * ttsEngine 是 TtsManager：查询合并后的完整可用性
+                     * （系统 voice + 离线引擎支持的语言）。
+                     */
                     updateTtsAvailability(
-                        availability
+                        ttsEngine
+                            .voiceAvailability()
                     )
                 }
             }
@@ -340,13 +347,28 @@ class MainActivity : AppCompatActivity() {
             )
 
         /*
-         * TTS v0.1：系统 TextToSpeech，异步初始化。
+         * TTS v0.1：系统 TextToSpeech 为主引擎；
+         * 离线神经引擎（内置 Piper ru_RU）补齐系统 voice 缺失的语言。
          * 生命周期跟随 Activity（onDestroy 统一 release）。
          */
-        ttsEngine =
+        val systemEngine =
             AndroidSystemTtsEngine(
                 applicationContext,
                 ttsListener,
+            )
+
+        val offlineEngine =
+            OfflineNeuralTtsEngine(
+                applicationContext,
+                ttsListener,
+            )
+
+        ttsEngine =
+            TtsManager(
+                systemEngine =
+                    systemEngine,
+                offlineEngine =
+                    offlineEngine,
             )
 
         /*

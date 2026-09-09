@@ -38,3 +38,4 @@ experiments/speaker_exp4/*
 !experiments/speaker_exp4/*.py
 !experiments/speaker_exp4/*.csv
 experiments/**/out_wav/
+app/src/main/assets/tts/
