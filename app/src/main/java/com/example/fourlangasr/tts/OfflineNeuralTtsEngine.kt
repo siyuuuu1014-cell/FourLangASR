@@ -330,24 +330,48 @@ class OfflineNeuralTtsEngine(
 
             generation.incrementAndGet()
 
-            engines
-                .values
-                .forEach {
-                    engine ->
+            engines.forEach {
+                (oldCode, engine) ->
 
-                    engine
-                        .release()
-                }
+                Log.d(
+                    TAG,
+                    "unload: release[$oldCode] start"
+                )
+
+                engine
+                    .release()
+
+                Log.d(
+                    TAG,
+                    "unload: release[$oldCode] done"
+                )
+            }
 
             engines.clear()
+
+            Log.d(
+                TAG,
+                "unload: map cleared"
+            )
         }
 
         try {
+
+            Log.d(
+                TAG,
+                "load[$code]: ensureModelFiles start"
+            )
 
             val modelDir =
                 ensureModelFiles(
                     spec
                 )
+
+            Log.d(
+                TAG,
+                "load[$code]: model files OK, " +
+                        "building recognizer"
+            )
 
             val config =
                 OfflineTtsConfig(
