@@ -844,7 +844,7 @@ class OfflineNeuralTtsEngine(
             "FourLangTTS"
 
         private const val VERSION =
-            "2"
+            "3"
 
         private const val VERSION_FILE =
             ".version"
