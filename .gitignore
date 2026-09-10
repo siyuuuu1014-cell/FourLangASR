@@ -45,3 +45,4 @@ experiments/tts_exp1/_*.json
 experiments/tts_exp1/_mms_doc.rst
 experiments/tts_exp1/models/mms_uzb_src/
 experiments/**/out_wav_uzb/
+experiments/tts_exp1/convert_uzb_v2/
