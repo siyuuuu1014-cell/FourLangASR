@@ -44,3 +44,32 @@ translation seam / 自动朗读 / 防回灌 gate 全部不动。
   python .\run_piper_ru_tts_probe.py
 
 （模型在 models/ 下，已被 .gitignore 排除，不入库。）
+
+乌兹别克 MMS TTS 验证（EXP1.2，2026-09-10）
+------------------------------------------
+结论：可行，需要自转换 + 西里尔转写步骤。
+
+模型源：
+  facebook/mms-tts/models/uzb-script_cyrillic（西里尔字母版，
+  sherpa tts-models release 没有预导出的乌兹别克模型，需自转换）
+
+转换（本地已执行，产物被 gitignore）：
+  1. 从 hf-mirror 下载 config.json / vocab.txt / G_100000.pth（145MB）
+  2. 官方 vits-mms.py 流程（MMS 源码 + torch + onnx）
+  3. 本机适配（均已验证可行）：
+     - 无 C 编译器 -> monotonic_align 换纯 numpy 实现
+     - torch 2.14 需要 pip install onnxscript
+     - torch.onnx.export 必须加 dynamo=False（旧导出器，
+       新 dynamo 导出器无法追踪 RQS 的动态分支）
+  产物：model.onnx 114MB + tokens.txt（16k，add_blank，
+  frontend=characters）
+
+PC 结果：
+  句子（1.5s / 3.2s / 4.2s）：合成 0.23 / 0.47 / 0.53 s
+  平均 RTF 0.14（比实时快约 7 倍），输出全部非静音、时长合理
+  听感 wav：out_wav_uzb/（转换目录已清理，可用脚本重生成）
+
+重要产品事实：
+  MMS 乌兹别克模型只吃西里尔字母；App 的 uz ASR 输出拉丁字母，
+  安卓集成前必须加 Latin->Cyrillic 转写步骤（规则映射，
+  无第三方依赖即可实现）。
