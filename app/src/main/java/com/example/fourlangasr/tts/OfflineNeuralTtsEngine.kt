@@ -12,6 +12,7 @@ import com.k2fsa.sherpa.onnx.OfflineTtsConfig
 import com.k2fsa.sherpa.onnx.OfflineTtsModelConfig
 import com.k2fsa.sherpa.onnx.OfflineTtsVitsModelConfig
 import java.io.File
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -19,14 +20,21 @@ import java.util.concurrent.atomic.AtomicInteger
  * 离线神经 TTS 引擎（路 B 可行性验证的 Android 实现）。
  *
  * 用与 ASR 相同的 sherpa-onnx 运行时合成语音，不依赖系统 TTS 引擎。
- * 当前内置模型：Piper ru_RU（assets/tts/ru），约 81 MB，
- * 以 asset 相对路径直接加载（与 sherpa-onnx 官方 Android
- * Piper TTS 引擎 APK 的用法一致）。
+ * 按语言挂载内置模型（MODELS 表）：
+ *   ru -> Piper irina-medium（espeak G2P 数据）
+ *   uz -> MMS uzb-script_cyrillic（需 Latin->Cyrillic 转写，
+ *         见 [UzbekScript]）
  *
- * 合成与播放都在后台线程，speak 立即返回。
+ * 模型从 assets 复制到 filesDir（espeak 数据需真实未压缩文件，
+ * aapt 会压缩无扩展名的 asset），每次复制带版本标记与关键文件
+ * 校验。加载 OfflineTts 时 assetManager 必须传 null
+ * （sherpa file-utils.cc 的显式要求，否则 FATAL abort）。
+ *
+ * 合成与播放都在单一后台线程；打断只改代际计数，
+ * 播放循环自行退出并释放自己的 AudioTrack（线程安全约束）。
  *
  * 设计为 tts/TtsManager 的语言 fallback：
- * 系统引擎有 voice 的语言（zh/en）仍走系统；系统没有的（ru）走这里。
+ * 系统引擎有 voice 的语言（zh/en）仍走系统；系统没有的走这里。
  */
 class OfflineNeuralTtsEngine(
     context: Context,
@@ -49,16 +57,15 @@ class OfflineNeuralTtsEngine(
         1.0f
         private set
 
-    @Volatile
-    private var modelReady =
-        false
+    private val engines =
+        ConcurrentHashMap<
+                String,
+                OfflineTts
+                >()
 
+    @Volatile
     private var loadError:
             String? =
-        null
-
-    private var tts:
-            OfflineTts? =
         null
 
     /*
@@ -69,17 +76,18 @@ class OfflineNeuralTtsEngine(
         AtomicInteger(0)
 
     override val isReady: Boolean
-        get() = modelReady
+        get() = engines.isNotEmpty()
 
     /**
-     * 本引擎内置模型支持的语言（当前仅 ru）。
+     * 本引擎内置模型支持的语言（ru / uz）。
      */
     fun supportsLanguage(
         language: AppLanguage,
     ): Boolean {
 
-        return language.code ==
-                "ru"
+        return MODELS.containsKey(
+            language.code
+        )
     }
 
     override fun speak(
@@ -109,6 +117,33 @@ class OfflineNeuralTtsEngine(
         }
 
         /*
+         * MMS 乌兹别克模型只吃西里尔字母，
+         * ASR 输出是拉丁字母 -> 转写。
+         */
+        val synthText =
+            if (
+                language.code ==
+                "uz"
+            ) {
+
+                UzbekScript
+                    .latinToCyrillic(
+                        text
+                    )
+
+            } else {
+
+                text
+            }
+
+        if (
+            synthText.isBlank()
+        ) {
+
+            return false
+        }
+
+        /*
          * 打断上一句（QUEUE_FLUSH 语义）：只递增代际，
          * 播放线程的循环会在 50ms 内自行退出并释放自己的
          * AudioTrack——AudioTrack 不是线程安全的，绝不在
@@ -128,7 +163,9 @@ class OfflineNeuralTtsEngine(
             try {
 
                 val engine =
-                    ensureLoaded()
+                    ensureLoaded(
+                        language.code
+                    )
 
                 if (
                     engine == null
@@ -155,7 +192,7 @@ class OfflineNeuralTtsEngine(
 
                 val audio =
                     engine.generate(
-                        text,
+                        synthText,
                         0,
                         speechRate,
                     )
@@ -209,9 +246,11 @@ class OfflineNeuralTtsEngine(
     override fun voiceAvailability():
             Map<String, Boolean> {
 
-        return mapOf(
-            "ru" to true,
-        )
+        return MODELS
+            .keys
+            .associateWith {
+                true
+            }
     }
 
     override fun stop() {
@@ -232,45 +271,53 @@ class OfflineNeuralTtsEngine(
 
         executor.shutdownNow()
 
-        tts =
-            null
-
-        modelReady =
-            false
+        engines.clear()
     }
 
     /**
-     * 预加载模型（幂等）。
+     * 预加载 ru 模型（幂等）。
      *
-     * 在对话开始前调用（无 VAD/ASR 等 sherpa native 并发活动），
-     * 把模型加载从"识别完成后的 speak 路径"挪出，
-     * 规避加载期与流式识别并发的原生崩溃窗口。
+     * 在对话开始前调用，把最常用模型的加载从
+     * "识别完成后的 speak 路径"挪出。uz 保持懒加载
+     * （114MB，只在真正说乌兹别克语时占用内存）。
      */
     fun preload() {
 
         executor.execute {
 
-            ensureLoaded()
+            ensureLoaded(
+                "ru"
+            )
         }
     }
 
     /**
-     * 懒加载：assets -> filesDir 复制（仅首次），再建 OfflineTts。
+     * 按语言懒加载：assets -> filesDir 复制（仅首次），
+     * 再建 OfflineTts 并缓存。
      */
-    private fun ensureLoaded():
-            OfflineTts? {
+    private fun ensureLoaded(
+        code: String,
+    ): OfflineTts? {
 
-        if (
-            modelReady
-        ) {
+        engines[
+            code
+        ]
+            ?.let {
+                return it
+            }
 
-            return tts
-        }
+        val spec =
+            MODELS[
+                code
+            ]
+                ?: return null
 
         try {
 
             val modelDir =
-                ensureModelFiles()
+                ensureModelFiles(
+                    spec
+                )
 
             val config =
                 OfflineTtsConfig(
@@ -281,21 +328,26 @@ class OfflineNeuralTtsEngine(
                                     model =
                                         File(
                                             modelDir,
-                                            MODEL_ONNX,
+                                            spec.modelName,
                                         )
                                             .absolutePath,
                                     tokens =
                                         File(
                                             modelDir,
-                                            MODEL_TOKENS,
+                                            spec.tokensName,
                                         )
                                             .absolutePath,
                                     dataDir =
-                                        File(
-                                            modelDir,
-                                            ESPEAK_DIR,
-                                        )
-                                            .absolutePath,
+                                        spec
+                                            .dataDirName
+                                            ?.let {
+                                                File(
+                                                    modelDir,
+                                                    it,
+                                                )
+                                                    .absolutePath
+                                            }
+                                            ?: "",
                                 ),
                             numThreads = 2,
                             debug = false,
@@ -303,7 +355,7 @@ class OfflineNeuralTtsEngine(
                         ),
                 )
 
-            tts =
+            val engine =
                 OfflineTts(
                     /*
                      * 关键：从文件系统（filesDir 副本）加载模型时
@@ -318,13 +370,15 @@ class OfflineNeuralTtsEngine(
 
             Log.d(
                 TAG,
-                "loaded: sampleRate=${tts?.sampleRate()}"
+                "loaded[$code]: sampleRate=${engine.sampleRate()}"
             )
 
-            modelReady =
-                true
+            engines[
+                code
+            ] =
+                engine
 
-            return tts
+            return engine
 
         } catch (
             e: Throwable
@@ -335,7 +389,7 @@ class OfflineNeuralTtsEngine(
 
             Log.e(
                 TAG,
-                "load failed: ${e.message}",
+                "load failed[$code]: ${e.message}",
                 e,
             )
 
@@ -343,41 +397,48 @@ class OfflineNeuralTtsEngine(
         }
     }
 
-    private fun ensureModelFiles():
-            File {
+    private fun ensureModelFiles(
+        spec: ModelSpec,
+    ): File {
 
         val modelDir =
             File(
                 appContext.filesDir,
-                FILES_SUBDIR,
+                spec.filesSubdir,
             )
 
-        /*
-         * 完整 = onnx + 关键 G2P 文件 + 版本标记一致。
-         * 旧版本 APK 可能已复制过不完整/旧结构的 espeak-ng-data，
-         * 检测到不完整就整体删除重拷，避免 native 层崩溃。
-         */
         val versionFile =
             File(
                 modelDir,
                 VERSION_FILE,
             )
 
-        val espeakCheck =
-            File(
-                modelDir,
-                ESPEAK_DIR,
-            )
-
+        /*
+         * 完整 = onnx + tokens +（有 G2P 数据的模型）关键
+         * espeak 文件 + 版本标记一致。
+         * 旧版本 APK 可能已复制过不完整/旧结构的数据，
+         * 检测到不完整就整体删除重拷，避免 native 层崩溃。
+         */
         val complete =
             File(
                 modelDir,
-                MODEL_ONNX,
+                spec.modelName,
             ).isFile &&
                     File(
-                        espeakCheck,
-                        "phondata",
+                        modelDir,
+                        spec.tokensName,
                     ).isFile &&
+                    (
+                        spec.dataDirName ==
+                            null ||
+                            File(
+                                File(
+                                    modelDir,
+                                    spec.dataDirName,
+                                ),
+                                "phondata",
+                            ).isFile
+                        ) &&
                     versionFile
                         .takeIf {
                             it.isFile
@@ -395,7 +456,8 @@ class OfflineNeuralTtsEngine(
 
         Log.d(
             TAG,
-            "model files incomplete or outdated, re-copying"
+            "model files incomplete or outdated " +
+                    "for ${spec.code}, re-copying"
         )
 
         modelDir
@@ -409,78 +471,65 @@ class OfflineNeuralTtsEngine(
         }
 
         copyAsset(
-            ASSET_ROOT + MODEL_ONNX,
+            spec.assetRoot +
+                    spec.modelName,
             File(
                 modelDir,
-                MODEL_ONNX,
+                spec.modelName,
             ),
         )
 
         copyAsset(
-            ASSET_ROOT + MODEL_TOKENS,
+            spec.assetRoot +
+                    spec.tokensName,
             File(
                 modelDir,
-                MODEL_TOKENS,
+                spec.tokensName,
             ),
         )
 
-        val espeakDir =
-            File(
-                modelDir,
-                ESPEAK_DIR,
-            )
-
-        /*
-         * espeak-ng-data 是深目录（lang/、voices/ 等数百文件），
-         * 必须递归复制；只拷第一层会导致 espeak 加载失败。
-         */
-        copyAssetDir(
-            ASSET_ROOT + ESPEAK_DIR,
-            espeakDir,
-        )
-
-        /*
-         * 加载前校验关键 G2P 数据文件存在；
-         * 缺失时给出明确错误而不是让 native 层崩溃。
-         */
-        val required =
-            listOf(
-                "phondata",
-                "phonindex",
-                "phontab",
-                "intonations",
-                "ru_dict",
-            )
-
-        val missing =
-            required.filter { name ->
-
-                !File(
-                    espeakDir,
-                    name,
-                ).isFile
-            }
-
         if (
-            missing.isNotEmpty()
+            spec.dataDirName !=
+            null
         ) {
 
-            throw IllegalStateException(
-                "espeak-ng-data incomplete, missing: " +
-                        missing
+            val dataDir =
+                File(
+                    modelDir,
+                    spec.dataDirName,
+                )
+
+            /*
+             * espeak-ng-data 是深目录（lang/、voices/ 等数百
+             * 文件），必须递归复制；只拷第一层会导致加载失败。
+             */
+            copyAssetDir(
+                spec.assetRoot +
+                        spec.dataDirName,
+                dataDir,
             )
+
+            if (
+                !File(
+                    dataDir,
+                    "phondata",
+                ).isFile
+            ) {
+
+                throw IllegalStateException(
+                    "G2P data incomplete for ${spec.code}"
+                )
+            }
         }
 
-        /*
-         * 复制完整后写入版本标记。
-         */
         versionFile.writeText(
             VERSION
         )
 
         Log.d(
             TAG,
-            "model files ready in ${modelDir.absolutePath}"
+            "model files ready[${spec.code}] in " +
+                    modelDir.absolutePath
         )
 
         return modelDir
@@ -491,7 +540,7 @@ class OfflineNeuralTtsEngine(
      *
      * AssetManager.list 对文件路径的返回值在不同版本语义不一
      * （null 或空数组都可能），两种都按文件尝试复制；
-     * 对目录递归。复制失败只记日志，由后续关键文件校验兜底。
+     * 对目录递归。复制失败只记日志，由关键文件校验兜底。
      */
     private fun copyAssetDir(
         assetDir: String,
@@ -557,11 +606,6 @@ class OfflineNeuralTtsEngine(
 
             } else {
 
-                /*
-                 * null = 文件（标准语义）；空数组 = 部分版本的
-                 * 文件语义，同样按文件复制（open 失败则跳过，
-                 * 关键文件由 ensureModelFiles 校验）。
-                 */
                 try {
 
                     copyAsset(
@@ -745,29 +789,47 @@ class OfflineNeuralTtsEngine(
         private const val TAG =
             "FourLangTTS"
 
-        private const val ASSET_ROOT =
-            "tts/ru/"
-
-        private const val MODEL_ONNX =
-            "ru_RU-irina-medium.onnx"
-
-        private const val MODEL_TOKENS =
-            "tokens.txt"
-
-        private const val ESPEAK_DIR =
-            "espeak-ng-data"
-
-        /*
-         * filesDir 模型副本的版本标记：
-         * 资产或复制逻辑变化时递增，强制重拷。
-         */
-        private const val FILES_SUBDIR =
-            "tts_ru"
-
         private const val VERSION =
             "2"
 
         private const val VERSION_FILE =
             ".version"
+
+        /**
+         * 一个内置 TTS 模型的描述。
+         */
+        private data class ModelSpec(
+            val code: String,
+            val assetRoot: String,
+            val modelName: String,
+            val tokensName: String,
+            val dataDirName: String?,
+            val filesSubdir: String,
+        )
+
+        private val MODELS =
+            mapOf(
+                "ru" to
+                    ModelSpec(
+                        code = "ru",
+                        assetRoot = "tts/ru/",
+                        modelName =
+                            "ru_RU-irina-medium.onnx",
+                        tokensName = "tokens.txt",
+                        dataDirName =
+                            "espeak-ng-data",
+                        filesSubdir = "tts_ru",
+                    ),
+
+                "uz" to
+                    ModelSpec(
+                        code = "uz",
+                        assetRoot = "tts/uz/",
+                        modelName = "model.onnx",
+                        tokensName = "tokens.txt",
+                        dataDirName = null,
+                        filesSubdir = "tts_uz",
+                    ),
+            )
     }
 }
