@@ -803,13 +803,64 @@ class OfflineNeuralTtsEngine(
              */
             listener.onSpeakStart()
 
+            /*
+             * 完成判定不能依赖 playState 轮询：
+             * 部分设备上 MODE_STATIC 播完后 playState 不跳变，
+             * 曾导致循环永不退出（状态卡"播放中"、
+             * isSpeaking 卡 true、VAD gate 永久锁死）。
+             * 改用 marker 通知 + 超时兜底。
+             */
+            val done =
+                java.util.concurrent.atomic
+                    .AtomicBoolean(
+                        false
+                    )
+
+            track.setNotificationMarkerPosition(
+                samples.size - 1
+            )
+
+            track.setPlaybackPositionUpdateListener(
+                object :
+                    AudioTrack
+                        .OnPlaybackPositionUpdateListener {
+
+                    override fun onMarkerReached(
+                        track: AudioTrack
+                    ) {
+
+                        done.set(
+                            true
+                        )
+                    }
+
+                    override fun onPeriodicNotification(
+                        track: AudioTrack
+                    ) {
+                    }
+                }
+            )
+
             track.play()
 
+            val timeoutMs =
+                (
+                    samples.size *
+                            1000L /
+                            sampleRate
+                    ) +
+                        1500L
+
+            val deadline =
+                System.currentTimeMillis() +
+                        timeoutMs
+
             while (
-                track.playState ==
-                AudioTrack.PLAYSTATE_PLAYING &&
+                !done.get() &&
                 myGeneration ==
-                generation.get()
+                generation.get() &&
+                System.currentTimeMillis() <
+                deadline
             ) {
 
                 try {
@@ -846,6 +897,11 @@ class OfflineNeuralTtsEngine(
 
             isSpeaking =
                 false
+
+            Log.d(
+                TAG,
+                "offline onSpeakDone"
+            )
 
             listener.onSpeakDone()
         }
