@@ -312,6 +312,36 @@ class OfflineNeuralTtsEngine(
             ]
                 ?: return null
 
+        /*
+         * 内存防御：同一时刻只驻留一个离线 TTS 模型
+         * （ru 63+18MB / uz 114MB）。加载另一个语言的模型前
+         * 释放当前模型，避免与识别管线叠加触发 native OOM
+         * 或 LMK。代价是双语交替时重新加载（数秒）。
+         */
+        if (
+            engines.isNotEmpty()
+        ) {
+
+            Log.d(
+                TAG,
+                "unloading ${engines.keys} " +
+                        "before loading $code"
+            )
+
+            generation.incrementAndGet()
+
+            engines
+                .values
+                .forEach {
+                    engine ->
+
+                    engine
+                        .release()
+                }
+
+            engines.clear()
+        }
+
         try {
 
             val modelDir =
