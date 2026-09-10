@@ -796,6 +796,13 @@ class OfflineNeuralTtsEngine(
                 return
             }
 
+            /*
+             * 实际开始出声时上报 onSpeakStart：
+             * 与系统引擎的异步 onStart 对齐，
+             * 状态栏从"继续监听…"切换为"TTS 播放中…"。
+             */
+            listener.onSpeakStart()
+
             track.play()
 
             while (
