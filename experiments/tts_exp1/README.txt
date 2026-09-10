@@ -73,3 +73,26 @@ PC 结果：
   MMS 乌兹别克模型只吃西里尔字母；App 的 uz ASR 输出拉丁字母，
   安卓集成前必须加 Latin->Cyrillic 转写步骤（规则映射，
   无第三方依赖即可实现）。
+
+乌兹别克 Android 集成结果（2026-09-10）：回退
+--------------------------------------------
+PC 侧全部通过（模型转换、ORT 1.27 加载、sherpa 合成、听感验收），
+但安卓集成失败：sherpa-onnx AAR 1.13.7 原生层构造该模型时静默崩溃
+（App 直接退出，无 Java 异常、无 fatal 日志、dropbox 无记录、
+16GB 设备内存充足）。
+
+已排除（逐一实验验证）：
+  asset 压缩 / assetManager 非 null / espeak 递归复制 /
+  加载与流式识别并发（PC 无法复现）/ AudioTrack 跨线程释放 /
+  内存峰值（单模型驻留）/ n_speakers 元数据 / ORT 版本
+  （PC 1.27.0 正常）/ 导出工具链（torch 2.14 vs 2.0.1 图一致）/
+  IR/opset 画像（IR9/opset17 转换后仍崩溃）
+
+结论：AAR 1.13.7 原生层与 MMS 系模型不兼容（piper 系正常）。
+已回退：uz 从 MODELS 移除、assets 删除、回系统引擎降级路径；
+UzbekScript 转写器、多模型引擎架构、PC 转换产物全部保留。
+
+重试清单（升级 sherpa AAR / ORT 后）：
+  1. assets/tts/uz/ 放回 model.onnx + tokens.txt
+  2. 恢复注释掉的 uz ModelSpec + bump VERSION
+  3. 无需改其它代码（UzbekScript / TtsManager 已就位）

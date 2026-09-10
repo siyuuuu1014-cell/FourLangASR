@@ -881,15 +881,30 @@ class OfflineNeuralTtsEngine(
                         filesSubdir = "tts_ru",
                     ),
 
-                "uz" to
-                    ModelSpec(
-                        code = "uz",
-                        assetRoot = "tts/uz/",
-                        modelName = "model.onnx",
-                        tokensName = "tokens.txt",
-                        dataDirName = null,
-                        filesSubdir = "tts_uz",
-                    ),
+                /*
+                 * uz（MMS uzb-script_cyrillic）已从内置模型表移除：
+                 * sherpa-onnx AAR 1.13.7 的原生层在构造该模型时
+                 * 静默崩溃（十项假设全部排除，详见
+                 * experiments/tts_exp1/README.txt）。
+                 *
+                 * uz 由此回退到系统引擎降级路径
+                 * （"TTS voice missing/unsupported for uz"）。
+                 *
+                 * 重试清单（AAR 升级后）：
+                 * 1. assets/tts/uz/ 放回 model.onnx + tokens.txt
+                 *    （PC 转换产物在 experiments/tts_exp1/convert_uzb/）
+                 * 2. 恢复下面的 ModelSpec 条目并 bump VERSION
+                 * 3. 转写逻辑（UzbekScript）已就位，无需改动
+                 */
+                // "uz" to
+                //     ModelSpec(
+                //         code = "uz",
+                //         assetRoot = "tts/uz/",
+                //         modelName = "model.onnx",
+                //         tokensName = "tokens.txt",
+                //         dataDirName = null,
+                //         filesSubdir = "tts_uz",
+                //     ),
             )
     }
 }
