@@ -328,8 +328,14 @@ class OfflineNeuralTtsEngine(
                         "before loading $code"
             )
 
-            generation.incrementAndGet()
-
+            /*
+             * 注意：这里绝不能动 generation 计数器！
+             * speak() 已把当前代际记为 myGeneration，
+             * 若此处递增，后面 myGeneration != generation
+             * 的检查会把待播任务自我作废（曾导致"模型加载了
+             * 但永远不朗读"）。卸载在单线程 executor 上执行，
+             * 不可能与 play() 并发，无需靠代际打断。
+             */
             engines.forEach {
                 (oldCode, engine) ->
 
