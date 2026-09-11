@@ -96,3 +96,28 @@ UzbekScript 转写器、多模型引擎架构、PC 转换产物全部保留。
   1. assets/tts/uz/ 放回 model.onnx + tokens.txt
   2. 恢复注释掉的 uz ModelSpec + bump VERSION
   3. 无需改其它代码（UzbekScript / TtsManager 已就位）
+
+sherpa AAR 升级风险评估（2026-09-11）
+----------------------------------
+最新版 v1.13.8（2026-09-10 发布，仅比当前 1.13.7 高一个补丁版）。
+
+版本 diff（v1.13.7..v1.13.8，25 commits）：
+  - 原生代码改动集中在 fast-clustering（说话人聚类）和 canary/cohere/
+    funasr-nano/moonshine-v2 识别器——全部不是本项目用的模型；
+  - **TTS 原生代码（offline-tts-*.cc）零改动** → uz MMS 崩溃在 1.13.8
+    中被修复的概率低；
+  - Android 构建的 ORT 从 1.27.1 升到 1.28.2（唯一可能影响 uz 崩溃
+    的变量——崩溃发生在 Android ORT session 创建期，不排除是 1.27.1
+    的 Android 专用 kernel bug）。
+
+关键事实：当前 App 已无 ORT Java bridge 依赖（LID 换 TFLite 时已移除），
+升级 AAR = 单文件替换，不再有 v0.4 时代的 so 配对风险。
+
+PC 回归（sherpa 1.13.8，本机实测 run_sherpa138_regression.py）：
+  uz mms TTS / ru piper TTS / zh zipformer2 CTC / en transducer / silero VAD
+  全部 PASS——模型层面无回归风险。
+
+结论：升级本身安全（补丁版 + PC 全绿 + 无配对问题），
+但对解锁 uz 是低概率赌注（无 TTS 代码改动，仅 ORT 小版本提升）。
+建议：可作为低成本实验直接尝试；若 uz 仍崩溃则维持现状等待
+明确的 TTS/MMS 修复版本，升级本身依然保留（安全补丁）。
