@@ -89,13 +89,14 @@ PC 侧全部通过（模型转换、ORT 1.27 加载、sherpa 合成、听感验�
   IR/opset 画像（IR9/opset17 转换后仍崩溃）
 
 结论：AAR 1.13.7 原生层与 MMS 系模型不兼容（piper 系正常）。
-已回退：uz 从 MODELS 移除、assets 删除、回系统引擎降级路径；
-UzbekScript 转写器、多模型引擎架构、PC 转换产物全部保留。
+已回退：uz 从 MODELS 移除、assets 删除、回系统引擎降级路径。
+多模型引擎架构与 PC 转换产物保留在 tts_exp1；UzbekScript 转写器
+与 uz 集成代码存于 git 历史（提交 12f0953），重试时可恢复。
 
 重试清单（升级 sherpa AAR / ORT 后）：
-  1. assets/tts/uz/ 放回 model.onnx + tokens.txt
-  2. 恢复注释掉的 uz ModelSpec + bump VERSION
-  3. 无需改其它代码（UzbekScript / TtsManager 已就位）
+  1. 从 git 历史恢复 UzbekScript.kt（提交 12f0953）
+  2. assets/tts/uz/ 放回 model.onnx + tokens.txt
+  3. 在 MODELS 中加回 uz ModelSpec + bump VERSION
 
 sherpa AAR 升级风险评估（2026-09-11）
 ----------------------------------

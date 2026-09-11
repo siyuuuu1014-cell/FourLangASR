@@ -22,8 +22,6 @@ import java.util.concurrent.atomic.AtomicInteger
  * 用与 ASR 相同的 sherpa-onnx 运行时合成语音，不依赖系统 TTS 引擎。
  * 按语言挂载内置模型（MODELS 表）：
  *   ru -> Piper irina-medium（espeak G2P 数据）
- *   uz -> MMS uzb-script_cyrillic（需 Latin->Cyrillic 转写，
- *         见 [UzbekScript]）
  *
  * 模型从 assets 复制到 filesDir（espeak 数据需真实未压缩文件，
  * aapt 会压缩无扩展名的 asset），每次复制带版本标记与关键文件
@@ -117,33 +115,6 @@ class OfflineNeuralTtsEngine(
         }
 
         /*
-         * MMS 乌兹别克模型只吃西里尔字母，
-         * ASR 输出是拉丁字母 -> 转写。
-         */
-        val synthText =
-            if (
-                language.code ==
-                "uz"
-            ) {
-
-                UzbekScript
-                    .latinToCyrillic(
-                        text
-                    )
-
-            } else {
-
-                text
-            }
-
-        if (
-            synthText.isBlank()
-        ) {
-
-            return false
-        }
-
-        /*
          * 打断上一句（QUEUE_FLUSH 语义）：只递增代际，
          * 播放线程的循环会在 50ms 内自行退出并释放自己的
          * AudioTrack——AudioTrack 不是线程安全的，绝不在
@@ -192,7 +163,7 @@ class OfflineNeuralTtsEngine(
 
                 val audio =
                     engine.generate(
-                        synthText,
+                        text,
                         0,
                         speechRate,
                     )
@@ -945,29 +916,12 @@ class OfflineNeuralTtsEngine(
                     ),
 
                 /*
-                 * uz（MMS uzb-script_cyrillic）已从内置模型表移除：
-                 * sherpa-onnx AAR 1.13.7 的原生层在构造该模型时
-                 * 静默崩溃（十项假设全部排除，详见
-                 * experiments/tts_exp1/README.txt）。
-                 *
-                 * uz 由此回退到系统引擎降级路径
-                 * （"TTS voice missing/unsupported for uz"）。
-                 *
-                 * 重试清单（AAR 升级后）：
-                 * 1. assets/tts/uz/ 放回 model.onnx + tokens.txt
-                 *    （PC 转换产物在 experiments/tts_exp1/convert_uzb/）
-                 * 2. 恢复下面的 ModelSpec 条目并 bump VERSION
-                 * 3. 转写逻辑（UzbekScript）已就位，无需改动
+                 * uz（MMS uzb-script_cyrillic）曾被加入本表，
+                 * 但 sherpa AAR 1.13.7 原生层构造该模型时静默
+                 * 崩溃，已回退到系统引擎降级路径。
+                 * 重试清单见 experiments/tts_exp1/README.txt
+                 * （模型、转写器与多模型结构均在 git 历史中）。
                  */
-                // "uz" to
-                //     ModelSpec(
-                //         code = "uz",
-                //         assetRoot = "tts/uz/",
-                //         modelName = "model.onnx",
-                //         tokensName = "tokens.txt",
-                //         dataDirName = null,
-                //         filesSubdir = "tts_uz",
-                //     ),
             )
     }
 }
