@@ -34,15 +34,15 @@ experiments/**/speaker_data_*/
 
 # AMI corpus resources inside the speaker experiment dir; keep only
 # scripts and result CSVs under version control.
-experiments/speaker_exp4/*
-!experiments/speaker_exp4/*.py
-!experiments/speaker_exp4/*.csv
+experiments/speaker/*
+!experiments/speaker/*.py
+!experiments/speaker/*.csv
 experiments/**/out_wav/
 app/src/main/assets/tts/
-experiments/tts_exp1/convert_uzb/
-experiments/tts_exp1/MMS/
-experiments/tts_exp1/_*.json
-experiments/tts_exp1/_mms_doc.rst
-experiments/tts_exp1/models/mms_uzb_src/
+experiments/tts/convert_uzb/
+experiments/tts/MMS/
+experiments/tts/_*.json
+experiments/tts/_mms_doc.rst
+experiments/tts/models/mms_uzb_src/
 experiments/**/out_wav_uzb/
-experiments/tts_exp1/convert_uzb_v2/
+experiments/tts/convert_uzb_v2/

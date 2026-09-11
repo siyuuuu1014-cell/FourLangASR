@@ -24,7 +24,7 @@ import sherpa_onnx
 
 BASE_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = BASE_DIR.parents[1]
-EXP4_DIR = PROJECT_ROOT / "experiments" / "codeswitch_natural_exp4"
+EXP4_DIR = PROJECT_ROOT / "experiments" / "codeswitch_ascend"
 MODEL_DIR = Path(r"D:\dev\projects\fourlang_translation\asr_exp1\models")
 ZH_MODEL_DIR = MODEL_DIR / "sherpa-onnx-streaming-zipformer-small-ctc-zh-int8-2025-04-01"
 EN_MODEL_DIR = MODEL_DIR / "sherpa-onnx-zipformer-gigaspeech-2023-12-12"

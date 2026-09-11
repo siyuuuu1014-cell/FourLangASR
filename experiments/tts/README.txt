@@ -1,4 +1,4 @@
-TTS 路 B 可行性验证 - sherpa-onnx Piper 俄语离线合成
+离线 TTS（俄语 Piper + 乌兹别克 MMS）验证记录
 =====================================================
 
 目的
@@ -40,12 +40,12 @@ translation seam / 自动朗读 / 防回灌 gate 全部不动。
 运行
 ----
   & "D:\dev\projects\fourlang_translation\asr_exp1\.venv_sherpa\Scripts\Activate.ps1"
-  cd experiments\tts_exp1
+  cd experiments\tts
   python .\run_piper_ru_tts_probe.py
 
 （模型在 models/ 下，已被 .gitignore 排除，不入库。）
 
-乌兹别克 MMS TTS 验证（EXP1.2，2026-09-10）
+乌兹别克 MMS TTS 验证
 ------------------------------------------
 结论：可行，需要自转换 + 西里尔转写步骤。
 
@@ -90,7 +90,7 @@ PC 侧全部通过（模型转换、ORT 1.27 加载、sherpa 合成、听感验�
 
 结论：AAR 1.13.7 原生层与 MMS 系模型不兼容（piper 系正常）。
 已回退：uz 从 MODELS 移除、assets 删除、回系统引擎降级路径。
-多模型引擎架构与 PC 转换产物保留在 tts_exp1；UzbekScript 转写器
+多模型引擎架构与 PC 转换产物保留在 tts；UzbekScript 转写器
 与 uz 集成代码存于 git 历史（提交 12f0953），重试时可恢复。
 
 重试清单（升级 sherpa AAR / ORT 后）：
@@ -98,7 +98,7 @@ PC 侧全部通过（模型转换、ORT 1.27 加载、sherpa 合成、听感验�
   2. assets/tts/uz/ 放回 model.onnx + tokens.txt
   3. 在 MODELS 中加回 uz ModelSpec + bump VERSION
 
-sherpa AAR 升级风险评估（2026-09-11）
+sherpa AAR 升级风险评估
 ----------------------------------
 最新版 v1.13.8（2026-09-10 发布，仅比当前 1.13.7 高一个补丁版）。
 
@@ -125,7 +125,7 @@ PC 回归（sherpa 1.13.8，本机实测 run_sherpa138_regression.py）：
 
 清理记录（2026-09-11）：删除过时实验产物约 4.3GB
 ------------------------------------------
-- 三个一次性 venv（tts_exp1/.venv_convert、.venv_convert2、
+- 三个一次性 venv（tts/.venv_convert、.venv_convert2、
   lid_exp4_tflite/.venv_convert，环境重建命令见各实验 README）
 - convert_uzb_v2（torch 2.0.1 重导出实验，图结构与 v1 一致，无用）
 - G_100000.pth 两份、IR9 转换变体、config/vocab/vits-mms.py 副本

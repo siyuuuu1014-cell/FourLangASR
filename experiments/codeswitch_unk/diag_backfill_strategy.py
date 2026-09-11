@@ -1,7 +1,7 @@
 """Simulate backfill candidate-selection strategies on EXP5 regions data.
 
 Goal: pick the strategy that yields the cleanest backfill text on device.
-Data: unk_exp5_regions.csv (pad 0.45, positive_zh_en), en_text = raw
+Data: unk_regions.csv (pad 0.45, positive_zh_en), en_text = raw
 multi-candidate EN outputs joined by " | " (whole | left-half | right-half).
 
 Judgments:
@@ -17,8 +17,8 @@ STOP = set(
     "ah up we were what when which who will with you your s t ve re gonna got one two".split()
 )
 
-UTR = "unk_exp5_utterances.csv"
-REG = "unk_exp5_regions.csv"
+UTR = "unk_utterances.csv"
+REG = "unk_regions.csv"
 
 
 def load():

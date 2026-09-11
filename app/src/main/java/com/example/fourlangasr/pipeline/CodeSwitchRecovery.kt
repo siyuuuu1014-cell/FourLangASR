@@ -11,7 +11,7 @@ import com.example.fourlangasr.model.LoadResult
  * <unk>。本类以这些 <unk> 的时间戳为中心裁出音频片段，交给
  * EN（GigaSpeech）验证识别，再把识别文本回填到中文输出里。
  *
- * PC 基准（experiments/codeswitch_unk_exp5）：
+ * PC 基准（experiments/codeswitch_unk）：
  *   - 纯中文 15 条零 <unk>，误报 0
  *   - 30 条中英夹杂句约 60% 能回填出正确英文词，另有约 20%
  *     回填近似词（POST / FAMILY / MOBILE 级别，仍有提示意义）
@@ -728,7 +728,7 @@ class CodeSwitchRecovery(
             "<unk>"
 
         /*
-         * PC 校准（codeswitch_unk_exp5 diag_backfill_strategy）：
+         * PC 校准（codeswitch_unk diag_backfill_strategy）：
          * pad 越大回填质量越高 —— 0.6 s 严格词级命中 48% vs
          * 0.45 s 的 36%（检测命中率两者持平，但回填文本完整性
          * 0.6 明显更好，EN 需要更多上下文才能输出完整词）。

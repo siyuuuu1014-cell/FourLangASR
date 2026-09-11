@@ -20,17 +20,17 @@ MODEL_PATH = (
 
 DATA_DIR = (
     BASE_DIR
-    / "speaker_data_exp4"
+    / "speaker_data"
 )
 
 RESULTS_CSV = (
     BASE_DIR
-    / "speaker_exp4_results.csv"
+    / "speaker_results.csv"
 )
 
 SUMMARY_CSV = (
     BASE_DIR
-    / "speaker_exp4_summary.csv"
+    / "speaker_summary.csv"
 )
 
 

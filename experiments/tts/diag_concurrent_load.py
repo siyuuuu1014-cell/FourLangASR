@@ -16,7 +16,7 @@ from pathlib import Path
 
 import sherpa_onnx
 
-MODEL = Path(r"D:\dev\projects\FourLangAsrMobile\experiments\tts_exp1\models\vits-piper-ru_RU-irina-medium")
+MODEL = Path(r"D:\dev\projects\FourLangAsrMobile\experiments\tts\models\vits-piper-ru_RU-irina-medium")
 SILERO = Path(r"D:\dev\projects\FourLangAsrMobile\app\src\main\assets\silero_vad.onnx")
 STOP = threading.Event()
 crashed = []

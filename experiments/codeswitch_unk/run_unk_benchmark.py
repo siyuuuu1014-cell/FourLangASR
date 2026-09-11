@@ -28,7 +28,7 @@ PC_MODELS_DEFAULT = Path(r"D:\dev\projects\fourlang_translation\asr_exp1\models"
 ZH_MODEL_NAME = "sherpa-onnx-streaming-zipformer-small-ctc-zh-int8-2025-04-01"
 EN_MODEL_NAME = "sherpa-onnx-zipformer-gigaspeech-2023-12-12"
 
-EXP4_DIR_NAME = "codeswitch_natural_exp4"
+EXP4_DIR_NAME = "codeswitch_ascend"
 MANIFEST_CSV = "ascend_natural_manifest.csv"
 
 # Same flush tail as the Android ChineseSherpaEngine (0.66 s of silence).
@@ -36,9 +36,9 @@ TAIL_PAD_SEC = 0.66
 
 UNK_TOKEN = "<unk>"
 
-UTTERANCES_CSV = BASE_DIR / "unk_exp5_utterances.csv"
-REGIONS_CSV = BASE_DIR / "unk_exp5_regions.csv"
-SUMMARY_CSV = BASE_DIR / "unk_exp5_summary.csv"
+UTTERANCES_CSV = BASE_DIR / "unk_utterances.csv"
+REGIONS_CSV = BASE_DIR / "unk_regions.csv"
+SUMMARY_CSV = BASE_DIR / "unk_summary.csv"
 
 
 def load_manifest(exp4_dir: Path):

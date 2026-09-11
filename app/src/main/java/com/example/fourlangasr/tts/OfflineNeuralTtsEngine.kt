@@ -919,7 +919,7 @@ class OfflineNeuralTtsEngine(
                  * uz（MMS uzb-script_cyrillic）曾被加入本表，
                  * 但 sherpa AAR 1.13.7 原生层构造该模型时静默
                  * 崩溃，已回退到系统引擎降级路径。
-                 * 重试清单见 experiments/tts_exp1/README.txt
+                 * 重试清单见 experiments/tts/README.txt
                  * （模型、转写器与多模型结构均在 git 历史中）。
                  */
             )

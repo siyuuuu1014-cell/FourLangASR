@@ -18,12 +18,12 @@ SAMPLE_RATE = 16000
 
 EXP_DIR_REL = (
     Path("experiments")
-    / "codeswitch_natural_exp4"
+    / "codeswitch_ascend"
 )
 
 MODEL_REL = (
     Path("experiments")
-    / "lid_exp4_tflite"
+    / "lid"
     / "converted_tf"
     / "voxlingua107_float32.tflite"
 )
@@ -31,15 +31,15 @@ MODEL_REL = (
 MANIFEST_NAME = "ascend_natural_manifest.csv"
 
 WINDOW_RESULTS_NAME = (
-    "natural_exp4_shortwin_windows.csv"
+    "shortwin_windows.csv"
 )
 
 SUMMARY_NAME = (
-    "natural_exp4_shortwin_summary.csv"
+    "shortwin_summary.csv"
 )
 
 UTTERANCE_NAME = (
-    "natural_exp4_shortwin_utterances.csv"
+    "shortwin_utterances.csv"
 )
 
 MODEL_INPUT_SAMPLES = 80000

@@ -76,6 +76,6 @@ app/src/main/assets/
 - 无流式 partial 输出；无 TTS；翻译仍是 Placeholder。
 - 短外语词（"嗯 hello 我的名字叫……"）检测路线已从 VoxLingua 短窗口
   转向"主语言 ASR 不确定度触发候选验证"（见
-  `experiments/codeswitch_natural_exp4/README_shortwin.txt` 的结论）。
+  `experiments/codeswitch_ascend/README.txt` 的结论）。
 - 说话人采用 v0.3 观察模式（低置信即新建档案），真机验证后再考虑
   tentative-speaker 阶段。

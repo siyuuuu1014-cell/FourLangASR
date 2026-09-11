@@ -17,10 +17,10 @@ import soundfile as sf
 
 BASE_DIR = Path(__file__).resolve().parent
 
-OUTPUT_DIR = BASE_DIR / "speaker_data_exp4"
+OUTPUT_DIR = BASE_DIR / "speaker_data"
 
 COMBINED_MANIFEST = (
-    BASE_DIR / "speaker_exp4_manifest.csv"
+    BASE_DIR / "speaker_manifest.csv"
 )
 
 
@@ -1264,7 +1264,7 @@ def save_language_manifest(
     path = (
         BASE_DIR
         / (
-            f"speaker_exp4_"
+            f"speaker_"
             f"manifest_{language}.csv"
         )
     )
@@ -1305,7 +1305,7 @@ def rebuild_combined_manifest():
         path = (
             BASE_DIR
             / (
-                f"speaker_exp4_"
+                f"speaker_"
                 f"manifest_{language}.csv"
             )
         )

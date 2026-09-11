@@ -14,7 +14,7 @@ PROJECT_ROOT = BASE_DIR.parent.parent
 ONNX_MODEL = (
     PROJECT_ROOT
     / "experiments"
-    / "lid_exp1-3"
+    / "lid"
     / "models"
     / "voxlingua107"
     / "voxlingua107.onnx"
@@ -25,12 +25,12 @@ TFLITE_DIR = BASE_DIR / "converted_tf"
 DATA_DIR = (
     PROJECT_ROOT
     / "experiments"
-    / "speaker_exp4"
-    / "speaker_data_exp4"
+    / "speaker"
+    / "speaker_data"
 )
 
-RESULTS_CSV = BASE_DIR / "lid_exp4_tfbackend_results.csv"
-SUMMARY_CSV = BASE_DIR / "lid_exp4_tfbackend_summary.csv"
+RESULTS_CSV = BASE_DIR / "lid_tflite_results.csv"
+SUMMARY_CSV = BASE_DIR / "lid_tflite_summary.csv"
 
 LANGUAGES = ["zh", "en", "ru", "uz"]
 

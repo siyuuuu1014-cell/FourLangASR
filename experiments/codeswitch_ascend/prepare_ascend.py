@@ -323,7 +323,7 @@ def main() -> None:
     base_dir = (
         args.project_root
         / "experiments"
-        / "codeswitch_natural_exp4"
+        / "codeswitch_ascend"
     )
 
     positive_dir = (
@@ -736,7 +736,7 @@ def main() -> None:
             "rerun with:"
         )
         print(
-            "  python .\\prepare_ascend_natural_exp4.py "
+            "  python .\\prepare_ascend.py "
             "--endpoint https://huggingface.co"
         )
 

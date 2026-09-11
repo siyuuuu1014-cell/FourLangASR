@@ -15,18 +15,18 @@ from ai_edge_litert.interpreter import Interpreter
 PROJECT_ROOT_DEFAULT = Path(r"D:\dev\projects\FourLangAsrMobile")
 
 SAMPLE_RATE = 16000
-EXP_REL = Path("experiments") / "codeswitch_natural_exp4"
+EXP_REL = Path("experiments") / "codeswitch_ascend"
 
 MODEL_REL = (
     Path("experiments")
-    / "lid_exp4_tflite"
+    / "lid"
     / "converted_tf"
     / "voxlingua107_float32.tflite"
 )
 
 MANIFEST_NAME = "ascend_natural_manifest.csv"
-UTTERANCE_RESULTS_NAME = "natural_exp4_utterance_results.csv"
-SUMMARY_NAME = "natural_exp4_summary.csv"
+UTTERANCE_RESULTS_NAME = "ascend_utterance_results.csv"
+SUMMARY_NAME = "ascend_summary.csv"
 
 WINDOW_SEC = 1.25
 HOP_SEC = 0.25
@@ -885,7 +885,7 @@ def main() -> None:
     if not manifest_path.is_file():
         raise FileNotFoundError(
             f"Missing ASCEND manifest:\n{manifest_path}\n\n"
-            "Run prepare_ascend_natural_exp4.py first."
+            "Run prepare_ascend.py first."
         )
 
     if not model_path.is_file():

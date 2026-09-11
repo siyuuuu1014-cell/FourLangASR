@@ -15,12 +15,12 @@ LANG_MAP_PATH = MODEL_DIR / "lang_map.json"
 
 DATA_DIR = (
     BASE_DIR.parent
-    / "speaker_exp4"
-    / "speaker_data_exp4"
+    / "speaker"
+    / "speaker_data"
 )
 
-RESULTS_CSV = BASE_DIR / "lid_exp2_results.csv"
-SUMMARY_CSV = BASE_DIR / "lid_exp2_summary.csv"
+RESULTS_CSV = BASE_DIR / "lid_voxlingua_results.csv"
+SUMMARY_CSV = BASE_DIR / "lid_voxlingua_summary.csv"
 
 LANGUAGES = ["zh", "en", "ru", "uz"]
 SAMPLE_RATE = 16000

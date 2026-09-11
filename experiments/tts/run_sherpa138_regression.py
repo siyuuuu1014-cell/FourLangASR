@@ -21,7 +21,7 @@ import soundfile as sf
 BASE = Path(__file__).resolve().parent
 PROJECT = BASE.parents[1]
 ASSETS = PROJECT / "app" / "src" / "main" / "assets"
-EXP4 = PROJECT / "experiments" / "codeswitch_natural_exp4"
+EXP4 = PROJECT / "experiments" / "codeswitch_ascend"
 
 ZH_DIR = BASE / "models" / "zh_probe"
 EN_DIR = BASE / "models" / "en_probe"

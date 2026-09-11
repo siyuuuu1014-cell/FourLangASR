@@ -19,12 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent
 
 OUTPUT_DIR = (
     BASE_DIR
-    / "speaker_data_exp4"
+    / "speaker_data"
 )
 
 MANIFEST_PATH = (
     BASE_DIR
-    / "speaker_exp4_manifest.csv"
+    / "speaker_manifest.csv"
 )
 
 
@@ -1073,7 +1073,7 @@ def main():
 
     print(
         "python "
-        ".\\run_speaker_exp4.py"
+        ".\\run_speaker_benchmark.py"
     )
 
 
