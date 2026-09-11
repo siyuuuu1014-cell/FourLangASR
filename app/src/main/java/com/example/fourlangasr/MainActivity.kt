@@ -123,6 +123,27 @@ class MainActivity : AppCompatActivity() {
         false
 
     /*
+     * TTS 播放结束后的回声冷却截止时间（毫秒时间戳）。
+     *
+     * 系统 TTS 的 onDone 常在扬声器实际停止前触发，
+     * 播完瞬间的残留回声会被麦克风拾取、被 VAD 判成"新语音"，
+     * 造成 识别 → 朗读 → 再识别 的自触发循环。
+     * 冷却期内音频帧直接丢弃。
+     */
+    @Volatile
+    private var ttsCooldownUntil =
+        0L
+
+    /*
+     * 冷却结束时在音频线程重置一次 VAD，
+     * 丢弃播放期间任何已进入 VAD 的残留状态。
+     * （VAD 不是线程安全的，reset 必须由音频线程执行）
+     */
+    @Volatile
+    private var pendingVadReset =
+        false
+
+    /*
      * 当前 VAD 是否已经检测到人在讲话。
      */
     @Volatile
@@ -170,6 +191,17 @@ class MainActivity : AppCompatActivity() {
             override fun onSpeakDone() {
 
                 runOnUiThread {
+
+                    /*
+                     * 播完进入回声冷却期，并标记 VAD 重置：
+                     * 扬声器残响不再触发"识别→朗读"自循环。
+                     */
+                    ttsCooldownUntil =
+                        System.currentTimeMillis() +
+                                TTS_COOLDOWN_MS
+
+                    pendingVadReset =
+                        true
 
                     if (
                         conversationActive
@@ -1539,6 +1571,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         /*
+         * 回声冷却期：播完瞬间的扬声器残响直接丢弃，
+         * 防止自触发循环。
+         */
+        if (
+            System.currentTimeMillis() <
+            ttsCooldownUntil
+        ) {
+            return
+        }
+
+        /*
          * TTS 防回灌 gate：
          * 播放期间麦克风仍在采集，但这些帧不得进入 VAD——
          * 否则扬声器声音会触发 VAD → ASR → 又朗读，形成循环。
@@ -1546,6 +1589,16 @@ class MainActivity : AppCompatActivity() {
          */
         if (ttsEngine.isSpeaking) {
             return
+        }
+
+        /*
+         * 冷却结束后由音频线程重置一次 VAD，
+         * 清掉播放期间进入的任何残留状态。
+         */
+        if (pendingVadReset) {
+            pendingVadReset = false
+            vad.reset()
+            vadSpeechActive = false
         }
 
         try {
@@ -2307,5 +2360,15 @@ class MainActivity : AppCompatActivity() {
         ttsEngine.release()
 
         super.onDestroy()
+    }
+
+    companion object {
+
+        /*
+         * TTS 播完后的回声冷却时长。
+         * 覆盖系统引擎 onDone 提前触发 + 扬声器残响的时间窗。
+         */
+        private const val TTS_COOLDOWN_MS =
+            900L
     }
 }
