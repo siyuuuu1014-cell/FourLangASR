@@ -122,3 +122,16 @@ PC 回归（sherpa 1.13.8，本机实测 run_sherpa138_regression.py）：
 但对解锁 uz 是低概率赌注（无 TTS 代码改动，仅 ORT 小版本提升）。
 建议：可作为低成本实验直接尝试；若 uz 仍崩溃则维持现状等待
 明确的 TTS/MMS 修复版本，升级本身依然保留（安全补丁）。
+
+清理记录（2026-09-11）：删除过时实验产物约 4.3GB
+------------------------------------------
+- 三个一次性 venv（tts_exp1/.venv_convert、.venv_convert2、
+  lid_exp4_tflite/.venv_convert，环境重建命令见各实验 README）
+- convert_uzb_v2（torch 2.0.1 重导出实验，图结构与 v1 一致，无用）
+- G_100000.pth 两份、IR9 转换变体、config/vocab/vits-mms.py 副本
+  （源模型可经 hf-mirror 重新下载）
+
+重试套件（retry_kit/，已入库）：
+- vits-mms.py（官方转换脚本）
+- monotonic_align_numpy_fallback.py（无编译器环境的 numpy 实现）
+- convert_uzb/ 仅保留 model.onnx + tokens.txt（最终转换产物）
