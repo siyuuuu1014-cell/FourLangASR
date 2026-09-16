@@ -3,6 +3,8 @@ package com.example.fourlangasr
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
 import android.util.Log
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -24,7 +27,12 @@ import com.example.fourlangasr.pipeline.CodeSwitchRecovery
 import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
-import com.example.fourlangasr.translation.PlaceholderTranslationEngine
+import com.example.fourlangasr.translation.KitTranslationEngine
+import com.example.fourlangasr.translation.M2m100Tokenizer
+import com.example.fourlangasr.translation.ServerTranslationEngine
+import com.example.fourlangasr.translation.TranslationDownloadManager
+import com.example.fourlangasr.translation.TranslationEngine
+import com.example.fourlangasr.translation.TranslationService
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
 import com.example.fourlangasr.tts.OfflineNeuralTtsEngine
 import com.example.fourlangasr.tts.TtsEngine
@@ -33,10 +41,15 @@ import com.example.fourlangasr.vad.VadEngine
 import com.example.fourlangasr.speaker.SpeakerManager
 import com.example.fourlangasr.lid.LidEngine
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -122,6 +135,9 @@ class MainActivity : AppCompatActivity() {
     private var conversationActive =
         false
 
+    @Volatile
+    private var activityDestroyed = false
+
     /*
      * TTS 播放结束后的回声冷却截止时间（毫秒时间戳）。
      *
@@ -157,8 +173,130 @@ class MainActivity : AppCompatActivity() {
     private var languageSwitchInProgress =
         false
 
-    private val translationEngine =
-        PlaceholderTranslationEngine()
+    /*
+     * 翻译路由（lazy）：
+     * - 本地 m2m100 四语 int8 ONNX（离线，模型包首次使用时经服务器下载）；
+     * - 服务器六组 SMaLL-100 API（回退，模型未就绪时也可用）。
+     * tokenizer 资产（约 4MB）打包在 APK assets，与模型包无关。
+     */
+    private val translationEngine: TranslationEngine by lazy {
+        val tokenizer =
+            M2m100Tokenizer.load(
+                assets.open("m2m100/tokenizer.bin")
+            )
+
+        val modelDir =
+            File(filesDir, "translation")
+
+        TranslationService(
+            kitEngine =
+                KitTranslationEngine(
+                    tokenizer = tokenizer,
+                    modelDir = modelDir,
+                ),
+            serverEngine =
+                ServerTranslationEngine(),
+            downloadManager =
+                TranslationDownloadManager(
+                    modelDir = modelDir,
+                ),
+        )
+    }
+
+    /*
+     * 首次使用：在非计费网络（Wi-Fi）下后台下载四语翻译模型包（约 734MB）。
+     * 下载期间翻译走服务器回退；完成后本机离线翻译可用。
+     * 失败不弹错误：下次满足条件时自动续传。
+     */
+    private fun maybeDownloadTranslationModel() {
+        val service =
+            translationEngine as? TranslationService
+                ?: return
+
+        lifecycleScope.launch {
+
+            if (
+                service.isLocalModelReady() ||
+                !isOnUnmeteredNetwork()
+            ) {
+
+                return@launch
+            }
+
+            var lastPct =
+                -1
+
+            val ok =
+                withContext(Dispatchers.IO) {
+
+                    try {
+
+                        service.ensureLocalModel {
+                                phase,
+                                done,
+                                total,
+                            ->
+
+                            if (total > 0) {
+
+                                val pct =
+                                    (done * 100 / total)
+                                        .toInt()
+
+                                if (
+                                    pct != lastPct &&
+                                    pct % 10 == 0
+                                ) {
+
+                                    lastPct =
+                                        pct
+
+                                    Log.d(
+                                        "FourLangTranslation",
+                                        "$phase $pct%",
+                                    )
+                                }
+                            }
+                        }
+
+                        true
+
+                    } catch (e: Throwable) {
+
+                        Log.w(
+                            "FourLangTranslation",
+                            "模型下载失败（翻译走服务器回退）",
+                            e,
+                        )
+
+                        false
+                    }
+                }
+
+            if (ok) {
+
+                Toast.makeText(
+                    this@MainActivity,
+                    "离线翻译模型已就绪",
+                    Toast.LENGTH_SHORT,
+                ).show()
+            }
+        }
+    }
+
+    private fun isOnUnmeteredNetwork(): Boolean {
+        val cm =
+            getSystemService(ConnectivityManager::class.java)
+                ?: return false
+
+        val caps =
+            cm.getNetworkCapabilities(cm.activeNetwork)
+                ?: return false
+
+        return caps.hasCapability(
+            NetworkCapabilities.NET_CAPABILITY_NOT_METERED
+        )
+    }
 
     /*
      * TTS v0.1（Android 系统 TextToSpeech）。
@@ -176,6 +314,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSpeakStart() {
 
                 runOnUiThread {
+                    if (activityDestroyed) return@runOnUiThread
 
                     if (
                         conversationActive
@@ -191,6 +330,7 @@ class MainActivity : AppCompatActivity() {
             override fun onSpeakDone() {
 
                 runOnUiThread {
+                    if (activityDestroyed) return@runOnUiThread
 
                     /*
                      * 播完进入回声冷却期，并标记 VAD 重置：
@@ -219,6 +359,7 @@ class MainActivity : AppCompatActivity() {
             ) {
 
                 runOnUiThread {
+                    if (activityDestroyed) return@runOnUiThread
 
                     showStatus(
                         "TTS: $reason"
@@ -256,6 +397,7 @@ class MainActivity : AppCompatActivity() {
             ) {
 
                 runOnUiThread {
+                    if (activityDestroyed) return@runOnUiThread
 
                     /*
                      * ttsEngine 是 TtsManager：查询合并后的完整可用性
@@ -409,6 +551,12 @@ class MainActivity : AppCompatActivity() {
                 offlineEngine =
                     offlineEngine,
             )
+
+        /*
+         * Wi-Fi 下首次使用时后台下载四语翻译模型包；
+         * 未就绪期间翻译走服务器回退。
+         */
+        maybeDownloadTranslationModel()
 
         /*
          * ========================================================
@@ -761,30 +909,57 @@ class MainActivity : AppCompatActivity() {
             val target =
                 selectedTarget()
 
-            val result =
-                translationEngine.translate(
-                    text = lastAsrText,
-                    source = source,
-                    target = target,
-                )
+            val text =
+                lastAsrText
 
-            /*
-             * 翻译模型未接入时显示原文并明确提示，
-             * 避免用户误以为已完成翻译。
-             */
+            if (
+                text.isBlank()
+            ) {
+
+                return@setOnClickListener
+            }
+
             textTranslation.text =
-                if (
-                    result.translated ||
-                    result.outputText.isBlank()
-                ) {
+                "翻译中…"
 
-                    result.outputText
+            lifecycleScope.launch {
 
-                } else {
+                val result =
+                    try {
 
-                    result.outputText +
-                            "\n（翻译模型未接入，当前朗读 ASR 原文）"
-                }
+                        withContext(Dispatchers.IO) {
+
+                            translationEngine.translate(
+                                text = text,
+                                source = source,
+                                target = target,
+                            )
+                        }
+
+                    } catch (e: Throwable) {
+
+                        textTranslation.text =
+                            "翻译失败：\n" +
+                                    "${e.javaClass.simpleName}: " +
+                                    "${e.message}"
+
+                        return@launch
+                    }
+
+                textTranslation.text =
+                    if (
+                        result.translated ||
+                        result.outputText.isBlank()
+                    ) {
+
+                        result.outputText
+
+                    } else {
+
+                        result.outputText +
+                                "\n（翻译模型未接入，当前朗读 ASR 原文）"
+                    }
+            }
         }
 
         /*
@@ -809,7 +984,7 @@ class MainActivity : AppCompatActivity() {
                 /*
                  * 关闭时立刻停掉正在播放的语音。
                  */
-                ttsEngine.stop()
+                stopSpeech()
 
                 showStatus(
                     "自动朗读已关闭。"
@@ -1872,6 +2047,8 @@ class MainActivity : AppCompatActivity() {
                 pipeline
             )
 
+        } catch (e: CancellationException) {
+            throw e
         } catch (
             e: Throwable
         ) {
@@ -1912,7 +2089,7 @@ class MainActivity : AppCompatActivity() {
         /*
          * 结束对话即停止正在播放的朗读。
          */
-        ttsEngine.stop()
+        stopSpeech()
 
         btnRecord.isEnabled =
             false
@@ -2149,7 +2326,7 @@ class MainActivity : AppCompatActivity() {
      * 真实翻译接入前 passthrough 保证 speechLanguage == sourceLanguage
      * （中文 ASR 永远用中文 voice，即使 targetLanguage 选了 EN）。
      */
-    private fun speakPipelineResult(
+    private suspend fun speakPipelineResult(
         pipeline: PipelineResult,
     ) {
 
@@ -2165,7 +2342,7 @@ class MainActivity : AppCompatActivity() {
          * 识别与文本显示不受影响。
          */
         if (
-            !autoSpeakEnabled
+            !conversationActive || activityDestroyed || !autoSpeakEnabled
         ) {
 
             return
@@ -2185,18 +2362,40 @@ class MainActivity : AppCompatActivity() {
             selectedTarget()
 
         val translation =
-            translationEngine.translate(
-                text = text,
-                source =
-                    pipeline.routedLanguage,
-                target = target,
-            )
+            try {
+
+                withContext(Dispatchers.IO) {
+
+                    translationEngine.translate(
+                        text = text,
+                        source =
+                            pipeline.routedLanguage,
+                        target = target,
+                    )
+                }
+
+            } catch (e: Throwable) {
+
+                /*
+                 * 翻译不可用（无网络且本地模型未就绪等）：
+                 * 回退朗读 ASR 原文，避免整条链路静默失效。
+                 */
+                Log.w(
+                    "FourLangTTS",
+                    "翻译失败，回退朗读 ASR 原文",
+                    e,
+                )
+
+                null
+            }
 
         ttsEngine.speak(
             text =
-                translation.outputText,
+                translation?.outputText
+                    ?: text,
             language =
-                translation.speechLanguage,
+                translation?.speechLanguage
+                    ?: pipeline.routedLanguage,
         )
 
         /*
@@ -2288,78 +2487,48 @@ class MainActivity : AppCompatActivity() {
      */
 
     override fun onDestroy() {
+        activityDestroyed = true
+        conversationActive = false
+        vadSpeechActive = false
+        segmentChannel?.close()
+        segmentChannel = null
 
-        conversationActive =
-            false
-
-        vadSpeechActive =
-            false
-
-        try {
-
-            segmentChannel
-                ?.close()
-
-        } catch (_: Throwable) {
-        }
-
-        segmentChannel =
-            null
-
-        recognitionJob
-            ?.cancel()
-
-        recognitionJob =
-            null
-
-        /*
-         * 先停止录音线程。
-         */
-        audioRecorder.cancel()
-
-        /*
-         * 再释放 VAD native 模型。
-         */
-        try {
-
-            vadEngine
-                ?.release()
-
-        } catch (_: Throwable) {
-        }
-
-        vadEngine =
-            null
-
-        /*
-         * 释放 Speaker native 模型。
-         * SpeakerManager 内部对 identify/release 做了同步保护。
-         */
-        speakerManager.release()
-
-        /*
-         * Release LiteRT LID.
-         * This does not touch sherpa-onnx / ONNX Runtime.
-         */
-        lidEngine.release()
-
-        /*
-         * 释放 code-switch EN 验证模型（懒加载的 EN recognizer）。
-         */
-        codeSwitchRecovery.release()
-
-        /*
-         * 最后释放当前 ASR。
-         */
-        asrManager.release()
-
-        /*
-         * TTS（Android 系统引擎）：stop + shutdown。
-         * 追加在现有 release 序列末尾，不改动已有顺序。
-         */
+        // cancel 不会中断正在执行的 native 推理。连同初始化/切换任务一起
+        // 等待结束，才能释放模型；清理使用独立 scope，不阻塞主线程。
+        val pendingJobs = lifecycleScope.coroutineContext[Job]
+            ?.children?.toList().orEmpty()
+        lifecycleScope.cancel()
+        recognitionJob = null
         ttsEngine.release()
 
+        CoroutineScope(Dispatchers.IO).launch {
+            pendingJobs.joinAll()
+            // 停止对话任务也可能正在操作 AudioRecord，先等它退出，避免双重停止。
+            audioRecorder.cancel()
+
+            val releases = listOf<Pair<String, () -> Unit>>(
+                "VAD" to { vadEngine?.release(); vadEngine = null },
+                "Speaker" to { speakerManager.release() },
+                "LID" to { lidEngine.release() },
+                "Code-switch" to { codeSwitchRecovery.release() },
+                "ASR" to { asrManager.release() },
+            )
+            for ((name, release) in releases) {
+                try {
+                    release()
+                } catch (e: Exception) {
+                    Log.e("FourLangASR", "Failed to release $name", e)
+                }
+            }
+        }
         super.onDestroy()
+    }
+
+    private fun stopSpeech() {
+        // 手动停止也会留下扬声器残响，和自然播完共用冷却机制。
+        ttsCooldownUntil = System.currentTimeMillis() + TTS_COOLDOWN_MS
+        pendingVadReset = true
+        ttsEngine.stop()
     }
 
     companion object {

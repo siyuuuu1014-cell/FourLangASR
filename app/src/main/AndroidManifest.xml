@@ -9,6 +9,9 @@
     -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 判断当前网络是否计费（Wi-Fi 才自动下载翻译模型包） -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="true" />
@@ -30,7 +33,9 @@
         android:allowBackup="true"
         android:label="FourLang ASR"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FourLangAsr">
+        android:theme="@style/Theme.FourLangAsr"
+        android:usesCleartextTraffic="true">
+        <!-- usesCleartextTraffic：翻译 API/模型包托管在 http://（无 TLS）的实验服务器上。 -->
 
         <activity
             android:name=".MainActivity"
