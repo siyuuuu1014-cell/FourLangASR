@@ -151,10 +151,12 @@ class KitTranslationEngine(
         useCache: Boolean,
     ): Pair<Int, Pair<List<OnnxTensor>, List<OnnxTensor>>> {
         val feeds = HashMap<String, OnnxTensor>(60)
+        val idTensor = int64Tensor(inputIds)
+        val boolTensor = boolTensor(useCache)
         feeds["encoder_attention_mask"] = encMask
-        feeds["input_ids"] = int64Tensor(inputIds)
+        feeds["input_ids"] = idTensor
         feeds["encoder_hidden_states"] = encHidden
-        feeds["use_cache_branch"] = boolTensor(useCache)
+        feeds["use_cache_branch"] = boolTensor
         var di = 0
         var ei = 0
         for (i in pastInputNames.indices) {
@@ -175,6 +177,8 @@ class KitTranslationEngine(
             return next to (presentDec to presentEnc)
         } finally {
             result.close()
+            idTensor.close()
+            boolTensor.close()
         }
     }
 
