@@ -3,6 +3,12 @@
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!--
+        Translation: six specialist models are accessed via the server API;
+        the 4-language m2m100 model is downloaded from the server on first use.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="true" />

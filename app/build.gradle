@@ -37,6 +37,10 @@ android {
         jvmTarget = '17'
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     // ASR models are already compressed/binary. Keeping them uncompressed
     // avoids extra work and is friendly to native model loading.
     aaptOptions {
@@ -45,6 +49,8 @@ android {
 }
 
 dependencies {
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:4.11.0'
     // VoxLingua LID runtime. Java Interpreter API; compatible with Kotlin 1.9 project.
     implementation 'org.tensorflow:tensorflow-lite:2.16.1'
     // VoxLingua107 LID runtime; separate from sherpa ONNX Runtime.
@@ -58,6 +64,10 @@ implementation 'androidx.core:core-ktx:1.12.0'
     // sherpa-onnx Android AAR.
     // tools/download_sherpa_aar.ps1 downloads this file.
     implementation files('libs/sherpa-onnx-1.13.7.aar')
+
+    // ORT Java bridge (1.27.0 classes.jar + libonnxruntime4j_jni.so).
+    // libonnxruntime.so is reused from sherpa-onnx 1.13.7's bundled 1.27.1 build.
+    implementation files('libs/onnxruntime-1.27.0-classes.jar')
 
     // Russian Vosk fallback/current candidate.
     implementation 'net.java.dev.jna:jna:5.18.1@aar'
