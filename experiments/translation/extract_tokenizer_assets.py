@@ -42,7 +42,7 @@ SPM_MODEL = PKG / "sentencepiece.bpe.model"
 VOCAB_JSON = PKG / "vocab.json"
 ADDED_TOKENS = PKG / "added_tokens.json"
 
-ASSET_DIR = ROOT / "app" / "src" / "main" / "assets" / "m2m100"
+ASSET_DIR = ROOT / "app" / "src" / "test" / "resources" / "m2m100"
 ASSET_FILE = ASSET_DIR / "tokenizer.bin"
 TEST_RES_DIR = ROOT / "app" / "src" / "test" / "resources" / "m2m100"
 VECTORS_FILE = TEST_RES_DIR / "tokenizer_test_vectors.json"

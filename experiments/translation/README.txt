@@ -85,11 +85,13 @@ piece 数组按 spm id 顺序；score 用于 BPE agenda 优先级。
   /d/dev/projects/fourlang_translation/.venv/Scripts/python.exe extract_tokenizer_assets.py
 语料：全部 128000 个 piece（含前导空格变体）+ 四语真实句 +
 边界/空白/全角/emoji/组合标记压力（基数 × 组合标记）。
-输出：
-  app/src/main/assets/m2m100/tokenizer.bin
-  app/src/test/resources/m2m100/tokenizer_test_vectors.json
-  app/src/test/resources/m2m100/normalizer_test_vectors.json
-（后两者为 Kotlin 单测对拍向量，由 M2m100TokenizerTest 消费。）
+输出（全部进入 app/src/test/resources/m2m100/，Kotlin 单测消费）：
+  tokenizer.bin（紧凑资产，fromAsset 构造路径的测试基准）
+  tokenizer_test_vectors.json / normalizer_test_vectors.json（oracle 对拍向量）
+
+App 运行时不再使用 APK 内置资产：下载的模型包自包含
+sentencepiece.bpe.model + vocab.json，由 M2m100Tokenizer.fromSpm
+在首次使用时构建（同一批 oracle 向量验证）。
 
 运行参考解码器
 --------------

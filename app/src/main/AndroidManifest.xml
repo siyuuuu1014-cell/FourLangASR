@@ -46,6 +46,11 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".translation.ui.SpecialistModelsActivity"
+            android:exported="false"
+            android:label="专项模型" />
+
     </application>
 
 </manifest>

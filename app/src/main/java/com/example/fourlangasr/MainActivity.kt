@@ -27,12 +27,9 @@ import com.example.fourlangasr.pipeline.CodeSwitchRecovery
 import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
-import com.example.fourlangasr.translation.KitTranslationEngine
-import com.example.fourlangasr.translation.M2m100Tokenizer
-import com.example.fourlangasr.translation.ServerTranslationEngine
-import com.example.fourlangasr.translation.TranslationDownloadManager
 import com.example.fourlangasr.translation.TranslationEngine
-import com.example.fourlangasr.translation.TranslationService
+import com.example.fourlangasr.translation.TranslationModules
+import com.example.fourlangasr.translation.ui.SpecialistModelsActivity
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
 import com.example.fourlangasr.tts.OfflineNeuralTtsEngine
 import com.example.fourlangasr.tts.TtsEngine
@@ -61,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnRecord: Button
     private lateinit var btnRelease: Button
     private lateinit var btnTranslate: Button
+    private lateinit var btnSpecialistModels: Button
     private lateinit var btnAutoSpeak: Button
     private lateinit var btnSpeechRate: Button
     private lateinit var textTtsAvailability: TextView
@@ -174,38 +172,19 @@ class MainActivity : AppCompatActivity() {
         false
 
     /*
-     * 翻译路由（lazy）：
-     * - 本地 m2m100 四语 int8 ONNX（离线，模型包首次使用时经服务器下载）；
-     * - 服务器六组 SMaLL-100 API（回退，模型未就绪时也可用）。
-     * tokenizer 资产（约 4MB）打包在 APK assets，与模型包无关。
+     * 翻译子系统（进程内单例，专项模型页共享）：
+     * - 本地模型：四语总模型 + 六组专项模型，按需下载（专项模型页）；
+     * - 服务器 API：本地未就绪/失败时的兜底。
+     * 路由与模型参数全部来自远端 manifest + 包内 MANIFEST，无硬编码。
      * 注意：KitTranslationEngine 构造不加载 ORT 原生库，
      * 首次 translate 才加载 —— App 启动路径绝不触碰 native ORT。
      */
-    private val translationDownloadManager: TranslationDownloadManager by lazy {
-        TranslationDownloadManager(
-            modelDir =
-                File(filesDir, "translation")
-        )
+    private val translationModules by lazy {
+        TranslationModules.getInstance(applicationContext)
     }
 
     private val translationEngine: TranslationEngine by lazy {
-        val tokenizer =
-            M2m100Tokenizer.load(
-                assets.open("m2m100/tokenizer.bin")
-            )
-
-        TranslationService(
-            kitEngine =
-                KitTranslationEngine(
-                    tokenizer = tokenizer,
-                    modelDir =
-                        File(filesDir, "translation"),
-                ),
-            serverEngine =
-                ServerTranslationEngine(),
-            downloadManager =
-                translationDownloadManager,
-        )
+        translationModules.service
     }
 
     /*
@@ -213,79 +192,83 @@ class MainActivity : AppCompatActivity() {
      * 下载期间翻译走服务器回退；完成后本机离线翻译可用。
      * 失败不弹错误：下次满足条件时自动续传。
      */
-    private fun maybeDownloadTranslationModel() {
-        val downloadManager =
-            translationDownloadManager
+    /**
+     * 模型同步（Wi-Fi 下）：拉取远端清单 → 总模型首装 → 过期包重下。
+     * 下载期间翻译走服务器回退；失败不弹错误，下次满足条件自动重试。
+     * 六组专项模型不在启动时自动下载，由"专项模型"页按需触发。
+     */
+    private fun maybeSyncTranslationModels() {
+        val sync =
+            translationModules.sync
 
         lifecycleScope.launch {
 
             if (
-                downloadManager.isModelReady() ||
                 !isOnUnmeteredNetwork()
             ) {
 
                 return@launch
             }
 
-            var lastPct =
-                -1
+            var lastLogPct =
+                HashMap<String, Int>()
 
             val ok =
-                withContext(Dispatchers.IO) {
+                sync.sync(
+                    installGeneralistIfMissing = true,
+                ) { modelId, phase, done, total ->
 
-                    try {
-
-                        downloadManager.ensureModel {
-                                phase,
-                                done,
-                                total,
-                            ->
-
-                            if (total > 0) {
-
-                                val pct =
-                                    (done * 100 / total)
-                                        .toInt()
-
-                                if (
-                                    pct != lastPct &&
-                                    pct % 10 == 0
-                                ) {
-
-                                    lastPct =
-                                        pct
-
-                                    Log.d(
-                                        "FourLangTranslation",
-                                        "$phase $pct%",
-                                    )
-                                }
-                            }
-                        }
-
-                        true
-
-                    } catch (e: Throwable) {
+                    if (phase == "error") {
 
                         Log.w(
                             "FourLangTranslation",
-                            "模型下载失败（翻译走服务器回退）",
-                            e,
+                            "$modelId 同步失败",
                         )
 
-                        false
+                        return@sync
+                    }
+
+                    if (total > 0) {
+
+                        val pct =
+                            (done * 100 / total)
+                                .toInt()
+
+                        if (
+                            pct != lastLogPct[modelId] &&
+                            pct % 10 == 0
+                        ) {
+
+                            lastLogPct[modelId] =
+                                pct
+
+                            Log.d(
+                                "FourLangTranslation",
+                                "$modelId $phase $pct%",
+                            )
+                        }
                     }
                 }
 
             if (ok) {
 
-                Toast.makeText(
-                    this@MainActivity,
-                    "离线翻译模型已就绪",
-                    Toast.LENGTH_SHORT,
-                ).show()
+                Log.d(
+                    "FourLangTranslation",
+                    "manifest synced: " +
+                            (sync.latestManifest?.models?.size ?: 0) +
+                            " models",
+                )
             }
         }
+    }
+
+    private fun openSpecialistModels() {
+        startActivity(
+            Intent(
+                this,
+                SpecialistModelsActivity::class.java,
+            )
+        )
     }
 
     private fun isOnUnmeteredNetwork(): Boolean {
@@ -560,7 +543,7 @@ class MainActivity : AppCompatActivity() {
          * Wi-Fi 下首次使用时后台下载四语翻译模型包；
          * 未就绪期间翻译走服务器回退。
          */
-        maybeDownloadTranslationModel()
+        maybeSyncTranslationModels()
 
         /*
          * ========================================================
@@ -1026,6 +1009,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         /*
+         * 专项模型页入口：六组语言对模型的按需下载/更新/启用。
+         */
+        btnSpecialistModels.setOnClickListener {
+
+            openSpecialistModels()
+        }
+
+        /*
          * 朗读语音可用性行：点击打开系统语音安装/设置页，
          * 用于下载缺失的离线语音（如 Google TTS 的俄语包）。
          */
@@ -1356,6 +1347,11 @@ class MainActivity : AppCompatActivity() {
         btnTranslate =
             findViewById(
                 R.id.btnTranslate
+            )
+
+        btnSpecialistModels =
+            findViewById(
+                R.id.btnSpecialistModels
             )
 
         btnAutoSpeak =

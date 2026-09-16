@@ -1,6 +1,8 @@
-package com.example.fourlangasr.translation
+package com.example.fourlangasr.translation.engine
 
 import com.example.fourlangasr.model.AppLanguage
+import com.example.fourlangasr.translation.TranslationEngine
+import com.example.fourlangasr.translation.TranslationResult
 import org.json.JSONObject
 import java.io.IOException
 import java.net.HttpURLConnection

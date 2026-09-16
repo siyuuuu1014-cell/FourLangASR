@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/specialistToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:title="专项模型" />
+
+    <Button
+        android:id="@+id/specialistRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="刷新模型清单" />
+
+    <ListView
+        android:id="@+id/specialistList"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp" />
+
+    <TextView
+        android:id="@+id/specialistStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="" />
+
+</LinearLayout>

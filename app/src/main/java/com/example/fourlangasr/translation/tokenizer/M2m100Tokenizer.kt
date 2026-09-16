@@ -1,4 +1,4 @@
-package com.example.fourlangasr.translation
+package com.example.fourlangasr.translation.tokenizer
 
 import java.io.InputStream
 import java.nio.ByteBuffer
@@ -7,11 +7,11 @@ import java.nio.charset.StandardCharsets
 import java.util.PriorityQueue
 
 /**
- * M2M100 四语模型的 SentencePiece BPE 分词器（Kotlin 实现）。
+ * SentencePiece BPE 分词器（M2M100/SMaLL-100 家族，Kotlin 实现）。
  *
- * 实现完全对照 experiments/translation/extract_tokenizer_assets.py 的
- * Python 参考实现，后者已与 sentencepiece 0.2.2 官方编码器
- * 在 337,138 条语料上逐条对拍（0 不一致）。契约要点：
+ * 算法与 experiments/translation/extract_tokenizer_assets.py 的 Python 参考实现
+ * 完全一致，后者与 sentencepiece 0.2.2 官方编码器在 337,138 条语料上
+ * 逐条对拍（0 不一致）。契约要点：
  *
  * 1. 归一化 = 模型内嵌的 precompiled_charsmap（Darts double-array trie，
  *    nmt_nfkc 规则）+ 空白折叠/空格→▁/dummy prefix 管线。
@@ -21,45 +21,35 @@ import java.util.PriorityQueue
  * 3. 未知字符（不在词表）吞并其后紧邻的、同样不在词表的
  *    Unicode 类别 M（Mn/Mc/Me）组合标记，作为一个符号。
  * 4. 模型词表 id ≠ sentencepiece id：piece → model_id 经 vocab.json
- *    重映射（资产内已固化）；缺失 piece → unk id 3。
+ *    重映射；缺失 piece → unk id。
  *
- * 内存占用约 25-35MB（词表 HashMap + 字符串池），实例应复用。
- * 线程安全：实例只读，可跨线程共享。
+ * 两种构造：
+ * - [fromAsset]：预构建的紧凑资产（APK assets / 测试资源）；
+ * - [fromSpm]：运行时从模型包内的原始 sentencepiece.bpe.model + vocab.json
+ *   构建（下载的模型包自包含，不依赖 APK 内资产）。
+ *
+ * 实例只读，可跨线程共享。
  */
 class M2m100Tokenizer private constructor(
-    // ---- 词表（spm id 空间） ----
-    private val pieceStrings: Array<String>,
+    private val pieces: Array<String>,
     private val pieceToIdx: HashMap<String, Int>,
     private val pieceScores: FloatArray,
     private val pieceModelIds: IntArray,
-    // ---- detok（model id 空间，0..128111） ----
-    private val modelIdToPoolOff: IntArray,
-    private val pool: ByteArray,
-    // ---- 归一化 charsmap（Darts double-array） ----
+    private val unkModelId: Int,
+    private val detokPoolOffs: IntArray,
+    private val detokPool: ByteArray,
     private val units: IntArray,
     private val normalized: ByteArray,
-    // ---- Unicode 类别 M 码点区间 ----
-    private val markRangeStarts: IntArray,
-    private val markRangeEnds: IntArray,
+    private val langTokens: Map<String, Long>,
 ) {
 
     companion object {
         const val DUMMY = "\u2581" // ▁
-        const val BOS_ID = 0L
-        const val PAD_ID = 1L
-        const val EOS_ID = 2L
-        const val UNK_MODEL_ID = 3L
-
-        val LANG_TOKENS = mapOf(
-            "en" to 128022L,
-            "zh" to 128102L,
-            "uz" to 128096L,
-            "ru" to 128077L,
-        )
 
         private const val MAGIC = "M2M3"
 
-        fun load(input: InputStream): M2m100Tokenizer {
+        /** 从预构建紧凑资产加载（格式见 extract_tokenizer_assets.py）。 */
+        fun fromAsset(input: InputStream, langTokens: Map<String, Long>): M2m100Tokenizer {
             val data = input.use { it.readBytes() }
             val buf = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN)
 
@@ -75,21 +65,20 @@ class M2m100Tokenizer private constructor(
             val markRangeCount = buf.int
             buf.int // poolBytes（顺序读取用，未单独使用）
 
-            val pieceStrings = arrayOfNulls<String>(pieceCount)
-            val pieceScores = FloatArray(pieceCount)
-            val pieceModelIds = IntArray(pieceCount)
-            val piecePoolOff = IntArray(pieceCount)
-            val pieceByteLen = IntArray(pieceCount)
+            val poolOffs = IntArray(pieceCount)
+            val byteLens = IntArray(pieceCount)
+            val modelIds = IntArray(pieceCount)
+            val scores = FloatArray(pieceCount)
             for (i in 0 until pieceCount) {
-                piecePoolOff[i] = buf.int
-                pieceByteLen[i] = buf.int
-                pieceModelIds[i] = buf.int
-                pieceScores[i] = buf.float
+                poolOffs[i] = buf.int
+                byteLens[i] = buf.int
+                modelIds[i] = buf.int
+                scores[i] = buf.float
             }
 
-            val detokOff = IntArray(detokCount)
+            val detokOffs = IntArray(detokCount)
             for (i in 0 until detokCount) {
-                detokOff[i] = buf.int
+                detokOffs[i] = buf.int
             }
 
             val units = IntArray(charsmapUnits)
@@ -100,35 +89,121 @@ class M2m100Tokenizer private constructor(
             val normalized = ByteArray(normalizedBytes)
             buf.get(normalized)
 
-            val markStarts = IntArray(markRangeCount)
-            val markEnds = IntArray(markRangeCount)
+            // mark ranges 段（UnicodeMarkRanges 常量与资产生成同源，此处仅消费跳过）
             for (i in 0 until markRangeCount) {
-                markStarts[i] = buf.int
-                markEnds[i] = buf.int
+                buf.int
+                buf.int
             }
 
             val pool = ByteArray(buf.remaining())
             buf.get(pool)
 
+            val pieces = arrayOfNulls<String>(pieceCount)
             val pieceToIdx = HashMap<String, Int>(pieceCount * 2)
             for (i in 0 until pieceCount) {
-                val s = String(pool, piecePoolOff[i], pieceByteLen[i], StandardCharsets.UTF_8)
-                pieceStrings[i] = s
+                val s = String(pool, poolOffs[i], byteLens[i], StandardCharsets.UTF_8)
+                pieces[i] = s
                 pieceToIdx[s] = i
             }
 
             @Suppress("UNCHECKED_CAST")
             return M2m100Tokenizer(
-                pieceStrings = pieceStrings as Array<String>,
+                pieces = pieces as Array<String>,
                 pieceToIdx = pieceToIdx,
-                pieceScores = pieceScores,
-                pieceModelIds = pieceModelIds,
-                modelIdToPoolOff = detokOff,
-                pool = pool,
+                pieceScores = scores,
+                pieceModelIds = modelIds,
+                unkModelId = 3,
+                detokPoolOffs = detokOffs,
+                detokPool = pool,
                 units = units,
                 normalized = normalized,
-                markRangeStarts = markStarts,
-                markRangeEnds = markEnds,
+                langTokens = langTokens,
+            )
+        }
+
+        /**
+         * 从模型包内的原始文件构建：sentencepiece.bpe.model + vocab.json。
+         * [addedTokensJsonText] 可选（added_tokens.json 原文，用于精确的
+         * 语言 token 字符串）；缺失时按 "__{code}__" 约定合成。
+         */
+        fun fromSpm(
+            spmModelBytes: ByteArray,
+            vocabJsonText: String,
+            addedTokensJsonText: String?,
+            langTokens: Map<String, Long>,
+        ): M2m100Tokenizer {
+            val spm = SpmModel.parse(spmModelBytes)
+            val vocab = org.json.JSONObject(vocabJsonText)
+            val unkId = vocab.optInt("<unk>", 3)
+
+            val n = spm.pieces.size
+            val pool = java.io.ByteArrayOutputStream()
+            val piecePoolOffs = IntArray(n)
+
+            fun intern(s: String): Int {
+                val off = pool.size()
+                pool.write(s.toByteArray(StandardCharsets.UTF_8))
+                pool.write(0) // NUL 结尾
+                return off
+            }
+
+            val pieces = arrayOfNulls<String>(n)
+            val scores = FloatArray(n)
+            val modelIds = IntArray(n)
+            val pieceToIdx = HashMap<String, Int>(n * 2)
+            for (i in 0 until n) {
+                val p = spm.pieces[i]
+                piecePoolOffs[i] = intern(p)
+                pieces[i] = p
+                scores[i] = spm.scores[i]
+                modelIds[i] = vocab.optInt(p, unkId)
+                pieceToIdx[p] = i
+            }
+
+            // detok 表：model id → pool 偏移；未覆盖 id = -1（detok 时跳过）
+            var maxModelId = (langTokens.values.maxOrNull() ?: 0L).toInt()
+            run {
+                val keys = vocab.keys()
+                while (keys.hasNext()) {
+                    val v = vocab.optInt(keys.next(), -1)
+                    if (v > maxModelId) maxModelId = v
+                }
+            }
+            val detokOffs = IntArray(maxModelId + 1) { -1 }
+            for (piece in pieces) {
+                if (piece == null) continue
+                val mid = vocab.optInt(piece, -1)
+                if (mid in 0..maxModelId) detokOffs[mid] = piecePoolOffs[pieceToIdx[piece]!!]
+            }
+            val langStrings = HashMap<Int, String>()
+            if (addedTokensJsonText != null) {
+                val added = org.json.JSONObject(addedTokensJsonText)
+                for (key in added.keys()) {
+                    val v = added.optInt(key, -1)
+                    if (v in 0..maxModelId) {
+                        langStrings[v] = key
+                    }
+                }
+            }
+            for ((code, id) in langTokens) {
+                val idInt = id.toInt()
+                if (idInt in 0..maxModelId) {
+                    detokOffs[idInt] = intern(langStrings[idInt] ?: "__${code}__")
+                }
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            return M2m100Tokenizer(
+                pieces = pieces as Array<String>,
+                pieceToIdx = pieceToIdx,
+                pieceScores = scores,
+                pieceModelIds = modelIds,
+                unkModelId = unkId,
+                detokPoolOffs = detokOffs,
+                detokPool = pool.toByteArray(),
+                units = spm.charsmapUnits,
+                normalized = spm.charsmapNormalized,
+                langTokens = langTokens,
             )
         }
     }
@@ -137,12 +212,12 @@ class M2m100Tokenizer private constructor(
 
     private fun isMark(cp: Int): Boolean {
         var lo = 0
-        var hi = markRangeStarts.size - 1
+        var hi = UnicodeMarkRanges.STARTS.size - 1
         while (lo <= hi) {
             val mid = (lo + hi) ushr 1
             when {
-                cp < markRangeStarts[mid] -> hi = mid - 1
-                cp > markRangeEnds[mid] -> lo = mid + 1
+                cp < UnicodeMarkRanges.STARTS[mid] -> hi = mid - 1
+                cp > UnicodeMarkRanges.ENDS[mid] -> lo = mid + 1
                 else -> return true
             }
         }
@@ -334,11 +409,11 @@ class M2m100Tokenizer private constructor(
     }
 
     private fun pieceToModelId(piece: String): Long {
-        val idx = pieceToIdx[piece] ?: return UNK_MODEL_ID
+        val idx = pieceToIdx[piece] ?: return unkModelId.toLong()
         return pieceModelIds[idx].toLong()
     }
 
-    /** pieces → model id 序列（未知名 → unk id 3）。 */
+    /** pieces → model id 序列（未知名 → unk id）。 */
     fun piecesToModelIds(pieces: List<String>): LongArray {
         val ids = LongArray(pieces.size)
         for (i in pieces.indices) {
@@ -347,29 +422,36 @@ class M2m100Tokenizer private constructor(
         return ids
     }
 
-    /** 完整源序列：[src_lang_token] + pieces ids + [eos]，可直接喂给 encoder。 */
-    fun encodeSourceIds(text: String, srcLang: String): LongArray {
+    /**
+     * 完整源序列：[src_lang_token] + pieces ids + [eos]，可直接喂给 encoder。
+     * [eosId] 与语言 token 由模型包 MANIFEST 提供（调用方注入，避免硬编码）。
+     */
+    fun encodeSourceIds(text: String, srcLang: String, eosId: Long): LongArray {
         val pieces = encodePieces(text)
         val body = piecesToModelIds(pieces)
         val ids = LongArray(body.size + 2)
-        ids[0] = LANG_TOKENS[srcLang] ?: error("unsupported src lang: $srcLang")
+        ids[0] = langTokens[srcLang] ?: error("unsupported src lang: $srcLang")
         System.arraycopy(body, 0, ids, 1, body.size)
-        ids[ids.size - 1] = EOS_ID
+        ids[ids.size - 1] = eosId
         return ids
     }
 
+    fun langToken(code: String): Long =
+        langTokens[code] ?: error("unsupported lang: $code")
+
     // ================================================================ 解码
 
-    /** model id → piece 字符串；越界 id 跳过。 */
+    /** model id → piece 字符串；越界/未覆盖 id 跳过。 */
     fun detok(ids: LongArray): String {
         val sb = StringBuilder()
         for (id in ids) {
             val i = id.toInt()
-            if (i < 0 || i >= modelIdToPoolOff.size) continue
-            val off = modelIdToPoolOff[i]
+            if (i < 0 || i >= detokPoolOffs.size) continue
+            val off = detokPoolOffs[i]
+            if (off < 0) continue
             var end = off
-            while (end < pool.size && pool[end].toInt() != 0) end++
-            sb.append(String(pool, off, end - off, StandardCharsets.UTF_8))
+            while (end < detokPool.size && detokPool[end].toInt() != 0) end++
+            sb.append(String(detokPool, off, end - off, StandardCharsets.UTF_8))
         }
         return sb.toString().replace(DUMMY, " ").trim()
     }
