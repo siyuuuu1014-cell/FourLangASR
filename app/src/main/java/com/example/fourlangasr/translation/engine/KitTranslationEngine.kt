@@ -290,6 +290,7 @@ class KitTranslationEngine(
                     targetLanguage = target,
                     speechLanguage = target,
                     translated = true,
+                    modelLabel = config.modelId,
                 )
             } catch (e: Throwable) {
                 encHidden.close()

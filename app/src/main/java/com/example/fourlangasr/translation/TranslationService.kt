@@ -76,6 +76,23 @@ class TranslationService(
         return generalist.takeIf { packageManager.isModelReady(it.modelId) }
     }
 
+    /**
+     * 该方向当前会使用的引擎的可读标识（供 UI 实时显示，
+     * 与 [translate] 的路由规则完全一致）。
+     */
+    fun engineLabelFor(source: AppLanguage, target: AppLanguage): String {
+        val local = localModelFor(source.code, target.code)
+        if (local != null) {
+            val generalistId = manifestProvider()?.generalist()?.modelId
+            return if (local.modelId == generalistId) {
+                "总模型 ${local.modelId}"
+            } else {
+                "专项模型 ${local.modelId}"
+            }
+        }
+        return "服务器 API"
+    }
+
     override fun translate(
         text: String,
         source: AppLanguage,

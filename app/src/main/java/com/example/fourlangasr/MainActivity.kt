@@ -29,6 +29,7 @@ import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
 import com.example.fourlangasr.translation.TranslationEngine
 import com.example.fourlangasr.translation.TranslationModules
+import com.example.fourlangasr.translation.engine.ServerTranslationEngine
 import com.example.fourlangasr.translation.ui.SpecialistModelsActivity
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
 import com.example.fourlangasr.tts.OfflineNeuralTtsEngine
@@ -67,6 +68,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textResult: TextView
     private lateinit var textMetrics: TextView
     private lateinit var textTranslation: TextView
+    private lateinit var textEngineHint: TextView
 
     private lateinit var asrManager: AsrManager
     private lateinit var audioRecorder: AudioRecorder
@@ -258,6 +260,8 @@ class MainActivity : AppCompatActivity() {
                             (sync.latestManifest?.models?.size ?: 0) +
                             " models",
                 )
+
+                updateEngineHint()
             }
         }
     }
@@ -270,6 +274,57 @@ class MainActivity : AppCompatActivity() {
             )
         )
     }
+
+    /**
+     * 实时引擎指示：与 TranslationService 的路由规则一致，
+     * 显示当前源/目标方向会使用哪个翻译引擎（专项 / 总模型 / 服务器）。
+     */
+    private fun updateEngineHint() {
+        if (
+            !::textEngineHint.isInitialized
+        ) {
+
+            return
+        }
+
+        val service =
+            translationModules.service
+
+        val label =
+            try {
+
+                service.engineLabelFor(
+                    selectedSource(),
+                    selectedTarget(),
+                )
+
+            } catch (e: Exception) {
+
+                "服务器 API"
+            }
+
+        textEngineHint.text =
+            "当前翻译引擎：$label"
+    }
+
+    /** TranslationResult.modelLabel → 展示文案。 */
+    private fun friendlyModelLabel(modelLabel: String?): String =
+        when {
+            modelLabel.isNullOrBlank() -> ""
+            modelLabel == ServerTranslationEngine.MODEL_LABEL_SERVER -> "服务器 API"
+            else -> {
+                val generalistId =
+                    translationModules.sync.latestManifest
+                        ?.generalist()
+                        ?.modelId
+
+                if (modelLabel == generalistId) {
+                    "总模型 $modelLabel"
+                } else {
+                    "专项模型 $modelLabel"
+                }
+            }
+        }
 
     private fun isOnUnmeteredNetwork(): Boolean {
         val cm =
@@ -577,6 +632,8 @@ class MainActivity : AppCompatActivity() {
             AppLanguage.ZH.ordinal
         )
 
+        updateEngineHint()
+
         spinnerTarget.setSelection(
             AppLanguage.EN.ordinal
         )
@@ -593,6 +650,8 @@ class MainActivity : AppCompatActivity() {
 
         spinnerSource.onItemSelectedListener =
             SimpleItemSelectedListener {
+
+                updateEngineHint()
 
                 if (conversationActive) {
 
@@ -709,6 +768,12 @@ class MainActivity : AppCompatActivity() {
                         setBusy(false)
                     }
                 }
+            }
+
+        spinnerTarget.onItemSelectedListener =
+            SimpleItemSelectedListener {
+
+                updateEngineHint()
             }
 
         /*
@@ -933,13 +998,24 @@ class MainActivity : AppCompatActivity() {
                         return@launch
                     }
 
+                val label =
+                    friendlyModelLabel(result.modelLabel)
+
                 textTranslation.text =
                     if (
                         result.translated ||
                         result.outputText.isBlank()
                     ) {
 
-                        result.outputText
+                        if (label.isEmpty()) {
+
+                            result.outputText
+
+                        } else {
+
+                            "译文（$label）：\n" +
+                                    result.outputText
+                        }
 
                     } else {
 
@@ -1387,6 +1463,11 @@ class MainActivity : AppCompatActivity() {
         textTranslation =
             findViewById(
                 R.id.textTranslation
+            )
+
+        textEngineHint =
+            findViewById(
+                R.id.textEngineHint
             )
     }
 
@@ -2389,6 +2470,26 @@ class MainActivity : AppCompatActivity() {
                 null
             }
 
+        if (
+            translation != null &&
+            translation.translated
+        ) {
+
+            val label =
+                friendlyModelLabel(translation.modelLabel)
+
+            textTranslation.text =
+                if (label.isEmpty()) {
+
+                    translation.outputText
+
+                } else {
+
+                    "原文：$text\n译文（$label）：\n" +
+                            translation.outputText
+                }
+        }
+
         ttsEngine.speak(
             text =
                 translation?.outputText
@@ -2485,6 +2586,13 @@ class MainActivity : AppCompatActivity() {
      * Activity 销毁
      * ============================================================
      */
+
+    override fun onResume() {
+        super.onResume()
+
+        // 从专项模型页返回后刷新引擎指示（启用/停用状态可能已变化）
+        updateEngineHint()
+    }
 
     override fun onDestroy() {
         activityDestroyed = true

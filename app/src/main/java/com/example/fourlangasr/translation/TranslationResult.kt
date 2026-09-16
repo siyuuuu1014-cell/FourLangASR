@@ -11,7 +11,10 @@ import com.example.fourlangasr.model.AppLanguage
  *   TTS 必须用该语言朗读，不能用 targetLanguage 猜；
  * - [translated] = false 表示当前是 passthrough
  *   （真实翻译模型尚未接入），此时
- *   outputText == sourceText、speechLanguage == sourceLanguage。
+ *   outputText == sourceText、speechLanguage == sourceLanguage；
+ * - [modelLabel] 标识本次实际使用的模型：
+ *   "server" = 服务器 API；本地模型 id = 本地引擎（UI 负责渲染
+ *   为"总模型/专项模型"文案）；null = passthrough。
  */
 data class TranslationResult(
     val sourceText: String,
@@ -20,4 +23,5 @@ data class TranslationResult(
     val targetLanguage: AppLanguage,
     val speechLanguage: AppLanguage,
     val translated: Boolean,
+    val modelLabel: String? = null,
 )

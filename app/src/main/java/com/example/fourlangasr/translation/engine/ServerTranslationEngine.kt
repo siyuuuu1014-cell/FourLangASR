@@ -32,6 +32,9 @@ class ServerTranslationEngine(
          *   http://region-46.seetacloud.com:<远程端口>
          */
         const val DEFAULT_BASE_URL = "http://127.0.0.1:8000"
+
+        /** TranslationResult.modelLabel 中服务器路径的标识。 */
+        const val MODEL_LABEL_SERVER = "server"
     }
 
     override fun translate(
@@ -68,6 +71,7 @@ class ServerTranslationEngine(
                 targetLanguage = target,
                 speechLanguage = target,
                 translated = true,
+                modelLabel = MODEL_LABEL_SERVER,
             )
         } finally {
             conn.disconnect()

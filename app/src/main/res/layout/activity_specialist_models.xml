@@ -17,6 +17,13 @@
         android:layout_height="wrap_content"
         android:text="刷新模型清单" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="总模型是默认主力（覆盖全部 12 个方向）。下载并启用某个专项模型后，对应方向的翻译将优先使用该专项模型；主界面会实时显示当前方向使用哪个引擎。"
+        android:textSize="12sp" />
+
     <ListView
         android:id="@+id/specialistList"
         android:layout_width="match_parent"
