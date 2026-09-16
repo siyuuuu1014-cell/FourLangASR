@@ -73,6 +73,27 @@ class ModelSyncManager(
         }
         latestManifest = manifest
         writeCache(manifest)
+        // 旧布局迁移是纯本地文件操作（零流量），清单就绪即可执行
+        migrateLegacyIfNeeded(manifest)
+    }
+
+    private suspend fun migrateLegacyIfNeeded(manifest: ModelsManifest) {
+        val generalist = manifest.generalist()
+        if (packageManager.isModelReady(generalist.modelId) ||
+            registry.get(generalist.modelId) != null
+        ) {
+            return
+        }
+        val migrated = withContext(Dispatchers.IO) {
+            packageManager.migrateLegacyLayout(generalist.modelId)
+        }
+        if (migrated) {
+            registry.markInstalled(
+                generalist.modelId,
+                generalist.version,
+                generalist.sourceSha256,
+            )
+        }
     }
 
     /**
@@ -92,19 +113,8 @@ class ModelSyncManager(
             latestManifest = manifest
             writeCache(manifest)
 
-            // 旧版布局迁移（一次性）：旧 tar 解包复用，平铺文件清理后重新下载
-            val generalist = manifest.generalist()
-            if (!packageManager.isModelReady(generalist.modelId) &&
-                registry.get(generalist.modelId) == null
-            ) {
-                if (packageManager.migrateLegacyLayout(generalist.modelId)) {
-                    registry.markInstalled(
-                        generalist.modelId,
-                        generalist.version,
-                        generalist.sourceSha256,
-                    )
-                }
-            }
+            // 旧布局迁移（一次性）：旧 tar 解包复用，平铺文件清理后重新下载
+            migrateLegacyIfNeeded(manifest)
 
             for (model in manifest.models) {
                 val installed = registry.get(model.modelId)
