@@ -41,6 +41,13 @@ android {
         unitTests.returnDefaultValues = true
     }
 
+    sourceSets {
+        test {
+            // JVM 单测直接读取主 assets（m2m100/tokenizer.bin）
+            resources.srcDir 'src/main/assets'
+        }
+    }
+
     // ASR models are already compressed/binary. Keeping them uncompressed
     // avoids extra work and is friendly to native model loading.
     aaptOptions {
@@ -51,6 +58,8 @@ android {
 dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:4.11.0'
+    // JVM 单测解析对拍向量 JSON
+    testImplementation 'org.json:json:20231013'
     // VoxLingua LID runtime. Java Interpreter API; compatible with Kotlin 1.9 project.
     implementation 'org.tensorflow:tensorflow-lite:2.16.1'
     // VoxLingua107 LID runtime; separate from sherpa ONNX Runtime.

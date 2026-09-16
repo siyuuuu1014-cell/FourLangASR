@@ -44,8 +44,9 @@ ADDED_TOKENS = PKG / "added_tokens.json"
 
 ASSET_DIR = ROOT / "app" / "src" / "main" / "assets" / "m2m100"
 ASSET_FILE = ASSET_DIR / "tokenizer.bin"
-VECTORS_FILE = BASE / "tokenizer_test_vectors.json"
-NORM_VECTORS_FILE = BASE / "normalizer_test_vectors.json"
+TEST_RES_DIR = ROOT / "app" / "src" / "test" / "resources" / "m2m100"
+VECTORS_FILE = TEST_RES_DIR / "tokenizer_test_vectors.json"
+NORM_VECTORS_FILE = TEST_RES_DIR / "normalizer_test_vectors.json"
 
 UNK_PIECE = "<unk>"
 DUMMY = "\u2581"
@@ -418,6 +419,7 @@ def main():
             off = len(pool_bytes)
             pool[s] = off
             pool_bytes.extend(s.encode("utf-8"))
+            pool_bytes.append(0)  # NUL 结尾，Kotlin 端 detok 按 NUL 定界
         return off
 
     piece_pool_off = [intern(p) for p in piece_list]
@@ -489,6 +491,7 @@ def main():
         pieces = sp.Encode(text, out_type=str)
         ids = [int(piece_to_model.get(p, 3)) for p in pieces]
         vectors.append({"text": text, "pieces": pieces, "ids": ids})
+    TEST_RES_DIR.mkdir(parents=True, exist_ok=True)
     with open(VECTORS_FILE, "w", encoding="utf-8") as f:
         json.dump(vectors, f, ensure_ascii=False, separators=(",", ":"))
     print(f"written {VECTORS_FILE} ({len(vectors)} vectors)")

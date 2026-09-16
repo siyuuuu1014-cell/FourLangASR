@@ -87,7 +87,9 @@ piece 数组按 spm id 顺序；score 用于 BPE agenda 优先级。
 边界/空白/全角/emoji/组合标记压力（基数 × 组合标记）。
 输出：
   app/src/main/assets/m2m100/tokenizer.bin
-  tokenizer_test_vectors.json / normalizer_test_vectors.json（Kotlin 单测向量）
+  app/src/test/resources/m2m100/tokenizer_test_vectors.json
+  app/src/test/resources/m2m100/normalizer_test_vectors.json
+（后两者为 Kotlin 单测对拍向量，由 M2m100TokenizerTest 消费。）
 
 运行参考解码器
 --------------
