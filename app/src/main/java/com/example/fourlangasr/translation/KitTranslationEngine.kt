@@ -26,6 +26,7 @@ import java.nio.FloatBuffer
  *
  * 内存约 1GB/实例（两个 session 的 int8 权重 + 激活），
  * 必须单实例：translate 加锁串行执行。
+ * ORT 原生库在首次 translate 时才加载（构造不触碰 native）。
  */
 class KitTranslationEngine(
     private val tokenizer: M2m100Tokenizer,
@@ -43,13 +44,17 @@ class KitTranslationEngine(
         private const val DECODER_FILE = "decoder_model_merged.onnx"
     }
 
-    private val env: OrtEnvironment = OrtEnvironment.getEnvironment()
-    private var encoderSession: OrtSession? = null
-    private var decoderSession: OrtSession? = null
-    private var pastInputNames: List<String> = emptyList()
-    private var pastInputIsDecoder: BooleanArray = BooleanArray(0)
+    private class NativeState {
+        val env = OrtEnvironment.getEnvironment()
+        lateinit var enc: OrtSession
+        lateinit var dec: OrtSession
+        lateinit var pastInputNames: List<String>
+        lateinit var pastInputIsDecoder: BooleanArray
+    }
 
-    private fun makeSession(path: File): OrtSession {
+    private var native: NativeState? = null
+
+    private fun makeSession(env: OrtEnvironment, path: File): OrtSession {
         val opts = OrtSession.SessionOptions()
         // 必须 BASIC：ORT EXTENDED 的 TransposeDQWeightsForMatMulNBits
         // 对"子图内 DQ 引用主图 int8 权重"有 bug（包内 README 已实测）
@@ -58,16 +63,17 @@ class KitTranslationEngine(
         return env.createSession(path.absolutePath, opts)
     }
 
-    private fun ensureLoaded() {
-        if (encoderSession != null) return
+    private fun ensureLoaded(): NativeState {
+        native?.let { return it }
         synchronized(this) {
-            if (encoderSession != null) return
+            native?.let { return it }
+            val st = NativeState()
             val encFile = File(modelDir, ENCODER_FILE)
             val decFile = File(modelDir, DECODER_FILE)
             check(encFile.exists() && decFile.exists()) {
                 "本地翻译模型未就绪：需要先下载模型包（缺 $ENCODER_FILE/$DECODER_FILE）"
             }
-            val decSession = makeSession(decFile)
+            val decSession = makeSession(st.env, decFile)
             val names = decSession.inputInfo.keys.filter { it.startsWith("past_key_values.") }
             val isDecoder = BooleanArray(names.size)
             var decCount = 0
@@ -86,15 +92,16 @@ class KitTranslationEngine(
             check(decCount == N_LAYERS * 2 && encCount == N_LAYERS * 2) {
                 "decoder 输入 past 张量数不符：dec=$decCount enc=$encCount"
             }
-            val encSession = makeSession(encFile)
-            decoderSession = decSession
-            encoderSession = encSession
-            pastInputNames = names
-            pastInputIsDecoder = isDecoder
+            st.dec = decSession
+            st.enc = makeSession(st.env, encFile)
+            st.pastInputNames = names
+            st.pastInputIsDecoder = isDecoder
+            native = st
+            return st
         }
     }
 
-    private fun int64Tensor(values: LongArray): OnnxTensor {
+    private fun int64Tensor(env: OrtEnvironment, values: LongArray): OnnxTensor {
         val buf = ByteBuffer.allocateDirect(values.size * 8)
             .order(ByteOrder.nativeOrder()).asLongBuffer()
         buf.put(values)
@@ -102,7 +109,7 @@ class KitTranslationEngine(
         return OnnxTensor.createTensor(env, buf, longArrayOf(values.size.toLong()))
     }
 
-    private fun boolTensor(value: Boolean): OnnxTensor {
+    private fun boolTensor(env: OrtEnvironment, value: Boolean): OnnxTensor {
         val buf = ByteBuffer.allocateDirect(1)
         buf.put(if (value) 1 else 0)
         buf.rewind()
@@ -110,7 +117,7 @@ class KitTranslationEngine(
     }
 
     /** 拷贝一个输出张量为自有的输入张量（结果 Result 关闭后依然有效）。 */
-    private fun copyTensor(t: OnnxTensor): OnnxTensor {
+    private fun copyTensor(env: OrtEnvironment, t: OnnxTensor): OnnxTensor {
         val shape = t.info.shape
         val src = t.floatBuffer
         val size = src.remaining()
@@ -142,7 +149,7 @@ class KitTranslationEngine(
      * 返回 (nextToken, (presentDecoder, presentEncoder))。
      */
     private fun decoderStep(
-        dec: OrtSession,
+        st: NativeState,
         inputIds: LongArray,
         encMask: OnnxTensor,
         encHidden: OnnxTensor,
@@ -151,28 +158,29 @@ class KitTranslationEngine(
         useCache: Boolean,
     ): Pair<Int, Pair<List<OnnxTensor>, List<OnnxTensor>>> {
         val feeds = HashMap<String, OnnxTensor>(60)
-        val idTensor = int64Tensor(inputIds)
-        val boolTensor = boolTensor(useCache)
+        val idTensor = int64Tensor(st.env, inputIds)
+        val boolTensor = boolTensor(st.env, useCache)
         feeds["encoder_attention_mask"] = encMask
         feeds["input_ids"] = idTensor
         feeds["encoder_hidden_states"] = encHidden
         feeds["use_cache_branch"] = boolTensor
         var di = 0
         var ei = 0
-        for (i in pastInputNames.indices) {
-            feeds[pastInputNames[i]] = if (pastInputIsDecoder[i]) pastDec[di++] else pastEnc[ei++]
+        for (i in st.pastInputNames.indices) {
+            feeds[st.pastInputNames[i]] =
+                if (st.pastInputIsDecoder[i]) pastDec[di++] else pastEnc[ei++]
         }
-        val result = dec.run(feeds)
+        val result = st.dec.run(feeds)
         try {
             val logits = result.get("logits").get() as OnnxTensor
             val seqLen = logits.info.shape[1].toInt()
             val next = argmaxLast(logits.floatBuffer, seqLen)
             val presentDec = ArrayList<OnnxTensor>(N_LAYERS * 2)
             val presentEnc = ArrayList<OnnxTensor>(N_LAYERS * 2)
-            for (i in pastInputNames.indices) {
-                val outName = "present." + pastInputNames[i].removePrefix("past_key_values.")
-                val t = copyTensor(result.get(outName).get() as OnnxTensor)
-                if (pastInputIsDecoder[i]) presentDec.add(t) else presentEnc.add(t)
+            for (i in st.pastInputNames.indices) {
+                val outName = "present." + st.pastInputNames[i].removePrefix("past_key_values.")
+                val t = copyTensor(st.env, result.get(outName).get() as OnnxTensor)
+                if (st.pastInputIsDecoder[i]) presentDec.add(t) else presentEnc.add(t)
             }
             return next to (presentDec to presentEnc)
         } finally {
@@ -189,22 +197,20 @@ class KitTranslationEngine(
     ): TranslationResult {
         val tgtLang = target.code
         synchronized(this) {
-            ensureLoaded()
-            val enc = encoderSession!!
-            val dec = decoderSession!!
+            val st = ensureLoaded()
 
             // ---- 编码（一次） ----
             val srcIds = tokenizer.encodeSourceIds(text, source.code)
-            val srcIdsTensor = int64Tensor(srcIds)
+            val srcIdsTensor = int64Tensor(st.env, srcIds)
             val mask = LongArray(srcIds.size) { 1L }
-            val maskTensor = int64Tensor(mask)
+            val maskTensor = int64Tensor(st.env, mask)
             val encFeeds = HashMap<String, OnnxTensor>(2)
             encFeeds["input_ids"] = srcIdsTensor
             encFeeds["attention_mask"] = maskTensor
-            val encResult = enc.run(encFeeds)
+            val encResult = st.enc.run(encFeeds)
             val encHidden: OnnxTensor
             try {
-                encHidden = copyTensor(encResult.get("last_hidden_state").get() as OnnxTensor)
+                encHidden = copyTensor(st.env, encResult.get("last_hidden_state").get() as OnnxTensor)
             } finally {
                 encResult.close()
                 srcIdsTensor.close()
@@ -216,12 +222,12 @@ class KitTranslationEngine(
             val emptyBuf = ByteBuffer.allocateDirect(0)
                 .order(ByteOrder.nativeOrder()).asFloatBuffer()
             repeat(N_LAYERS * 4) {
-                emptyPast.add(OnnxTensor.createTensor(env, emptyBuf, emptyShape))
+                emptyPast.add(OnnxTensor.createTensor(st.env, emptyBuf, emptyShape))
             }
 
             try {
                 val (first, present0) = decoderStep(
-                    dec,
+                    st,
                     longArrayOf(M2m100Tokenizer.EOS_ID, M2m100Tokenizer.LANG_TOKENS[tgtLang]!!),
                     maskTensor,
                     encHidden,
@@ -241,7 +247,7 @@ class KitTranslationEngine(
                 while (next != eos && gen.size < maxNewTokens) {
                     gen.add(next.toLong())
                     val (nxt, present) = decoderStep(
-                        dec,
+                        st,
                         longArrayOf(next.toLong()),
                         maskTensor,
                         encHidden,
@@ -278,16 +284,16 @@ class KitTranslationEngine(
     /** 释放 ORT session（进程退出/引擎替换时调用）。 */
     fun close() {
         synchronized(this) {
+            val st = native ?: return
             try {
-                encoderSession?.close()
+                st.enc.close()
             } catch (_: OrtException) {
             }
             try {
-                decoderSession?.close()
+                st.dec.close()
             } catch (_: OrtException) {
             }
-            encoderSession = null
-            decoderSession = null
+            native = null
         }
     }
 }

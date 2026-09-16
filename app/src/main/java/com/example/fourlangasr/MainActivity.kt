@@ -178,28 +178,33 @@ class MainActivity : AppCompatActivity() {
      * - 本地 m2m100 四语 int8 ONNX（离线，模型包首次使用时经服务器下载）；
      * - 服务器六组 SMaLL-100 API（回退，模型未就绪时也可用）。
      * tokenizer 资产（约 4MB）打包在 APK assets，与模型包无关。
+     * 注意：KitTranslationEngine 构造不加载 ORT 原生库，
+     * 首次 translate 才加载 —— App 启动路径绝不触碰 native ORT。
      */
+    private val translationDownloadManager: TranslationDownloadManager by lazy {
+        TranslationDownloadManager(
+            modelDir =
+                File(filesDir, "translation")
+        )
+    }
+
     private val translationEngine: TranslationEngine by lazy {
         val tokenizer =
             M2m100Tokenizer.load(
                 assets.open("m2m100/tokenizer.bin")
             )
 
-        val modelDir =
-            File(filesDir, "translation")
-
         TranslationService(
             kitEngine =
                 KitTranslationEngine(
                     tokenizer = tokenizer,
-                    modelDir = modelDir,
+                    modelDir =
+                        File(filesDir, "translation"),
                 ),
             serverEngine =
                 ServerTranslationEngine(),
             downloadManager =
-                TranslationDownloadManager(
-                    modelDir = modelDir,
-                ),
+                translationDownloadManager,
         )
     }
 
@@ -209,14 +214,13 @@ class MainActivity : AppCompatActivity() {
      * 失败不弹错误：下次满足条件时自动续传。
      */
     private fun maybeDownloadTranslationModel() {
-        val service =
-            translationEngine as? TranslationService
-                ?: return
+        val downloadManager =
+            translationDownloadManager
 
         lifecycleScope.launch {
 
             if (
-                service.isLocalModelReady() ||
+                downloadManager.isModelReady() ||
                 !isOnUnmeteredNetwork()
             ) {
 
@@ -231,7 +235,7 @@ class MainActivity : AppCompatActivity() {
 
                     try {
 
-                        service.ensureLocalModel {
+                        downloadManager.ensureModel {
                                 phase,
                                 done,
                                 total,
