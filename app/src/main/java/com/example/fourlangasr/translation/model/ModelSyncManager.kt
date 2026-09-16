@@ -2,6 +2,7 @@ package com.example.fourlangasr.translation.model
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /**
  * 模型同步：拉取远端清单 + 版本对齐 + 按需下载。
@@ -18,17 +19,60 @@ class ModelSyncManager(
     private val manifestClient: ModelManifestClient,
     private val packageManager: ModelPackageManager,
     private val registry: ModelRegistry,
+    private val cacheFile: File,
 ) {
 
     @Volatile
-    var latestManifest: ModelsManifest? = null
+    var latestManifest: ModelsManifest? = readCache()
         private set
 
-    /** 仅拉取清单。失败抛异常，由调用方决定重试/提示。 */
+    private fun readCache(): ModelsManifest? =
+        try {
+            if (cacheFile.isFile) {
+                ModelManifestParser.parse(cacheFile.readText(Charsets.UTF_8))
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            null
+        }
+
+    private fun writeCache(manifest: ModelsManifest) {
+        try {
+            val tmp = File(cacheFile.parentFile, cacheFile.name + ".tmp")
+            cacheFile.parentFile?.mkdirs()
+            // 只持久化必需字段（与远端清单一致的最小集）
+            val arr = org.json.JSONArray()
+            for (m in manifest.models) {
+                arr.put(
+                    org.json.JSONObject()
+                        .put("model_id", m.modelId)
+                        .put("family", m.family)
+                        .put("version", m.version)
+                        .put("source_sha256", m.sourceSha256)
+                        .put("size_bytes", m.sizeBytes)
+                        .put("directions", org.json.JSONArray(m.directions))
+                        .put("download_url", m.downloadUrl),
+                )
+            }
+            val text = org.json.JSONObject().put("models", arr).toString()
+            tmp.writeText(text, Charsets.UTF_8)
+            if (!tmp.renameTo(cacheFile)) {
+                tmp.copyTo(cacheFile, overwrite = true)
+                tmp.delete()
+            }
+        } catch (e: Exception) {
+            // 缓存失败不影响内存状态
+        }
+    }
+
+    /** 仅拉取清单（成功则写入本地缓存，供离线路由使用）。失败抛异常。 */
     suspend fun refreshManifest() {
-        latestManifest = withContext(Dispatchers.IO) {
+        val manifest = withContext(Dispatchers.IO) {
             manifestClient.fetchManifest()
         }
+        latestManifest = manifest
+        writeCache(manifest)
     }
 
     /**
@@ -46,6 +90,7 @@ class ModelSyncManager(
                 null
             } ?: return@withContext false
             latestManifest = manifest
+            writeCache(manifest)
 
             // 旧版布局迁移（一次性）：旧 tar 解包复用，平铺文件清理后重新下载
             val generalist = manifest.generalist()

@@ -35,6 +35,7 @@ class TranslationModules private constructor(
         manifestClient = manifestClient,
         packageManager = packages,
         registry = registry,
+        cacheFile = File(baseDir, "model_manifest_cache.json"),
     )
     val service = TranslationService(
         registry = registry,
