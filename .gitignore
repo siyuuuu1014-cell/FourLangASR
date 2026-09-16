@@ -46,3 +46,5 @@ experiments/tts/_mms_doc.rst
 experiments/tts/models/mms_uzb_src/
 experiments/**/out_wav_uzb/
 experiments/tts/convert_uzb_v2/
+translation_pkg/
+experiments/translation/models/
