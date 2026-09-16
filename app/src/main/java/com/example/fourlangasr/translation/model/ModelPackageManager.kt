@@ -22,7 +22,7 @@ import java.net.URL
  * 必须在后台线程调用。
  */
 class ModelPackageManager(
-    private val baseUrl: String,
+    private val baseUrlProvider: () -> String,
     private val modelsRoot: File,
 ) {
 
@@ -62,7 +62,7 @@ class ModelPackageManager(
         val part = File(dir, PART_FILE)
         val existing = if (part.isFile) part.length() else 0L
 
-        val conn = URL(baseUrl + model.downloadUrl).openConnection() as HttpURLConnection
+        val conn = URL(baseUrlProvider() + model.downloadUrl).openConnection() as HttpURLConnection
         conn.connectTimeout = 15_000
         conn.readTimeout = 60_000
         if (existing > 0) {

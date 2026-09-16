@@ -15,24 +15,12 @@ import java.net.URL
  * 必须在后台线程调用（同步阻塞网络请求，与 TranslationEngine 契约一致）。
  */
 class ServerTranslationEngine(
-    private val baseUrl: String = DEFAULT_BASE_URL,
+    private val baseUrlProvider: () -> String,
     private val connectTimeoutMs: Int = 15_000,
     private val readTimeoutMs: Int = 60_000,
 ) : TranslationEngine {
 
     companion object {
-        /*
-         * 四语 API 服务器基址（全 App 唯一配置点，TranslationModules 引用）。
-         *
-         * 当前 = 开发机 SSH 隧道 + adb reverse 路径：
-         *   PC 上保持 ssh -p 28893 -L 8000:localhost:8000 root@region-46.seetacloud.com
-         *   USB 连接后执行 adb reverse tcp:8000 tcp:8000
-         *   手机访问自身 127.0.0.1:8000 即到服务器。
-         * AutoDL 自定义服务映射恢复后改回：
-         *   http://region-46.seetacloud.com:<远程端口>
-         */
-        const val DEFAULT_BASE_URL = "http://127.0.0.1:8000"
-
         /** TranslationResult.modelLabel 中服务器路径的标识。 */
         const val MODEL_LABEL_SERVER = "server"
     }
@@ -48,7 +36,7 @@ class ServerTranslationEngine(
             .put("text", text)
             .toString()
 
-        val conn = URL("$baseUrl/translate").openConnection() as HttpURLConnection
+        val conn = URL("${baseUrlProvider()}/translate").openConnection() as HttpURLConnection
         try {
             conn.requestMethod = "POST"
             conn.connectTimeout = connectTimeoutMs

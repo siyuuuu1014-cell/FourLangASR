@@ -27,10 +27,8 @@ import com.example.fourlangasr.pipeline.CodeSwitchRecovery
 import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
-import com.example.fourlangasr.translation.TranslationEngine
-import com.example.fourlangasr.translation.TranslationModules
-import com.example.fourlangasr.translation.engine.ServerTranslationEngine
-import com.example.fourlangasr.translation.ui.SpecialistModelsActivity
+import com.example.fourlangasr.translation.TranslationResult
+import com.example.fourlangasr.translation.ui.TranslationUiController
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
 import com.example.fourlangasr.tts.OfflineNeuralTtsEngine
 import com.example.fourlangasr.tts.TtsEngine
@@ -58,8 +56,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnLoad: Button
     private lateinit var btnRecord: Button
     private lateinit var btnRelease: Button
-    private lateinit var btnTranslate: Button
-    private lateinit var btnSpecialistModels: Button
     private lateinit var btnAutoSpeak: Button
     private lateinit var btnSpeechRate: Button
     private lateinit var textTtsAvailability: TextView
@@ -67,8 +63,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var textStatus: TextView
     private lateinit var textResult: TextView
     private lateinit var textMetrics: TextView
-    private lateinit var textTranslation: TextView
-    private lateinit var textEngineHint: TextView
+
+    private lateinit var translationUi: TranslationUiController
 
     private lateinit var asrManager: AsrManager
     private lateinit var audioRecorder: AudioRecorder
@@ -172,173 +168,6 @@ class MainActivity : AppCompatActivity() {
     @Volatile
     private var languageSwitchInProgress =
         false
-
-    /*
-     * 翻译子系统（进程内单例，专项模型页共享）：
-     * - 本地模型：四语总模型 + 六组专项模型，按需下载（专项模型页）；
-     * - 服务器 API：本地未就绪/失败时的兜底。
-     * 路由与模型参数全部来自远端 manifest + 包内 MANIFEST，无硬编码。
-     * 注意：KitTranslationEngine 构造不加载 ORT 原生库，
-     * 首次 translate 才加载 —— App 启动路径绝不触碰 native ORT。
-     */
-    private val translationModules by lazy {
-        TranslationModules.getInstance(applicationContext)
-    }
-
-    private val translationEngine: TranslationEngine by lazy {
-        translationModules.service
-    }
-
-    /*
-     * 首次使用：在非计费网络（Wi-Fi）下后台下载四语翻译模型包（约 734MB）。
-     * 下载期间翻译走服务器回退；完成后本机离线翻译可用。
-     * 失败不弹错误：下次满足条件时自动续传。
-     */
-    /**
-     * 模型同步（Wi-Fi 下）：拉取远端清单 → 总模型首装 → 过期包重下。
-     * 下载期间翻译走服务器回退；失败不弹错误，下次满足条件自动重试。
-     * 六组专项模型不在启动时自动下载，由"专项模型"页按需触发。
-     */
-    private fun maybeSyncTranslationModels() {
-        val sync =
-            translationModules.sync
-
-        lifecycleScope.launch {
-
-            if (
-                !isOnUnmeteredNetwork()
-            ) {
-
-                return@launch
-            }
-
-            var lastLogPct =
-                HashMap<String, Int>()
-
-            val ok =
-                sync.sync(
-                    installGeneralistIfMissing = true,
-                ) { modelId, phase, done, total ->
-
-                    if (phase == "error") {
-
-                        Log.w(
-                            "FourLangTranslation",
-                            "$modelId 同步失败",
-                        )
-
-                        return@sync
-                    }
-
-                    if (total > 0) {
-
-                        val pct =
-                            (done * 100 / total)
-                                .toInt()
-
-                        if (
-                            pct != lastLogPct[modelId] &&
-                            pct % 10 == 0
-                        ) {
-
-                            lastLogPct[modelId] =
-                                pct
-
-                            Log.d(
-                                "FourLangTranslation",
-                                "$modelId $phase $pct%",
-                            )
-                        }
-                    }
-                }
-
-            if (ok) {
-
-                Log.d(
-                    "FourLangTranslation",
-                    "manifest synced: " +
-                            (sync.latestManifest?.models?.size ?: 0) +
-                            " models",
-                )
-
-                updateEngineHint()
-            }
-        }
-    }
-
-    private fun openSpecialistModels() {
-        startActivity(
-            Intent(
-                this,
-                SpecialistModelsActivity::class.java,
-            )
-        )
-    }
-
-    /**
-     * 实时引擎指示：与 TranslationService 的路由规则一致，
-     * 显示当前源/目标方向会使用哪个翻译引擎（专项 / 总模型 / 服务器）。
-     */
-    private fun updateEngineHint() {
-        if (
-            !::textEngineHint.isInitialized
-        ) {
-
-            return
-        }
-
-        val service =
-            translationModules.service
-
-        val label =
-            try {
-
-                service.engineLabelFor(
-                    selectedSource(),
-                    selectedTarget(),
-                )
-
-            } catch (e: Exception) {
-
-                "服务器 API"
-            }
-
-        textEngineHint.text =
-            "当前翻译引擎：$label"
-    }
-
-    /** TranslationResult.modelLabel → 展示文案。 */
-    private fun friendlyModelLabel(modelLabel: String?): String =
-        when {
-            modelLabel.isNullOrBlank() -> ""
-            modelLabel == ServerTranslationEngine.MODEL_LABEL_SERVER -> "服务器 API"
-            else -> {
-                val generalistId =
-                    translationModules.sync.latestManifest
-                        ?.generalist()
-                        ?.modelId
-
-                if (modelLabel == generalistId) {
-                    "总模型 $modelLabel"
-                } else {
-                    "专项模型 $modelLabel"
-                }
-            }
-        }
-
-    private fun isOnUnmeteredNetwork(): Boolean {
-        val cm =
-            getSystemService(ConnectivityManager::class.java)
-                ?: return false
-
-        val caps =
-            cm.getNetworkCapabilities(cm.activeNetwork)
-                ?: return false
-
-        return caps.hasCapability(
-            NetworkCapabilities.NET_CAPABILITY_NOT_METERED
-        )
-    }
 
     /*
      * TTS v0.1（Android 系统 TextToSpeech）。
@@ -518,6 +347,27 @@ class MainActivity : AppCompatActivity() {
 
         bindViews()
 
+        /*
+         * 翻译 UI 编排（翻译按钮/引擎指示/译文显示/模型同步）
+         * 独立在 TranslationUiController，MainActivity 只负责注入视图与数据源。
+         */
+        translationUi =
+            TranslationUiController(
+                context = this,
+                scope = lifecycleScope,
+                btnTranslate =
+                    findViewById(R.id.btnTranslate),
+                btnSpecialistModels =
+                    findViewById(R.id.btnSpecialistModels),
+                textTranslation =
+                    findViewById(R.id.textTranslation),
+                textEngineHint =
+                    findViewById(R.id.textEngineHint),
+                lastAsrText = { lastAsrText },
+                selectedSource = { selectedSource() },
+                selectedTarget = { selectedTarget() },
+            )
+
         asrManager =
             AsrManager(
                 applicationContext
@@ -594,11 +444,7 @@ class MainActivity : AppCompatActivity() {
                     offlineEngine,
             )
 
-        /*
-         * Wi-Fi 下首次使用时后台下载四语翻译模型包；
-         * 未就绪期间翻译走服务器回退。
-         */
-        maybeSyncTranslationModels()
+        translationUi.syncModelsIfUnmetered()
 
         /*
          * ========================================================
@@ -632,7 +478,7 @@ class MainActivity : AppCompatActivity() {
             AppLanguage.ZH.ordinal
         )
 
-        updateEngineHint()
+        translationUi.updateEngineHint()
 
         spinnerTarget.setSelection(
             AppLanguage.EN.ordinal
@@ -651,7 +497,7 @@ class MainActivity : AppCompatActivity() {
         spinnerSource.onItemSelectedListener =
             SimpleItemSelectedListener {
 
-                updateEngineHint()
+                translationUi.updateEngineHint()
 
                 if (conversationActive) {
 
@@ -773,7 +619,7 @@ class MainActivity : AppCompatActivity() {
         spinnerTarget.onItemSelectedListener =
             SimpleItemSelectedListener {
 
-                updateEngineHint()
+                translationUi.updateEngineHint()
             }
 
         /*
@@ -953,78 +799,6 @@ class MainActivity : AppCompatActivity() {
          * ========================================================
          */
 
-        btnTranslate.setOnClickListener {
-
-            val source =
-                selectedSource()
-
-            val target =
-                selectedTarget()
-
-            val text =
-                lastAsrText
-
-            if (
-                text.isBlank()
-            ) {
-
-                return@setOnClickListener
-            }
-
-            textTranslation.text =
-                "翻译中…"
-
-            lifecycleScope.launch {
-
-                val result =
-                    try {
-
-                        withContext(Dispatchers.IO) {
-
-                            translationEngine.translate(
-                                text = text,
-                                source = source,
-                                target = target,
-                            )
-                        }
-
-                    } catch (e: Throwable) {
-
-                        textTranslation.text =
-                            "翻译失败：\n" +
-                                    "${e.javaClass.simpleName}: " +
-                                    "${e.message}"
-
-                        return@launch
-                    }
-
-                val label =
-                    friendlyModelLabel(result.modelLabel)
-
-                textTranslation.text =
-                    if (
-                        result.translated ||
-                        result.outputText.isBlank()
-                    ) {
-
-                        if (label.isEmpty()) {
-
-                            result.outputText
-
-                        } else {
-
-                            "译文（$label）：\n" +
-                                    result.outputText
-                        }
-
-                    } else {
-
-                        result.outputText +
-                                "\n（翻译模型未接入，当前朗读 ASR 原文）"
-                    }
-            }
-        }
-
         /*
          * ========================================================
          * 自动朗读开关（TTS v0.1）。
@@ -1087,11 +861,6 @@ class MainActivity : AppCompatActivity() {
         /*
          * 专项模型页入口：六组语言对模型的按需下载/更新/启用。
          */
-        btnSpecialistModels.setOnClickListener {
-
-            openSpecialistModels()
-        }
-
         /*
          * 朗读语音可用性行：点击打开系统语音安装/设置页，
          * 用于下载缺失的离线语音（如 Google TTS 的俄语包）。
@@ -1420,16 +1189,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.btnRelease
             )
 
-        btnTranslate =
-            findViewById(
-                R.id.btnTranslate
-            )
-
-        btnSpecialistModels =
-            findViewById(
-                R.id.btnSpecialistModels
-            )
-
         btnAutoSpeak =
             findViewById(
                 R.id.btnAutoSpeak
@@ -1460,15 +1219,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.textMetrics
             )
 
-        textTranslation =
-            findViewById(
-                R.id.textTranslation
-            )
-
-        textEngineHint =
-            findViewById(
-                R.id.textEngineHint
-            )
     }
 
     private fun selectedSource():
@@ -2098,9 +1848,10 @@ class MainActivity : AppCompatActivity() {
                 pipeline
             )
 
-            btnTranslate.isEnabled =
+            translationUi.setTranslateEnabled(
                 pipeline.asr.text
                     .isNotBlank()
+            )
 
             if (
                 conversationActive
@@ -2447,7 +2198,7 @@ class MainActivity : AppCompatActivity() {
 
                 withContext(Dispatchers.IO) {
 
-                    translationEngine.translate(
+                    translationUi.service.translate(
                         text = text,
                         source =
                             pipeline.routedLanguage,
@@ -2470,24 +2221,12 @@ class MainActivity : AppCompatActivity() {
                 null
             }
 
-        if (
-            translation != null &&
-            translation.translated
-        ) {
+        if (translation != null) {
 
-            val label =
-                friendlyModelLabel(translation.modelLabel)
-
-            textTranslation.text =
-                if (label.isEmpty()) {
-
-                    translation.outputText
-
-                } else {
-
-                    "原文：$text\n译文（$label）：\n" +
-                            translation.outputText
-                }
+            translationUi.showAutoSpeakTranslation(
+                sourceText = text,
+                result = translation,
+            )
         }
 
         ttsEngine.speak(
@@ -2591,7 +2330,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         // 从专项模型页返回后刷新引擎指示（启用/停用状态可能已变化）
-        updateEngineHint()
+        translationUi.updateEngineHint()
     }
 
     override fun onDestroy() {

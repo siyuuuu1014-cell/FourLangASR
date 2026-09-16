@@ -25,11 +25,11 @@ class TranslationModules private constructor(
 
     val registry = ModelRegistry(File(baseDir, "model_registry.json"))
     val packages = ModelPackageManager(
-        baseUrl = ServerTranslationEngine.DEFAULT_BASE_URL,
+        baseUrlProvider = { ServerConfig.baseUrl(applicationContext) },
         modelsRoot = File(baseDir, "models"),
     )
     val manifestClient = ModelManifestClient(
-        baseUrl = ServerTranslationEngine.DEFAULT_BASE_URL,
+        baseUrlProvider = { ServerConfig.baseUrl(applicationContext) },
     )
     val sync = ModelSyncManager(
         manifestClient = manifestClient,
@@ -41,7 +41,9 @@ class TranslationModules private constructor(
         registry = registry,
         packageManager = packages,
         manifestProvider = { sync.latestManifest },
-        serverEngine = ServerTranslationEngine(),
+        serverEngine = ServerTranslationEngine(
+            baseUrlProvider = { ServerConfig.baseUrl(applicationContext) },
+        ),
     )
 
     companion object {

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.fourlangasr.R
+import com.example.fourlangasr.translation.ServerConfig
 import com.example.fourlangasr.translation.TranslationModules
 import com.example.fourlangasr.translation.model.ManifestModel
 import kotlinx.coroutines.Dispatchers
@@ -38,6 +39,10 @@ class SpecialistModelsActivity : AppCompatActivity() {
         modules = TranslationModules.getInstance(this)
         statusText = findViewById(R.id.specialistStatus)
 
+        val serverUrlText = findViewById<TextView>(R.id.specialistServerUrl)
+        updateServerUrlText(serverUrlText)
+        serverUrlText.setOnClickListener { showServerUrlDialog(serverUrlText) }
+
         adapter = SpecialistModelAdapter(
             layoutInflater = layoutInflater,
             onDownload = { row -> downloadModel(row.model) },
@@ -51,6 +56,32 @@ class SpecialistModelsActivity : AppCompatActivity() {
         }
 
         refreshManifest()
+    }
+
+    private fun updateServerUrlText(view: TextView) {
+        view.text = "服务器地址：${ServerConfig.baseUrl(this)}（点击修改）"
+    }
+
+    private fun showServerUrlDialog(view: TextView) {
+        val input = android.widget.EditText(this)
+        input.setText(ServerConfig.baseUrl(this))
+        input.setSingleLine(true)
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("服务器地址")
+            .setMessage("修改后立即生效（清单/下载/服务器翻译都会走新地址）")
+            .setView(input)
+            .setPositiveButton("保存") { _, _ ->
+                try {
+                    ServerConfig.setBaseUrl(this, input.text.toString())
+                    updateServerUrlText(view)
+                    Toast.makeText(this, "已保存，正在刷新清单…", Toast.LENGTH_SHORT).show()
+                    refreshManifest()
+                } catch (e: Exception) {
+                    Toast.makeText(this, "地址无效：${e.message}", Toast.LENGTH_LONG).show()
+                }
+            }
+            .setNegativeButton("取消", null)
+            .show()
     }
 
     private fun refreshManifest() {

@@ -80,13 +80,13 @@ object ModelManifestParser {
  * 必须在后台线程调用（同步阻塞网络请求）。
  */
 class ModelManifestClient(
-    private val baseUrl: String,
+    private val baseUrlProvider: () -> String,
     private val connectTimeoutMs: Int = 15_000,
     private val readTimeoutMs: Int = 30_000,
 ) {
 
     fun fetchManifest(): ModelsManifest {
-        val conn = URL("$baseUrl/models/manifest").openConnection() as HttpURLConnection
+        val conn = URL("${baseUrlProvider()}/models/manifest").openConnection() as HttpURLConnection
         try {
             conn.connectTimeout = connectTimeoutMs
             conn.readTimeout = readTimeoutMs
