@@ -136,14 +136,20 @@ class ModelPackageManager(
         check(isModelReady(modelId)) { "解包后仍缺少关键文件" }
     }
 
-    /** 包内 MANIFEST.json 的 files.size_bytes 与解包结果比对。 */
+    /**
+     * 包内 MANIFEST.json 的 files.size_bytes 与解包结果比对。
+     * 只校验运行时必需文件（辅助文件如 vocab.txt 缺失不影响使用，
+     * 不应导致整个包被判定损坏）。
+     */
     fun verifyPackage(modelId: String) {
         val dir = modelDir(modelId)
         val manifestFile = File(dir, PACKAGE_MANIFEST_FILE)
         check(manifestFile.isFile) { "缺少 $PACKAGE_MANIFEST_FILE" }
         val files = JSONObject(manifestFile.readText(Charsets.UTF_8)).getJSONObject("files")
-        for (name in files.keys()) {
-            val expected = files.getJSONObject(name).getLong("size_bytes")
+        for (name in listOf(ENCODER_FILE, DECODER_FILE, SPM_FILE, VOCAB_FILE)) {
+            val entry = files.optJSONObject(name)
+                ?: throw IllegalStateException("$modelId: MANIFEST 缺少 $name 条目")
+            val expected = entry.getLong("size_bytes")
             val actual = File(dir, name).length()
             check(actual == expected) { "包校验失败：$name 实际 $actual != 期望 $expected" }
         }
@@ -187,7 +193,8 @@ class ModelPackageManager(
                 unpack(generalistId)
                 true
             } catch (e: Exception) {
-                dir.deleteRecursively()
+                // 解包失败视为 tar 损坏：删除 tar 以便重新下载（不销毁其它内容）
+                File(dir, TAR_FILE).delete()
                 false
             }
         }
@@ -204,11 +211,12 @@ class ModelPackageManager(
                 val src = File(legacyRoot, f)
                 if (src.isFile) src.renameTo(File(dir, f))
             }
+            // 校验失败不销毁已迁移的文件：缺的只是辅助文件时模型仍可用，
+            // 由 sync 按需重新下载完整包补齐（下载会覆盖/补全目录）。
             return try {
                 verifyPackage(generalistId)
                 true
             } catch (e: Exception) {
-                dir.deleteRecursively()
                 false
             }
         }
