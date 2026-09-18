@@ -1,26 +1,36 @@
 package com.example.fourlangasr.translation.ui
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.fourlangasr.R
 import com.example.fourlangasr.translation.ServerConfig
 import com.example.fourlangasr.translation.TranslationModules
-import com.example.fourlangasr.translation.model.ManifestModel
+import com.example.fourlangasr.translation.download.ModelDownloadCoordinator
+import com.example.fourlangasr.translation.download.ModelDownloadService
+import com.example.fourlangasr.translation.download.ModelDownloadState
+import com.example.fourlangasr.translation.download.ModelDownloadStatus
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /**
  * 专项模型页：六个语言对模型的按需下载 / 更新 / 启用 / 删除。
  *
- * 数据流：远端 /models/manifest（清单）+ 本地 ModelRegistry（版本/启用状态）
- * + ModelPackageManager（包就绪/下载进度）→ 组装为 SpecialistRow 列表。
- * 所有网络/解包操作在 IO 线程，UI 更新回主线程。
+ * 下载统一交给 [ModelDownloadService]（前台服务）执行 —— App 退后台
+ * 下载不中断、通知栏实时进度；本页订阅 [ModelDownloadCoordinator]
+ * 的状态流渲染列表（进程内单例，页面重建/重进后状态一致）。
  */
 class SpecialistModelsActivity : AppCompatActivity() {
 
@@ -28,7 +38,18 @@ class SpecialistModelsActivity : AppCompatActivity() {
     private lateinit var adapter: SpecialistModelAdapter
     private lateinit var statusText: TextView
 
-    private val progressMap = HashMap<String, Pair<String, Pair<Long, Long>>>()
+    private var downloadState: ModelDownloadState = ModelDownloadState(emptyList(), emptyMap())
+
+    private val notificationPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
+            if (!granted) {
+                Toast.makeText(
+                    this,
+                    "未授予通知权限：下载仍会在前台继续，但通知栏看不到进度",
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +66,7 @@ class SpecialistModelsActivity : AppCompatActivity() {
 
         adapter = SpecialistModelAdapter(
             layoutInflater = layoutInflater,
-            onDownload = { row -> downloadModel(row.model) },
+            onDownload = { row -> downloadModel(row) },
             onToggleEnabled = { row -> toggleEnabled(row) },
             onDelete = { row -> deleteModel(row) },
         )
@@ -55,7 +76,35 @@ class SpecialistModelsActivity : AppCompatActivity() {
             refreshManifest()
         }
 
+        // 订阅下载协调器状态（下载中/排队中/失败实时反映到列表）
+        lifecycleScope.launch {
+            modules.downloadCoordinator.state.collectLatest { state ->
+                downloadState = state
+                rebuildRows()
+            }
+        }
+
         refreshManifest()
+    }
+
+    private fun downloadModel(row: SpecialistRow) {
+        // Android 13+ 需要通知权限才能显示下载进度通知
+        if (
+            Build.VERSION.SDK_INT >= 33 &&
+            ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+            PackageManager.PERMISSION_GRANTED
+        ) {
+            notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+        }
+        modules.downloadCoordinator.enqueue(listOf(row.model.modelId))
+        ContextCompat.startForegroundService(
+            this,
+            Intent(this, ModelDownloadService::class.java).apply {
+                action = ModelDownloadService.ACTION_ENQUEUE
+                putExtra(ModelDownloadService.EXTRA_MODEL_ID, row.model.modelId)
+            },
+        )
+        rebuildRows()
     }
 
     private fun updateServerUrlText(view: TextView) {
@@ -109,6 +158,13 @@ class SpecialistModelsActivity : AppCompatActivity() {
             val ready = modules.packages.isModelReady(model.modelId)
             val stale = installed != null &&
                 (installed.sourceSha256 != model.sourceSha256 || installed.version != model.version)
+            val status = downloadState.statuses[model.modelId]
+            val progress = when (status) {
+                is ModelDownloadStatus.Running ->
+                    status.progress.phase to (status.progress.doneBytes to status.progress.totalBytes)
+                ModelDownloadStatus.Pending -> "queue" to (0L to -1L)
+                else -> null
+            }
             SpecialistRow(
                 model = model,
                 isGeneralist = model.modelId == generalistId,
@@ -116,62 +172,10 @@ class SpecialistModelsActivity : AppCompatActivity() {
                 ready = ready,
                 stale = stale,
                 enabled = installed?.enabled == true,
-                progress = progressMap[model.modelId],
+                progress = progress,
             )
         }
         adapter.submit(rows)
-    }
-
-    private fun downloadModel(model: ManifestModel) {
-        progressMap[model.modelId] = ("download" to (0L to model.sizeBytes))
-        rebuildRows()
-        lifecycleScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    modules.packages.ensureModel(model) { phase, done, total ->
-                        progressMap[model.modelId] = (phase to (done to total))
-                        runOnUiThread { adapter.update(rowFor(model.modelId) ?: return@runOnUiThread) }
-                    }
-                }
-                withContext(Dispatchers.IO) {
-                    val isSpecialist = modules.sync.latestManifest
-                        ?.specialists()?.any { it.modelId == model.modelId } == true
-                    modules.registry.markInstalled(
-                        model.modelId,
-                        model.version,
-                        model.sourceSha256,
-                    )
-                    if (isSpecialist) modules.registry.setEnabled(model.modelId, true)
-                }
-                Toast.makeText(this@SpecialistModelsActivity, "${model.modelId} 已就绪", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this@SpecialistModelsActivity,
-                    "${model.modelId} 下载失败：${e.javaClass.simpleName}",
-                    Toast.LENGTH_LONG,
-                ).show()
-            } finally {
-                progressMap.remove(model.modelId)
-                rebuildRows()
-            }
-        }
-    }
-
-    private fun rowFor(modelId: String): SpecialistRow? {
-        val manifest = modules.sync.latestManifest ?: return null
-        val model = manifest.byId(modelId) ?: return null
-        val installed = modules.registry.get(modelId)
-        val generalistId = manifest.generalist().modelId
-        return SpecialistRow(
-            model = model,
-            isGeneralist = modelId == generalistId,
-            installed = installed != null,
-            ready = modules.packages.isModelReady(modelId),
-            stale = installed != null &&
-                (installed.sourceSha256 != model.sourceSha256 || installed.version != model.version),
-            enabled = installed?.enabled == true,
-            progress = progressMap[modelId],
-        )
     }
 
     private fun toggleEnabled(row: SpecialistRow) {

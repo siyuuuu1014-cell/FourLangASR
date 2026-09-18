@@ -59,7 +59,11 @@ class SpecialistModelAdapter(
         val status = when {
             row.progress != null -> {
                 val pct = if (p.second > 0) "${p.first * 100 / p.second}%" else ""
-                if (phase == "unpack") "解包中…" else "下载中 $pct"
+                when (phase) {
+                    "queue" -> "排队中…"
+                    "unpack" -> "解包中…"
+                    else -> "下载中 $pct"
+                }
             }
             row.ready && row.stale -> "已就绪（有更新）"
             row.ready -> "已就绪"

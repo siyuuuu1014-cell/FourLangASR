@@ -1,6 +1,7 @@
 package com.example.fourlangasr.translation
 
 import android.content.Context
+import com.example.fourlangasr.translation.download.ModelDownloadCoordinator
 import com.example.fourlangasr.translation.engine.ServerTranslationEngine
 import com.example.fourlangasr.translation.model.ModelManifestClient
 import com.example.fourlangasr.translation.model.ModelPackageManager
@@ -37,6 +38,8 @@ class TranslationModules private constructor(
         registry = registry,
         cacheFile = File(baseDir, "model_manifest_cache.json"),
     )
+    /** 下载队列/进度协调器（ModelDownloadService 写、UI 订阅读）。 */
+    val downloadCoordinator = ModelDownloadCoordinator()
     val service = TranslationService(
         registry = registry,
         packageManager = packages,

@@ -12,6 +12,11 @@
     <!-- 判断当前网络是否计费（Wi-Fi 才自动下载翻译模型包） -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- 模型包后台下载：前台服务（Android 14+ 需显式类型） -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <uses-feature
         android:name="android.hardware.microphone"
         android:required="true" />
@@ -50,6 +55,11 @@
             android:name=".translation.ui.SpecialistModelsActivity"
             android:exported="false"
             android:label="专项模型" />
+
+        <service
+            android:name=".translation.download.ModelDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
 
     </application>
 
