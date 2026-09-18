@@ -86,7 +86,7 @@ class TranslationUiController(
         }
     }
 
-    /** 自动朗读路径：翻译成功后把原文/译文成对显示（带模型标签）。 */
+    /** 自动朗读路径：翻译成功后显示译文（原文在上方 ASR 结果区，天然对应）。 */
     fun showAutoSpeakTranslation(sourceText: String, result: TranslationResult) {
         if (!result.translated) return
         val label = friendlyModelLabel(result.modelLabel)
@@ -94,8 +94,14 @@ class TranslationUiController(
             if (label.isEmpty()) {
                 result.outputText
             } else {
-                "原文：$sourceText\n译文（$label）：\n" + result.outputText
+                "译文（$label）：\n" + result.outputText
             }
+    }
+
+    /** 自动朗读路径：翻译失败但回退朗读原文 —— 明确显示失败原因，不留空白。 */
+    fun showAutoSpeakFallback(e: Throwable) {
+        textTranslation.text =
+            "翻译失败（已朗读原文）：\n${e.javaClass.simpleName}: ${e.message}"
     }
 
     // ================================================================ 引擎指示

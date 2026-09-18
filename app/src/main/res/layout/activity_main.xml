@@ -140,6 +140,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:text="翻译结果"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textTranslation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="70dp"
+            android:padding="12dp"
+            android:text="—"
+            android:textIsSelectable="true"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:text="性能"
             android:textStyle="bold" />
 
@@ -151,22 +168,6 @@
             android:text="—"
             android:textIsSelectable="true"
             android:typeface="monospace" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="翻译结果（当前为占位接口）"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/textTranslation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="70dp"
-            android:padding="12dp"
-            android:text="翻译模型尚未接入。"
-            android:textIsSelectable="true" />
 
     </LinearLayout>
 </ScrollView>

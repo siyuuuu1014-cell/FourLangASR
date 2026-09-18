@@ -2210,13 +2210,15 @@ class MainActivity : AppCompatActivity() {
 
                 /*
                  * 翻译不可用（无网络且本地模型未就绪等）：
-                 * 回退朗读 ASR 原文，避免整条链路静默失效。
+                 * 回退朗读 ASR 原文，并在翻译结果区明确显示失败原因。
                  */
                 Log.w(
                     "FourLangTTS",
                     "翻译失败，回退朗读 ASR 原文",
                     e,
                 )
+
+                translationUi.showAutoSpeakFallback(e)
 
                 null
             }
