@@ -2193,6 +2193,8 @@ class MainActivity : AppCompatActivity() {
         val target =
             selectedTarget()
 
+        translationUi.showAutoSpeakTranslating()
+
         val translation =
             try {
 

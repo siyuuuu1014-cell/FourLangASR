@@ -62,6 +62,7 @@ class TranslationUiController(
         if (text.isBlank()) return
 
         textTranslation.text = "翻译中…"
+        scrollToTranslation()
         scope.launch {
             val result = try {
                 withContext(Dispatchers.IO) {
@@ -70,38 +71,61 @@ class TranslationUiController(
             } catch (e: Throwable) {
                 textTranslation.text =
                     "翻译失败：\n${e.javaClass.simpleName}: ${e.message}"
+                scrollToTranslation()
                 return@launch
             }
             textTranslation.text =
                 if (result.translated || result.outputText.isBlank()) {
                     val label = friendlyModelLabel(result.modelLabel)
+                    val body =
+                        if (result.outputText.isBlank()) "（未生成译文）" else result.outputText
                     if (label.isEmpty()) {
-                        result.outputText
+                        body
                     } else {
-                        "译文（$label）：\n" + result.outputText
+                        "译文（$label）：\n$body"
                     }
                 } else {
                     result.outputText + "\n（翻译模型未接入，当前朗读 ASR 原文）"
                 }
+            scrollToTranslation()
         }
+    }
+
+    /** 自动朗读路径：翻译开始（本地模型要几秒到几十秒，给用户明确进度感）。 */
+    fun showAutoSpeakTranslating() {
+        textTranslation.text = "翻译中…"
+        scrollToTranslation()
     }
 
     /** 自动朗读路径：翻译成功后显示译文（原文在上方 ASR 结果区，天然对应）。 */
     fun showAutoSpeakTranslation(sourceText: String, result: TranslationResult) {
         if (!result.translated) return
         val label = friendlyModelLabel(result.modelLabel)
+        val body = if (result.outputText.isBlank()) "（未生成译文）" else result.outputText
         textTranslation.text =
             if (label.isEmpty()) {
-                result.outputText
+                body
             } else {
-                "译文（$label）：\n" + result.outputText
+                "译文（$label）：\n$body"
             }
+        scrollToTranslation()
     }
 
     /** 自动朗读路径：翻译失败但回退朗读原文 —— 明确显示失败原因，不留空白。 */
     fun showAutoSpeakFallback(e: Throwable) {
         textTranslation.text =
             "翻译失败（已朗读原文）：\n${e.javaClass.simpleName}: ${e.message}"
+        scrollToTranslation()
+    }
+
+    /** 把翻译结果区滚进可视范围（页面较长，结果在下方）。 */
+    private fun scrollToTranslation() {
+        textTranslation.post {
+            textTranslation.requestRectangleOnScreen(
+                android.graphics.Rect(0, 0, textTranslation.width, textTranslation.height),
+                false,
+            )
+        }
     }
 
     // ================================================================ 引擎指示
