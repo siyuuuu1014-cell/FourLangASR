@@ -9,6 +9,7 @@ import android.os.SystemClock
 import android.util.Log
 import com.example.fourlangasr.model.AppLanguage
 import com.example.fourlangasr.translation.TranslationResult
+import com.example.fourlangasr.translation.model.DirectionMechanism
 import com.example.fourlangasr.translation.model.ModelRuntimeConfig
 import com.example.fourlangasr.translation.tokenizer.M2m100Tokenizer
 import java.io.File
@@ -206,7 +207,16 @@ class KitTranslationEngine(
             val tLoadMs = SystemClock.elapsedRealtime() - tLoad0
 
             // ---- 编码（一次） ----
-            val srcIds = tokenizer.encodeSourceIds(text, srcCode, config.eosId)
+            // 方向机制（家族契约）：
+            //   M2M100：  [src_lang] + X + [eos]
+            //   SMALL100：[tgt_lang] + X + [eos]（目标语言前缀，无 forced_bos）
+            val bodyIds = tokenizer.piecesToModelIds(tokenizer.encodePieces(text))
+            val srcIds = when (config.directionMechanism) {
+                DirectionMechanism.M2M100_STYLE ->
+                    longArrayOf(tokenizer.langToken(srcCode)) + bodyIds + config.eosId
+                DirectionMechanism.SMALL100_STYLE ->
+                    longArrayOf(tokenizer.langToken(tgtCode)) + bodyIds + config.eosId
+            }
             val srcIdsTensor = int64Tensor(st.env, srcIds)
             val mask = LongArray(srcIds.size) { 1L }
             val maskTensor = int64Tensor(st.env, mask)
@@ -238,9 +248,18 @@ class KitTranslationEngine(
             }
 
             try {
+                // 首步 decoder 输入：
+                //   M2M100：  [eos, tgt_lang]（forced bos）
+                //   SMALL100：[eos]（no forced_bos）
+                val firstInput = when (config.directionMechanism) {
+                    DirectionMechanism.M2M100_STYLE ->
+                        longArrayOf(config.eosId, tokenizer.langToken(tgtCode))
+                    DirectionMechanism.SMALL100_STYLE ->
+                        longArrayOf(config.eosId)
+                }
                 val (first, present0) = decoderStep(
                     st,
-                    longArrayOf(config.eosId, tokenizer.langToken(tgtCode)),
+                    firstInput,
                     maskTensor,
                     encHidden,
                     emptyPast,

@@ -65,7 +65,7 @@ class ModelModelTests {
              "special_tokens":{"bos_token_id":0,"eos_token_id":2,"pad_token_id":1},
              "generation":{"max_new_tokens":256}}
         """.trimIndent()
-        val cfg = ModelRuntimeConfigParser.parse(json, "m2m100_fourlang", "m2m100")
+        val cfg = ModelRuntimeConfigParser.parse(json, null, null, "m2m100_fourlang", "m2m100")
         assertEquals(128112, cfg.vocabSize)
         assertEquals(12, cfg.encoderLayers)
         assertEquals(16, cfg.attentionHeads)
@@ -73,6 +73,42 @@ class ModelModelTests {
         assertEquals(128102L, cfg.languages["zh"])
         assertEquals(2L, cfg.eosId)
         assertEquals(256, cfg.maxNewTokens)
+        assertEquals(DirectionMechanism.M2M100_STYLE, cfg.directionMechanism)
+    }
+
+    /** 真实 zh_uz 专项包结构（嵌套 languages + config.json 结构参数 + SMALL100 契约）。 */
+    @Test
+    fun runtimeConfig_parsesRealSmall100Package() {
+        val manifestJson = """
+            {"name":"shared","version":"1.0.0","family":"small100",
+             "languages":{
+               "en":{"token_id":128022},"zh":{"token_id":128102},
+               "uz":{"token_id":128096},"ru":{"token_id":128077}},
+             "special_tokens":{"bos_token_id":0,"eos_token_id":2,"pad_token_id":1},
+             "direction_mechanism":"tgt_lang prefix (target), no forced_bos",
+             "files":{}}
+        """.trimIndent()
+        val configJson = """
+            {"architectures":["M2M100ForConditionalGeneration"],
+             "vocab_size":128112,"d_model":1024,
+             "encoder_layers":12,"decoder_layers":3,
+             "encoder_attention_heads":16,"decoder_attention_heads":16,
+             "eos_token_id":2,"pad_token_id":1,"bos_token_id":0}
+        """.trimIndent()
+        val generationJson = """
+            {"decoder_start_token_id":2,"max_length":256,"eos_token_id":2}
+        """.trimIndent()
+        val cfg = ModelRuntimeConfigParser.parse(
+            manifestJson, configJson, generationJson, "zh_uz", "small100",
+        )
+        assertEquals(128112, cfg.vocabSize)
+        assertEquals(12, cfg.encoderLayers)
+        assertEquals(3, cfg.decoderLayers)
+        assertEquals(16, cfg.attentionHeads)
+        assertEquals(64, cfg.headDim)
+        assertEquals(128096L, cfg.languages["uz"])
+        assertEquals(256, cfg.maxNewTokens)
+        assertEquals(DirectionMechanism.SMALL100_STYLE, cfg.directionMechanism)
     }
 
     @Test

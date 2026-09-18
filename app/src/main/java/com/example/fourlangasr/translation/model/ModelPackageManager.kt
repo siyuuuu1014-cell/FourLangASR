@@ -228,11 +228,19 @@ class ModelPackageManager(
 
     // ---------------------------------------------------------------- 运行时资源加载
 
-    /** 包内 MANIFEST.json → 引擎运行时配置（结构参数 + 语言 token + 特殊 token）。 */
+    /** 包内 MANIFEST.json（+ config.json / generation_config.json）→ 引擎运行时配置。 */
     fun loadRuntimeConfig(modelId: String, family: String): ModelRuntimeConfig {
         val dir = modelDir(modelId)
-        val json = File(dir, PACKAGE_MANIFEST_FILE).readText(Charsets.UTF_8)
-        return ModelRuntimeConfigParser.parse(json, modelId, family)
+        val manifestJson = File(dir, PACKAGE_MANIFEST_FILE).readText(Charsets.UTF_8)
+        val configFile = File(dir, "config.json")
+        val generationFile = File(dir, "generation_config.json")
+        return ModelRuntimeConfigParser.parse(
+            packageManifestJson = manifestJson,
+            configJson = configFile.takeIf { it.isFile }?.readText(Charsets.UTF_8),
+            generationConfigJson = generationFile.takeIf { it.isFile }?.readText(Charsets.UTF_8),
+            modelId = modelId,
+            family = family,
+        )
     }
 
     /** 包内 sentencepiece 原始文件 → 分词器（首次构建，之后缓存于内存）。 */
