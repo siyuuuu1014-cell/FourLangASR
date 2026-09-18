@@ -61,60 +61,79 @@ class TranslationUiController(
         val text = lastAsrText()
         if (text.isBlank()) return
 
-        textTranslation.text = "翻译中…"
-        scrollToTranslation()
+        showTranslating()
         scope.launch {
             val result = try {
                 withContext(Dispatchers.IO) {
                     service.translate(text = text, source = source, target = target)
                 }
             } catch (e: Throwable) {
-                textTranslation.text =
-                    "翻译失败：\n${e.javaClass.simpleName}: ${e.message}"
-                scrollToTranslation()
+                appendFailure(e, null)
                 return@launch
             }
-            textTranslation.text =
-                if (result.translated || result.outputText.isBlank()) {
-                    val label = friendlyModelLabel(result.modelLabel)
-                    val body =
-                        if (result.outputText.isBlank()) "（未生成译文）" else result.outputText
-                    if (label.isEmpty()) {
-                        body
-                    } else {
-                        "译文（$label）：\n$body"
-                    }
-                } else {
-                    result.outputText + "\n（翻译模型未接入，当前朗读 ASR 原文）"
-                }
-            scrollToTranslation()
+            appendEntry(text, result.outputText, friendlyModelLabel(result.modelLabel))
         }
     }
 
-    /** 自动朗读路径：翻译开始（本地模型要几秒到几十秒，给用户明确进度感）。 */
-    fun showAutoSpeakTranslating() {
-        textTranslation.text = "翻译中…"
+    /**
+     * 翻译记录（与 ASR 记录同构）：每条 = 原文 + 译文（模型），按时间累积，
+     * 由 [resetTranslationLog] 随对话开始清空。
+     */
+    private val translationLog = StringBuilder()
+
+    /** 对话开始时清空翻译记录（MainActivity 与 ASR transcript 同步调用）。 */
+    fun resetTranslationLog() {
+        translationLog.setLength(0)
+        renderTranslationLog()
+    }
+
+    /** 翻译开始（本地模型要几秒到几十秒，给用户明确进度感）。 */
+    fun showTranslating() {
+        textTranslation.text =
+            translationLog.toString().trimEnd() + "\n翻译中…"
         scrollToTranslation()
     }
 
-    /** 自动朗读路径：翻译成功后显示译文（原文在上方 ASR 结果区，天然对应）。 */
+    /** 自动朗读路径：翻译成功后追加一条记录（原文/译文成对）。 */
     fun showAutoSpeakTranslation(sourceText: String, result: TranslationResult) {
         if (!result.translated) return
-        val label = friendlyModelLabel(result.modelLabel)
-        val body = if (result.outputText.isBlank()) "（未生成译文）" else result.outputText
-        textTranslation.text =
-            if (label.isEmpty()) {
-                body
-            } else {
-                "译文（$label）：\n$body"
-            }
-        scrollToTranslation()
+        appendEntry(sourceText, result.outputText, friendlyModelLabel(result.modelLabel))
     }
 
-    /** 自动朗读路径：翻译失败但回退朗读原文 —— 明确显示失败原因，不留空白。 */
+    /** 自动朗读路径：翻译失败但回退朗读原文 —— 记录失败原因。 */
     fun showAutoSpeakFallback(e: Throwable) {
+        appendFailure(e, "已朗读原文")
+    }
+
+    private fun appendEntry(source: String, body: String, label: String) {
+        val text = if (body.isBlank()) "（未生成译文）" else body
+        translationLog.append("原文：").append(source).append("\n")
+        if (label.isEmpty()) {
+            translationLog.append("译文：\n")
+        } else {
+            translationLog.append("译文（").append(label).append("）：\n")
+        }
+        translationLog.append(text).append("\n\n")
+        renderTranslationLog()
+    }
+
+    private fun appendFailure(e: Throwable, note: String?) {
+        translationLog.append("翻译失败")
+        if (note != null) {
+            translationLog.append("（").append(note).append("）")
+        }
+        translationLog
+            .append("：")
+            .append(e.javaClass.simpleName)
+            .append(": ")
+            .append(e.message)
+            .append("\n\n")
+        renderTranslationLog()
+    }
+
+    private fun renderTranslationLog() {
         textTranslation.text =
-            "翻译失败（已朗读原文）：\n${e.javaClass.simpleName}: ${e.message}"
+            translationLog.toString().trimEnd().ifBlank { "—" }
         scrollToTranslation()
     }
 

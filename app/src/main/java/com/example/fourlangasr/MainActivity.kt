@@ -1449,6 +1449,8 @@ class MainActivity : AppCompatActivity() {
 
                 conversationTranscript.clear()
 
+                translationUi.resetTranslationLog()
+
                 textResult.text =
                     "等待讲话…"
 
@@ -2193,7 +2195,7 @@ class MainActivity : AppCompatActivity() {
         val target =
             selectedTarget()
 
-        translationUi.showAutoSpeakTranslating()
+        translationUi.showTranslating()
 
         val translation =
             try {
