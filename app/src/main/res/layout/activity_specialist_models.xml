@@ -27,6 +27,15 @@
         android:textSize="12sp" />
 
     <TextView
+        android:id="@+id/specialistMemoryMode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="低内存档位："
+        android:textSize="12sp" />
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"

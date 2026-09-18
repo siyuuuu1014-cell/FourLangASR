@@ -27,6 +27,7 @@ import com.example.fourlangasr.pipeline.CodeSwitchRecovery
 import com.example.fourlangasr.pipeline.MetricsFormatter
 import com.example.fourlangasr.pipeline.PipelineResult
 import com.example.fourlangasr.pipeline.SourceMode
+import com.example.fourlangasr.translation.PerformanceConfig
 import com.example.fourlangasr.translation.TranslationResult
 import com.example.fourlangasr.translation.ui.TranslationUiController
 import com.example.fourlangasr.tts.AndroidSystemTtsEngine
@@ -2195,6 +2196,30 @@ class MainActivity : AppCompatActivity() {
         val target =
             selectedTarget()
 
+        /*
+         * 低内存档位（PerformanceConfig）：翻译前释放 ASR 模型，
+         * 翻译完成后重载。此路径在串行 segment 协程内执行，
+         * 释放窗口内不会有新的 processSegment 竞争 ASR。
+         */
+        val asrLanguageForSwap =
+            if (PerformanceConfig.releaseAsrDuringTranslation(this)) {
+                asrManager.loadedLanguage
+            } else {
+                null
+            }
+
+        if (asrLanguageForSwap != null) {
+
+            Log.d(
+                "FourLangTTS",
+                "低内存档位：翻译前释放 ASR 模型",
+            )
+
+            withContext(Dispatchers.IO) {
+                asrManager.release()
+            }
+        }
+
         translationUi.showTranslating()
 
         val translation =
@@ -2226,6 +2251,31 @@ class MainActivity : AppCompatActivity() {
 
                 null
             }
+
+        if (asrLanguageForSwap != null) {
+
+            runCatching {
+
+                withContext(Dispatchers.IO) {
+                    asrManager.switchLanguage(asrLanguageForSwap)
+                }
+
+            }.onSuccess {
+
+                Log.d(
+                    "FourLangTTS",
+                    "ASR 模型已重载",
+                )
+
+            }.onFailure { e ->
+
+                Log.w(
+                    "FourLangTTS",
+                    "ASR 模型重载失败（下一条识别会报错）",
+                    e,
+                )
+            }
+        }
 
         if (translation != null) {
 

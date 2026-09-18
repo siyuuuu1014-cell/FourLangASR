@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.fourlangasr.R
+import com.example.fourlangasr.translation.PerformanceConfig
 import com.example.fourlangasr.translation.ServerConfig
 import com.example.fourlangasr.translation.TranslationModules
 import com.example.fourlangasr.translation.download.ModelDownloadCoordinator
@@ -64,6 +65,23 @@ class SpecialistModelsActivity : AppCompatActivity() {
         updateServerUrlText(serverUrlText)
         serverUrlText.setOnClickListener { showServerUrlDialog(serverUrlText) }
 
+        val memoryModeText = findViewById<TextView>(R.id.specialistMemoryMode)
+        updateMemoryModeText(memoryModeText)
+        memoryModeText.setOnClickListener {
+            val current = PerformanceConfig.releaseAsrDuringTranslation(this)
+            PerformanceConfig.setReleaseAsrDuringTranslation(this, !current)
+            updateMemoryModeText(memoryModeText)
+            Toast.makeText(
+                this,
+                if (!current) {
+                    "已开启：翻译时释放 ASR 模型（省约 1GB 内存，识别有短暂切换延迟）"
+                } else {
+                    "已关闭低内存档位"
+                },
+                Toast.LENGTH_LONG,
+            ).show()
+        }
+
         adapter = SpecialistModelAdapter(
             layoutInflater = layoutInflater,
             onDownload = { row -> downloadModel(row) },
@@ -109,6 +127,11 @@ class SpecialistModelsActivity : AppCompatActivity() {
 
     private fun updateServerUrlText(view: TextView) {
         view.text = "服务器地址：${ServerConfig.baseUrl(this)}（点击修改）"
+    }
+
+    private fun updateMemoryModeText(view: TextView) {
+        val enabled = PerformanceConfig.releaseAsrDuringTranslation(this)
+        view.text = "低内存档位（翻译时释放 ASR 模型，约省 1GB）：${if (enabled) "开" else "关"}（点击切换）"
     }
 
     private fun showServerUrlDialog(view: TextView) {
