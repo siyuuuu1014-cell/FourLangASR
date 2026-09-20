@@ -300,7 +300,8 @@ class KitTranslationEngine(
                 Log.d(
                     "KitTranslation",
                     "${config.modelId}: load=${tLoadMs}ms decode=${totalMs - tLoadMs}ms " +
-                            "tokens=${gen.size} $srcCode->$tgtCode out='${output.take(60)}'",
+                            "tokens=${gen.size} $srcCode->$tgtCode " +
+                            "in='${text.take(60)}' out='${output.take(60)}'",
                 )
                 return TranslationResult(
                     sourceText = text,
