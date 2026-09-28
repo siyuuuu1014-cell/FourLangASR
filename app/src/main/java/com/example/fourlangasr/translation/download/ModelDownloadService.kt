@@ -90,6 +90,14 @@ class ModelDownloadService : Service() {
             return
         }
         try {
+            // 版本更新：本地文件与新清单 SHA/版本不一致时，先清旧包再重新下载
+            //（ensureModel 对"文件已就绪"会短路，不清包会导致旧文件配新版本号）
+            val installed = modules.registry.get(modelId)
+            val stale = installed != null &&
+                (installed.sourceSha256 != model.sourceSha256 || installed.version != model.version)
+            if (stale) {
+                modules.packages.removePackage(modelId)
+            }
             modules.packages.ensureModel(model) { phase, done, total ->
                 coordinator.updateProgress(modelId, phase, done, total)
                 notify(

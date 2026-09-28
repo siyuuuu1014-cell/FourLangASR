@@ -129,6 +129,10 @@ class ModelSyncManager(
                 if (!shouldInstall) continue
 
                 try {
+                    // 版本更新：清旧包再下载（ensureModel 对已就绪文件会短路）
+                    if (stale) {
+                        packageManager.removePackage(model.modelId)
+                    }
                     packageManager.ensureModel(model) { phase, done, total ->
                         onModelProgress(model.modelId, phase, done, total)
                     }
