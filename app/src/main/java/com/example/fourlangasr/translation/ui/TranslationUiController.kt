@@ -157,8 +157,13 @@ class TranslationUiController(
         val label = try {
             service.engineLabelFor(selectedSource(), selectedTarget())
         } catch (e: Exception) {
+            android.util.Log.w("FourLangTranslation", "engineLabelFor 异常", e)
             "服务器 API"
         }
+        android.util.Log.d(
+            "FourLangTranslation",
+            "engine hint: ${selectedSource().code}->${selectedTarget().code} => $label",
+        )
         textEngineHint.text = "当前翻译引擎：$label"
     }
 
