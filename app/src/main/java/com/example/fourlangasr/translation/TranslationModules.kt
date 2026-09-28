@@ -44,6 +44,7 @@ class TranslationModules private constructor(
         registry = registry,
         packageManager = packages,
         manifestProvider = { sync.latestManifest },
+        downloadStateProvider = { downloadCoordinator.state.value },
         serverEngine = ServerTranslationEngine(
             baseUrlProvider = { ServerConfig.baseUrl(applicationContext) },
         ),

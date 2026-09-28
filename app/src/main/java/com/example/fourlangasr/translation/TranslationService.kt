@@ -26,6 +26,7 @@ class TranslationService(
     private val registry: ModelRegistry,
     private val packageManager: ModelPackageManager,
     private val manifestProvider: () -> com.example.fourlangasr.translation.model.ModelsManifest?,
+    private val downloadStateProvider: () -> com.example.fourlangasr.translation.download.ModelDownloadState?,
     private val serverEngine: ServerTranslationEngine,
 ) : TranslationEngine {
 
@@ -90,7 +91,12 @@ class TranslationService(
                 "专项模型 ${local.modelId}"
             }
         }
-        return "服务器 API"
+        // 本地不可用：若目标模型正在下载/排队，明示原因，避免用户困惑
+        val downloading = downloadStateProvider()?.statuses?.values
+            ?.any { it is com.example.fourlangasr.translation.download.ModelDownloadStatus.Pending ||
+                it is com.example.fourlangasr.translation.download.ModelDownloadStatus.Running
+            } == true
+        return if (downloading) "服务器 API（本地模型下载中，完成后自动切换）" else "服务器 API"
     }
 
     override fun translate(
