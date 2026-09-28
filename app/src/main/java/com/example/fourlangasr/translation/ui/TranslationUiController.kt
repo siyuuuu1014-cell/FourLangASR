@@ -32,6 +32,9 @@ class TranslationUiController(
     private val btnTranslate: Button,
     btnTextTranslate: Button,
     private val editManualText: android.widget.EditText,
+    private val textSourceSpinner: android.widget.Spinner,
+    private val textTargetSpinner: android.widget.Spinner,
+    private val textTextEngineHint: TextView,
     btnSpecialistModels: Button,
     private val textTranslation: TextView,
     private val textEngineHint: TextView,
@@ -49,6 +52,49 @@ class TranslationUiController(
         btnTranslate.setOnClickListener { onTranslateClick() }
         btnTextTranslate.setOnClickListener { onTextTranslateClick() }
         btnSpecialistModels.setOnClickListener { openSpecialistModels() }
+
+        // 文字翻译模块：独立的源/目标语言选择（与语音链路完全解耦）
+        val languages = AppLanguage.entries.toTypedArray()
+        textSourceSpinner.adapter =
+            android.widget.ArrayAdapter(
+                context,
+                android.R.layout.simple_spinner_item,
+                languages,
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+        textTargetSpinner.adapter =
+            android.widget.ArrayAdapter(
+                context,
+                android.R.layout.simple_spinner_item,
+                languages,
+            ).apply {
+                setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            }
+        textSourceSpinner.setSelection(AppLanguage.ZH.ordinal)
+        textTargetSpinner.setSelection(AppLanguage.EN.ordinal)
+        textSourceSpinner.onItemSelectedListener =
+            com.example.fourlangasr.SimpleItemSelectedListener { updateTextEngineHint() }
+        textTargetSpinner.onItemSelectedListener =
+            com.example.fourlangasr.SimpleItemSelectedListener { updateTextEngineHint() }
+        updateTextEngineHint()
+    }
+
+    private fun selectedTextSource(): AppLanguage =
+        textSourceSpinner.selectedItem as AppLanguage
+
+    private fun selectedTextTarget(): AppLanguage =
+        textTargetSpinner.selectedItem as AppLanguage
+
+    /** 文字翻译模块的引擎指示（与语音模块分开显示）。 */
+    fun updateTextEngineHint() {
+        val label = try {
+            service.engineLabelFor(selectedTextSource(), selectedTextTarget())
+        } catch (e: Exception) {
+            android.util.Log.w("FourLangTranslation", "text engineLabelFor 异常", e)
+            "服务器 API"
+        }
+        textTextEngineHint.text = "文字翻译引擎：$label"
     }
 
     /** 主界面 ASR 出文本后开放翻译按钮（由 MainActivity 的识别流程调用）。 */
@@ -74,7 +120,13 @@ class TranslationUiController(
                 appendFailure(e, null)
                 return@launch
             }
-            appendEntry(text, result.outputText, friendlyModelLabel(result.modelLabel))
+            appendEntry(
+                source = text,
+                body = result.outputText,
+                label = friendlyModelLabel(result.modelLabel),
+                sourceLang = result.sourceLanguage.code,
+                targetLang = result.targetLanguage.code,
+            )
         }
     }
 
@@ -97,10 +149,16 @@ class TranslationUiController(
         scrollToTranslation()
     }
 
-    /** 自动朗读路径：翻译成功后追加一条记录（原文/译文成对）。 */
+    /** 自动朗读路径：翻译成功后追加一条记录（原文/译文成对，带方向标签）。 */
     fun showAutoSpeakTranslation(sourceText: String, result: TranslationResult) {
         if (!result.translated) return
-        appendEntry(sourceText, result.outputText, friendlyModelLabel(result.modelLabel))
+        appendEntry(
+            source = sourceText,
+            body = result.outputText,
+            label = friendlyModelLabel(result.modelLabel),
+            sourceLang = result.sourceLanguage.code,
+            targetLang = result.targetLanguage.code,
+        )
     }
 
     /** 自动朗读路径：翻译失败但回退朗读原文 —— 记录失败原因。 */
@@ -108,9 +166,22 @@ class TranslationUiController(
         appendFailure(e, "已朗读原文")
     }
 
-    private fun appendEntry(source: String, body: String, label: String) {
+    private fun appendEntry(
+        source: String,
+        body: String,
+        label: String,
+        sourceLang: String,
+        targetLang: String,
+    ) {
         val text = if (body.isBlank()) "（未生成译文）" else body
-        translationLog.append("原文：").append(source).append("\n")
+        translationLog
+            .append("原文[")
+            .append(sourceLang)
+            .append("→")
+            .append(targetLang)
+            .append("]：")
+            .append(source)
+            .append("\n")
         if (label.isEmpty()) {
             translationLog.append("译文：\n")
         } else {
@@ -150,15 +221,15 @@ class TranslationUiController(
         }
     }
 
-    /** 手动输入翻译：按当前源/目标语言翻译输入框文字，结果追加到翻译记录。 */
+    /** 手动输入翻译：按文字模块的源/目标语言（与语音链路独立）翻译，结果追加到记录。 */
     private fun onTextTranslateClick() {
         val text = editManualText.text.toString().trim()
         if (text.isEmpty()) {
             android.widget.Toast.makeText(context, "请先输入要翻译的文字", android.widget.Toast.LENGTH_SHORT).show()
             return
         }
-        val source = selectedSource()
-        val target = selectedTarget()
+        val source = selectedTextSource()
+        val target = selectedTextTarget()
         editManualText.text.clear()
         showTranslating()
         scope.launch {
@@ -170,7 +241,13 @@ class TranslationUiController(
                 appendFailure(e, null)
                 return@launch
             }
-            appendEntry(text, result.outputText, friendlyModelLabel(result.modelLabel))
+            appendEntry(
+                source = text,
+                body = result.outputText,
+                label = friendlyModelLabel(result.modelLabel),
+                sourceLang = source.code,
+                targetLang = target.code,
+            )
         }
     }
 

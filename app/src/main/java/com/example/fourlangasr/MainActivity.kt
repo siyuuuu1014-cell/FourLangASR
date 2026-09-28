@@ -362,6 +362,12 @@ class MainActivity : AppCompatActivity() {
                     findViewById(R.id.btnTextTranslate),
                 editManualText =
                     findViewById(R.id.editManualText),
+                textSourceSpinner =
+                    findViewById(R.id.spinnerTextSource),
+                textTargetSpinner =
+                    findViewById(R.id.spinnerTextTarget),
+                textTextEngineHint =
+                    findViewById(R.id.textTextEngineHint),
                 btnSpecialistModels =
                     findViewById(R.id.btnSpecialistModels),
                 textTranslation =

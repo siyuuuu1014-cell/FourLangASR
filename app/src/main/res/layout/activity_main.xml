@@ -82,12 +82,47 @@
             android:enabled="false"
             android:text="翻译" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="文字翻译（独立语言选择）"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="源语言" />
+
+        <Spinner
+            android:id="@+id/spinnerTextSource"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="目标语言" />
+
+        <Spinner
+            android:id="@+id/spinnerTextTarget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textTextEngineHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:text="文字翻译引擎：…"
+            android:textSize="12sp" />
+
         <EditText
             android:id="@+id/editManualText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="或手动输入要翻译的文字…"
+            android:hint="输入要翻译的文字…"
             android:inputType="textMultiLine"
             android:maxLines="3" />
 
