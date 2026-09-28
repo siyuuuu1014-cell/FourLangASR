@@ -358,6 +358,10 @@ class MainActivity : AppCompatActivity() {
                 scope = lifecycleScope,
                 btnTranslate =
                     findViewById(R.id.btnTranslate),
+                btnTextTranslate =
+                    findViewById(R.id.btnTextTranslate),
+                editManualText =
+                    findViewById(R.id.editManualText),
                 btnSpecialistModels =
                     findViewById(R.id.btnSpecialistModels),
                 textTranslation =

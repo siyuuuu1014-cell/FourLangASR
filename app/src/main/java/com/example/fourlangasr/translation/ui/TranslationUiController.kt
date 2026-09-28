@@ -30,6 +30,8 @@ class TranslationUiController(
     private val context: Context,
     private val scope: CoroutineScope,
     private val btnTranslate: Button,
+    btnTextTranslate: Button,
+    private val editManualText: android.widget.EditText,
     btnSpecialistModels: Button,
     private val textTranslation: TextView,
     private val textEngineHint: TextView,
@@ -45,6 +47,7 @@ class TranslationUiController(
 
     init {
         btnTranslate.setOnClickListener { onTranslateClick() }
+        btnTextTranslate.setOnClickListener { onTextTranslateClick() }
         btnSpecialistModels.setOnClickListener { openSpecialistModels() }
     }
 
@@ -144,6 +147,30 @@ class TranslationUiController(
                 android.graphics.Rect(0, 0, textTranslation.width, textTranslation.height),
                 false,
             )
+        }
+    }
+
+    /** 手动输入翻译：按当前源/目标语言翻译输入框文字，结果追加到翻译记录。 */
+    private fun onTextTranslateClick() {
+        val text = editManualText.text.toString().trim()
+        if (text.isEmpty()) {
+            android.widget.Toast.makeText(context, "请先输入要翻译的文字", android.widget.Toast.LENGTH_SHORT).show()
+            return
+        }
+        val source = selectedSource()
+        val target = selectedTarget()
+        editManualText.text.clear()
+        showTranslating()
+        scope.launch {
+            val result = try {
+                withContext(Dispatchers.IO) {
+                    service.translate(text = text, source = source, target = target)
+                }
+            } catch (e: Throwable) {
+                appendFailure(e, null)
+                return@launch
+            }
+            appendEntry(text, result.outputText, friendlyModelLabel(result.modelLabel))
         }
     }
 

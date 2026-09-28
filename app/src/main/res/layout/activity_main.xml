@@ -82,6 +82,22 @@
             android:enabled="false"
             android:text="翻译" />
 
+        <EditText
+            android:id="@+id/editManualText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="或手动输入要翻译的文字…"
+            android:inputType="textMultiLine"
+            android:maxLines="3" />
+
+        <Button
+            android:id="@+id/btnTextTranslate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="输入翻译" />
+
         <Button
             android:id="@+id/btnSpecialistModels"
             android:layout_width="match_parent"
