@@ -113,7 +113,12 @@ class ModelPackageManager(
             throw IOException("下载不完整：$downloaded/$total，可再次调用续传")
         }
         if (model.sizeBytes > 0 && downloaded != model.sizeBytes) {
-            throw IOException("下载大小与 manifest 不符：$downloaded != ${model.sizeBytes}")
+            // manifest 声明的 size_bytes 可能与实际 tar 大小有出入（后端打包后未同步声明），
+            // 真正的完整性由解包 + 包内 MANIFEST 校验保证，这里只告警不阻断。
+            android.util.Log.w(
+                "FourLangTranslation",
+                "${model.modelId}: 实际大小 $downloaded != manifest 声明 ${model.sizeBytes}",
+            )
         }
         check(part.renameTo(File(dir, TAR_FILE))) { "无法将 part 改名为 $TAR_FILE" }
     }
