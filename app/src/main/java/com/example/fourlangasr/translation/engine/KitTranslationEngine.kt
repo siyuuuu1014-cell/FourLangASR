@@ -105,11 +105,13 @@ class KitTranslationEngine(
     }
 
     private fun int64Tensor(env: OrtEnvironment, values: LongArray): OnnxTensor {
+        // 模型输入声明为 [batch, seq] 二维（encoder 的 input_ids/attention_mask、
+        // decoder 的 input_ids 均如此），batch 恒为 1。
         val buf = ByteBuffer.allocateDirect(values.size * 8)
             .order(ByteOrder.nativeOrder()).asLongBuffer()
         buf.put(values)
         buf.rewind()
-        return OnnxTensor.createTensor(env, buf, longArrayOf(values.size.toLong()))
+        return OnnxTensor.createTensor(env, buf, longArrayOf(1, values.size.toLong()))
     }
 
     private fun boolTensor(env: OrtEnvironment, value: Boolean): OnnxTensor {
