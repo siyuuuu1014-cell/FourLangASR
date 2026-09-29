@@ -71,12 +71,18 @@ class ModelDownloadService : Service() {
     private fun startProcessing() {
         if (processingJob?.isActive == true) return
         processingJob = scope.launch {
+            var processedAny = false
             while (true) {
                 val modelId = coordinator.nextPending() ?: break
+                processedAny = true
                 processOne(modelId)
             }
-            // 队列清空：保留完成通知，服务退出
-            notify(buildNotification("模型已就绪", progress = null))
+            // 队列清空：保留完成通知，服务退出。
+            // 进程被杀后 START_STICKY 重启时队列为内存态、必然为空，
+            // 这种情况不能报"模型已就绪"（下载其实中断了）。
+            if (processedAny) {
+                notify(buildNotification("模型已就绪", progress = null))
+            }
             stopForeground(STOP_FOREGROUND_DETACH)
             stopSelf()
         }
