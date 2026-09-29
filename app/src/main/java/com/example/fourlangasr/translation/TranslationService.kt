@@ -109,6 +109,11 @@ class TranslationService(
             return try {
                 engineFor(local).translate(text, source, target)
             } catch (e: Exception) {
+                android.util.Log.w(
+                    "FourLangTranslation",
+                    "本地引擎 ${local.modelId} 失败，回退服务器：${e.javaClass.simpleName}: ${e.message}",
+                    e,
+                )
                 serverEngine.translate(text, source, target)
             }
         }
