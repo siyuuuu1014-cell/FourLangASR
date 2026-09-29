@@ -36,6 +36,8 @@ data class ModelRuntimeConfig(
     val eosId: Long,
     val padId: Long,
     val maxNewTokens: Int,
+    /** encoder 端源序列上限（含语言前缀与 eos）；超出必须截断，否则位置编码越界。 */
+    val maxSourceTokens: Int,
     val directionMechanism: DirectionMechanism,
 )
 
@@ -104,6 +106,9 @@ object ModelRuntimeConfigParser {
         val maxNew = generation?.optInt("max_new_tokens", -1)?.takeIf { it > 0 }
             ?: gen?.optInt("max_length", -1)?.takeIf { it > 0 }
             ?: 200
+        val maxSrc = generation?.optInt("max_source_length", -1)?.takeIf { it > 0 }
+            ?: gen?.optInt("max_source_length", -1)?.takeIf { it > 0 }
+            ?: 256
 
         // ---- 方向机制 ----
         val mechanismText = m.optString("direction_mechanism", "")
@@ -130,6 +135,7 @@ object ModelRuntimeConfigParser {
             eosId = eos,
             padId = pad,
             maxNewTokens = maxNew,
+            maxSourceTokens = maxSrc,
             directionMechanism = mechanism,
         )
     }

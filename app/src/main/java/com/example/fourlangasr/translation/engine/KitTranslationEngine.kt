@@ -7,6 +7,7 @@ import ai.onnxruntime.OrtException
 import ai.onnxruntime.OrtSession
 import android.os.SystemClock
 import android.util.Log
+import com.example.fourlangasr.BuildConfig
 import com.example.fourlangasr.model.AppLanguage
 import com.example.fourlangasr.translation.TranslationResult
 import com.example.fourlangasr.translation.model.DirectionMechanism
@@ -135,11 +136,17 @@ class KitTranslationEngine(
         return OnnxTensor.createTensor(env, dst, shape)
     }
 
-    private fun argmaxLast(fb: FloatBuffer, seqLen: Int, vocab: Int): Int {
+    private fun argmaxLast(
+        fb: FloatBuffer,
+        seqLen: Int,
+        vocab: Int,
+        banned: IntArray,
+    ): Int {
         val start = (seqLen - 1) * vocab
         var best = 0
         var bestV = Float.NEGATIVE_INFINITY
         for (i in 0 until vocab) {
+            if (banned.binarySearch(i) >= 0) continue
             val v = fb.get(start + i)
             if (v > bestV) {
                 bestV = v
@@ -147,6 +154,39 @@ class KitTranslationEngine(
             }
         }
         return best
+    }
+
+    /**
+     * 禁止生成的 token：pad / bos / 四个语言标记。
+     * PC 端 beam 参考实现同样屏蔽 pad+bos；语言标记漏进正文会让译文带
+     * `__en__` 这类字面量，而 Kotlin 端 detok 与 sentencepiece 逐字节对拍过，
+     * 不能在那里加过滤（会破坏对拍契约），所以只在采样处屏蔽。
+     */
+    private val bannedTokenIds: IntArray by lazy {
+        val ids = sortedSetOf(config.padId.toInt(), config.bosId.toInt())
+        config.languages.values.forEach { ids.add(it.toInt()) }
+        ids.toIntArray()
+    }
+
+    /**
+     * 尾部是否已进入循环复读（连续 3 个完整周期，周期 1..3 token）。
+     * greedy 解码没有任何停止保护，实测会把同一个词一路刷到 maxNewTokens。
+     */
+    private fun tailRepeats(gen: List<Long>): Boolean {
+        val n = gen.size
+        for (period in 1..3) {
+            val need = period * 3
+            if (n < need) continue
+            var same = true
+            for (i in (n - need) until n) {
+                if (gen[i] != gen[i - period]) {
+                    same = false
+                    break
+                }
+            }
+            if (same) return true
+        }
+        return false
     }
 
     /**
@@ -179,7 +219,7 @@ class KitTranslationEngine(
         try {
             val logits = result.get("logits").get() as OnnxTensor
             val seqLen = logits.info.shape[1].toInt()
-            val next = argmaxLast(logits.floatBuffer, seqLen, config.vocabSize)
+            val next = argmaxLast(logits.floatBuffer, seqLen, config.vocabSize, bannedTokenIds)
             val nPairs = config.decoderLayers * 2
             val presentDec = ArrayList<OnnxTensor>(nPairs)
             val presentEnc = ArrayList<OnnxTensor>(nPairs)
@@ -208,48 +248,60 @@ class KitTranslationEngine(
             val st = ensureLoaded()
             val tLoadMs = SystemClock.elapsedRealtime() - tLoad0
 
-            // ---- 编码（一次） ----
-            // 方向机制（家族契约）：
-            //   M2M100：  [src_lang] + X + [eos]
-            //   SMALL100：[tgt_lang] + X + [eos]（目标语言前缀，无 forced_bos）
-            val bodyIds = tokenizer.piecesToModelIds(tokenizer.encodePieces(text))
-            val srcIds = when (config.directionMechanism) {
-                DirectionMechanism.M2M100_STYLE ->
-                    longArrayOf(tokenizer.langToken(srcCode)) + bodyIds + config.eosId
-                DirectionMechanism.SMALL100_STYLE ->
-                    longArrayOf(tokenizer.langToken(tgtCode)) + bodyIds + config.eosId
-            }
-            val srcIdsTensor = int64Tensor(st.env, srcIds)
-            val mask = LongArray(srcIds.size) { 1L }
-            val maskTensor = int64Tensor(st.env, mask)
-            val encFeeds = HashMap<String, OnnxTensor>(2)
-            encFeeds["input_ids"] = srcIdsTensor
-            encFeeds["attention_mask"] = maskTensor
-            val encResult = st.enc.run(encFeeds)
-            val encHidden: OnnxTensor
+            // 张量所有权集中在这里回收：异常路径同样必须关闭，
+            // 否则一次解码失败就把 48 组 cache 张量留在 native 里。
+            var encHidden: OnnxTensor? = null
+            var maskTensor: OnnxTensor? = null
+            var emptyPast: List<OnnxTensor> = emptyList()
+            var pastDec: List<OnnxTensor> = emptyList()
+            var frozenEnc: List<OnnxTensor> = emptyList()
             try {
-                encHidden = copyTensor(st.env, encResult.get("last_hidden_state").get() as OnnxTensor)
-            } finally {
-                encResult.close()
-                srcIdsTensor.close()
-            }
+                // ---- 编码（一次） ----
+                // 方向机制（家族契约）：
+                //   M2M100：  [src_lang] + X + [eos]
+                //   SMALL100：[tgt_lang] + X + [eos]（目标语言前缀，无 forced_bos）
+                var bodyIds = tokenizer.piecesToModelIds(tokenizer.encodePieces(text))
+                // 位置编码上限是硬约束（语言前缀 + eos 各占一位）：
+                // 超长句整段喂入会直接推理失败或质量塌陷，只能截正文。
+                val budget = config.maxSourceTokens - 2
+                val truncated = budget in 0 until bodyIds.size
+                if (truncated) bodyIds = bodyIds.copyOf(budget)
 
-            // ---- 首步解码：input=[eos, tgt_lang]，空 past ----
-            val nPast = config.decoderLayers * 4
-            val emptyPast = ArrayList<OnnxTensor>(nPast)
-            val emptyShape = longArrayOf(
-                1,
-                config.attentionHeads.toLong(),
-                0,
-                config.headDim.toLong(),
-            )
-            val emptyBuf = ByteBuffer.allocateDirect(0)
-                .order(ByteOrder.nativeOrder()).asFloatBuffer()
-            repeat(nPast) {
-                emptyPast.add(OnnxTensor.createTensor(st.env, emptyBuf, emptyShape))
-            }
+                val srcIds = when (config.directionMechanism) {
+                    DirectionMechanism.M2M100_STYLE ->
+                        longArrayOf(tokenizer.langToken(srcCode)) + bodyIds + config.eosId
+                    DirectionMechanism.SMALL100_STYLE ->
+                        longArrayOf(tokenizer.langToken(tgtCode)) + bodyIds + config.eosId
+                }
+                val srcIdsTensor = int64Tensor(st.env, srcIds)
+                val mask = LongArray(srcIds.size) { 1L }
+                val maskT = int64Tensor(st.env, mask)
+                maskTensor = maskT
+                val encFeeds = HashMap<String, OnnxTensor>(2)
+                encFeeds["input_ids"] = srcIdsTensor
+                encFeeds["attention_mask"] = maskT
+                val encResult = st.enc.run(encFeeds)
+                val hidden: OnnxTensor
+                try {
+                    hidden = copyTensor(st.env, encResult.get("last_hidden_state").get() as OnnxTensor)
+                    encHidden = hidden
+                } finally {
+                    encResult.close()
+                    srcIdsTensor.close()
+                }
 
-            try {
+                // ---- 首步解码：input=[eos, tgt_lang]，空 past ----
+                val nPast = config.decoderLayers * 4
+                val emptyShape = longArrayOf(
+                    1,
+                    config.attentionHeads.toLong(),
+                    0,
+                    config.headDim.toLong(),
+                )
+                val emptyBuf = ByteBuffer.allocateDirect(0)
+                    .order(ByteOrder.nativeOrder()).asFloatBuffer()
+                emptyPast = List(nPast) { OnnxTensor.createTensor(st.env, emptyBuf, emptyShape) }
+
                 // 首步 decoder 输入：
                 //   M2M100：  [eos, tgt_lang]（forced bos）
                 //   SMALL100：[eos]（no forced_bos）
@@ -262,49 +314,61 @@ class KitTranslationEngine(
                 val (first, present0) = decoderStep(
                     st,
                     firstInput,
-                    maskTensor,
-                    encHidden,
+                    maskT,
+                    hidden,
                     emptyPast,
                     emptyPast,
                     useCache = false,
                 )
-                emptyPast.forEach { it.close() }
 
                 // 冻结 encoder KV：cache 分支的 encoder 输出是占位张量，不能喂回
-                val frozenEnc = present0.second
+                frozenEnc = present0.second
 
                 var next = first
                 val gen = ArrayList<Long>()
-                var pastDec = present0.first
+                var decPast = present0.first
+                pastDec = decPast
                 val eos = config.eosId.toInt()
+                var stoppedByRepetition = false
                 while (next != eos && gen.size < config.maxNewTokens) {
+                    if (tailRepeats(gen)) {
+                        stoppedByRepetition = true
+                        break
+                    }
                     gen.add(next.toLong())
                     val (nxt, present) = decoderStep(
                         st,
                         longArrayOf(next.toLong()),
-                        maskTensor,
-                        encHidden,
-                        pastDec,
+                        maskT,
+                        hidden,
+                        decPast,
                         frozenEnc,
                         useCache = true,
                     )
-                    pastDec.forEach { it.close() }
-                    pastDec = present.first
+                    decPast.forEach { it.close() }
+                    decPast = present.first
+                    pastDec = decPast
                     next = nxt
                 }
-                pastDec.forEach { it.close() }
-                frozenEnc.forEach { it.close() }
-                encHidden.close()
-                maskTensor.close()
 
                 val output = tokenizer.detok(gen.toLongArray())
                 val totalMs = SystemClock.elapsedRealtime() - tLoad0
-                Log.d(
-                    "KitTranslation",
-                    "${config.modelId}: load=${tLoadMs}ms decode=${totalMs - tLoadMs}ms " +
-                            "tokens=${gen.size} $srcCode->$tgtCode " +
-                            "in='${text.take(60)}' out='${output.take(60)}'",
-                )
+                if (BuildConfig.DEBUG) {
+                    // 只有 debug 构建记录原文/译文内容，release 包不落到 logcat。
+                    Log.d(
+                        "KitTranslation",
+                        "${config.modelId}: load=${tLoadMs}ms decode=${totalMs - tLoadMs}ms " +
+                                "tokens=${gen.size} $srcCode->$tgtCode truncated=$truncated " +
+                                "loopcut=$stoppedByRepetition " +
+                                "in='${text.take(60)}' out='${output.take(60)}'",
+                    )
+                }
+                if (truncated) {
+                    Log.w(
+                        "KitTranslation",
+                        "${config.modelId}: 源句超过 ${config.maxSourceTokens} token，已截断后段",
+                    )
+                }
                 return TranslationResult(
                     sourceText = text,
                     outputText = output,
@@ -314,10 +378,12 @@ class KitTranslationEngine(
                     translated = true,
                     modelLabel = config.modelId,
                 )
-            } catch (e: Throwable) {
-                encHidden.close()
-                maskTensor.close()
-                throw e
+            } finally {
+                pastDec.forEach { runCatching { it.close() } }
+                frozenEnc.forEach { runCatching { it.close() } }
+                emptyPast.forEach { runCatching { it.close() } }
+                runCatching { encHidden?.close() }
+                runCatching { maskTensor?.close() }
             }
         }
     }

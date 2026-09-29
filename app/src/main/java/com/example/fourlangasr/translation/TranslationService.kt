@@ -32,6 +32,7 @@ class TranslationService(
 
     private val engineLock = Any()
     private var loadedModelId: String? = null
+    private var loadedSourceSha: String? = null
     private var loadedEngine: KitTranslationEngine? = null
     private val configCache = HashMap<String, ModelRuntimeConfig>()
     private val tokenizerCache = HashMap<String, M2m100Tokenizer>()
@@ -39,7 +40,17 @@ class TranslationService(
     private fun engineFor(model: ManifestModel): KitTranslationEngine {
         synchronized(engineLock) {
             val cached = loadedEngine
-            if (cached != null && loadedModelId == model.modelId) return cached
+            if (cached != null && loadedModelId == model.modelId &&
+                loadedSourceSha == model.sourceSha256 &&
+                // 专项页可能已删除/重装该包：文件不在就作废缓存，继续用会拿旧权重
+                packageManager.isModelReady(model.modelId)
+            ) return cached
+
+            // 同一 model_id 换了权重指纹：按模型缓存的配置与分词器一起作废
+            if (loadedSourceSha != model.sourceSha256) {
+                configCache.remove(model.modelId)
+                tokenizerCache.remove(model.modelId)
+            }
             // 单槽：切换模型先释放旧引擎（避免两个 ~1GB 引擎并存 OOM）
             cached?.close()
             loadedEngine = null
@@ -60,6 +71,7 @@ class TranslationService(
             )
             loadedEngine = engine
             loadedModelId = model.modelId
+            loadedSourceSha = model.sourceSha256
             return engine
         }
     }
@@ -91,11 +103,20 @@ class TranslationService(
                 "专项模型 ${local.modelId}"
             }
         }
-        // 本地不可用：若目标模型正在下载/排队，明示原因，避免用户困惑
-        val downloading = downloadStateProvider()?.statuses?.values
-            ?.any { it is com.example.fourlangasr.translation.download.ModelDownloadStatus.Pending ||
-                it is com.example.fourlangasr.translation.download.ModelDownloadStatus.Running
-            } == true
+        // 本地不可用：只看*该方向*需要的模型是否在排队/下载，
+        // 否则无关方向的下载也会把提示带成"下载中"。
+        val candidates = manifestProvider()
+            ?.models
+            ?.filter { it.covers(source.code, target.code) }
+            ?.map { it.modelId }
+            ?.toSet()
+            .orEmpty()
+        val downloading = downloadStateProvider()?.statuses.orEmpty()
+            .any { (modelId, status) ->
+                modelId in candidates &&
+                    (status is com.example.fourlangasr.translation.download.ModelDownloadStatus.Pending ||
+                        status is com.example.fourlangasr.translation.download.ModelDownloadStatus.Running)
+            }
         return if (downloading) "服务器 API（本地模型下载中，完成后自动切换）" else "服务器 API"
     }
 
@@ -106,16 +127,27 @@ class TranslationService(
     ): TranslationResult {
         val local = localModelFor(source.code, target.code)
         if (local != null) {
-            return try {
-                engineFor(local).translate(text, source, target)
-            } catch (e: Exception) {
-                android.util.Log.w(
-                    "FourLangTranslation",
-                    "本地引擎 ${local.modelId} 失败，回退服务器：${e.javaClass.simpleName}: ${e.message}",
-                    e,
-                )
-                serverEngine.translate(text, source, target)
+            /*
+             * 整段解码都在 engineLock 内：engineFor 出锁后到 translate 进
+             * KitTranslationEngine 内部锁之间有空窗，并发的换模型会 close 掉
+             * 正在使用的引擎，或被 close 的引擎原地重载出第二个 ~1GB 实例。
+             */
+            var localError: Exception? = null
+            val result = synchronized(engineLock) {
+                try {
+                    engineFor(local).translate(text, source, target)
+                } catch (e: Exception) {
+                    localError = e
+                    null
+                }
             }
+            if (result != null) return result
+            val e = localError!!
+            android.util.Log.w(
+                "FourLangTranslation",
+                "本地引擎 ${local.modelId} 失败，回退服务器：${e.javaClass.simpleName}: ${e.message}",
+                e,
+            )
         }
         return serverEngine.translate(text, source, target)
     }
@@ -126,6 +158,7 @@ class TranslationService(
             loadedEngine?.close()
             loadedEngine = null
             loadedModelId = null
+            loadedSourceSha = null
         }
     }
 }

@@ -63,7 +63,7 @@ class ModelModelTests {
              "encoder_layers":12,"decoder_layers":12,"attention_heads":16,"head_dim":64,
              "languages":{"en":128022,"zh":128102,"uz":128096,"ru":128077},
              "special_tokens":{"bos_token_id":0,"eos_token_id":2,"pad_token_id":1},
-             "generation":{"max_new_tokens":256}}
+             "generation":{"max_new_tokens":256,"max_source_length":1024}}
         """.trimIndent()
         val cfg = ModelRuntimeConfigParser.parse(json, null, null, "m2m100_fourlang", "m2m100")
         assertEquals(128112, cfg.vocabSize)
@@ -73,6 +73,8 @@ class ModelModelTests {
         assertEquals(128102L, cfg.languages["zh"])
         assertEquals(2L, cfg.eosId)
         assertEquals(256, cfg.maxNewTokens)
+        // 编码器截断上限必须被读出来，否则超长句整段喂入会直接推理失败
+        assertEquals(1024, cfg.maxSourceTokens)
         assertEquals(DirectionMechanism.M2M100_STYLE, cfg.directionMechanism)
     }
 
