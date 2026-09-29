@@ -19,6 +19,9 @@ android {
         ndk {
             abiFilters 'arm64-v8a'
         }
+
+        // 真机端到端管线测试（喂 WAV 进真实引擎）。
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -26,6 +29,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildFeatures {
+        // 内容级调试日志（用户语音/译文）必须靠 BuildConfig.DEBUG 只在 debug 构建输出。
+        buildConfig true
     }
 
     compileOptions {
@@ -60,6 +68,11 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:4.11.0'
     // JVM 单测解析对拍向量 JSON
     testImplementation 'org.json:json:20231013'
+
+    // 真机管线测试：加载真实模型 + 真实 WAV。
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:rules:1.5.0'
     // VoxLingua LID runtime. Java Interpreter API; compatible with Kotlin 1.9 project.
     implementation 'org.tensorflow:tensorflow-lite:2.16.1'
     // VoxLingua107 LID runtime; separate from sherpa ONNX Runtime.

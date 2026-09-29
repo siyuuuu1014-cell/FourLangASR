@@ -45,6 +45,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.Locale
@@ -764,7 +765,7 @@ class MainActivity : AppCompatActivity() {
 
         btnRelease.setOnClickListener {
 
-            if (conversationActive) {
+            if (pipelineBusy()) {
 
                 showStatus(
                     "请先结束当前对话。"
@@ -1244,10 +1245,18 @@ class MainActivity : AppCompatActivity() {
         spinnerTarget.selectedItem
                 as AppLanguage
 
+    /**
+     * 对话进行中，或已点"结束"但队列仍在排空（recognitionJob 还活着）。
+     * 排空窗口内释放/切模式会与在途句子并发：switchLanguage 与 transcribe
+     * 是两次独立加锁，释放插在中间整句就被丢了。
+     */
+    private fun pipelineBusy(): Boolean =
+        conversationActive || recognitionJob?.isActive == true
+
     private fun toggleSourceMode() {
 
         if (
-            conversationActive
+            pipelineBusy()
         ) {
             return
         }
@@ -1732,6 +1741,12 @@ class MainActivity : AppCompatActivity() {
      */
 
     private fun startRecognitionWorker() {
+
+        /*
+         * 新会话开始：允许 code-switch 的 EN 验证模型再次按需懒加载
+         * （上一轮可能已被"释放"按钮显式关掉）。
+         */
+        codeSwitchRecovery.beginSession()
 
         /*
          * 防止意外存在旧 Worker。
@@ -2232,6 +2247,8 @@ class MainActivity : AppCompatActivity() {
 
         translationUi.showTranslating()
 
+        var translationFailure: Throwable? = null
+
         val translation =
             try {
 
@@ -2247,30 +2264,23 @@ class MainActivity : AppCompatActivity() {
 
             } catch (e: Throwable) {
 
-                /*
-                 * 翻译不可用（无网络且本地模型未就绪等）：
-                 * 回退朗读 ASR 原文，并在翻译结果区明确显示失败原因。
-                 */
-                Log.w(
-                    "FourLangTTS",
-                    "翻译失败，回退朗读 ASR 原文",
-                    e,
-                )
-
-                translationUi.showAutoSpeakFallback(e)
+                translationFailure = e
 
                 null
             }
 
         if (asrLanguageForSwap != null) {
 
-            runCatching {
+            /*
+             * NonCancellable：旋转/退出/结束对话会把本协程取消，
+             * 但 ASR 已经为翻译让路而释放了——不重载就永久停在"已释放"态，
+             * 之后每句识别都只报错。清理逻辑不依赖这里，允许它跑完。
+             */
+            val reload = withContext(NonCancellable + Dispatchers.IO) {
+                runCatching { asrManager.switchLanguage(asrLanguageForSwap) }
+            }
 
-                withContext(Dispatchers.IO) {
-                    asrManager.switchLanguage(asrLanguageForSwap)
-                }
-
-            }.onSuccess {
+            reload.onSuccess {
 
                 Log.d(
                     "FourLangTTS",
@@ -2284,7 +2294,34 @@ class MainActivity : AppCompatActivity() {
                     "ASR 模型重载失败（下一条识别会报错）",
                     e,
                 )
+
+                runOnUiThread {
+                    if (activityDestroyed) return@runOnUiThread
+                    showStatus(
+                        "翻译后 ASR 模型重载失败，识别已停止：" +
+                                "${e.javaClass.simpleName}: ${e.message}\n" +
+                                "请点\"加载\"重新载入当前语言模型。"
+                    )
+                }
             }
+        }
+
+        // 取消不是"翻译失败"，不能继续往下朗读，也不能显示回退提示。
+        (translationFailure as? CancellationException)?.let { throw it }
+
+        if (translation == null && translationFailure != null) {
+
+            /*
+             * 翻译不可用（无网络且本地模型未就绪等）：
+             * 回退朗读 ASR 原文，并在翻译结果区明确显示失败原因。
+             */
+            Log.w(
+                "FourLangTTS",
+                "翻译失败，回退朗读 ASR 原文",
+                translationFailure,
+            )
+
+            translationUi.showAutoSpeakFallback(translationFailure)
         }
 
         if (translation != null) {
@@ -2425,6 +2462,8 @@ class MainActivity : AppCompatActivity() {
                 "LID" to { lidEngine.release() },
                 "Code-switch" to { codeSwitchRecovery.release() },
                 "ASR" to { asrManager.release() },
+                // 翻译引擎约 1GB，之前没有任何调用点关闭它，进程驻留到被系统杀。
+                "Translation" to { translationUi.service.close() },
             )
             for ((name, release) in releases) {
                 try {

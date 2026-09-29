@@ -1,8 +1,10 @@
 package com.example.fourlangasr.pipeline
 
 import android.content.res.AssetManager
+import com.example.fourlangasr.asr.AsrEngine
 import com.example.fourlangasr.asr.EnglishSherpaEngine
 import com.example.fourlangasr.model.LoadResult
+import kotlinx.coroutines.CancellationException
 
 /**
  * EXP5/EXP6 的 code-switch 单词回填。
@@ -19,17 +21,28 @@ import com.example.fourlangasr.model.LoadResult
  * 生命周期：EN 模型（约 73 MB）按需懒加载；
  * 释放交给 MainActivity 的释放按钮 / onDestroy。
  */
-class CodeSwitchRecovery(
-    assetManager: AssetManager,
+class CodeSwitchRecovery internal constructor(
+    private val enEngine: AsrEngine,
 ) {
 
-    private val enEngine =
-        EnglishSherpaEngine(
-            assetManager
-        )
+    constructor(assetManager: AssetManager) : this(EnglishSherpaEngine(assetManager))
 
     private var enLoaded =
         false
+
+    /**
+     * 用户显式释放后到下一轮对话之前，不再懒加载 EN 模型。
+     * 没有这个标志时，释放按钮与"结束对话"的排空窗口并发，
+     * 队列里剩下的句子会把 73 MB 模型悄悄加载回来，而 UI 已显示"已释放"。
+     */
+    private var released =
+        false
+
+    /** 新一轮对话开始：允许再次按需加载。 */
+    @Synchronized
+    fun beginSession() {
+        released = false
+    }
 
     /**
      * 是否已识别过任意 <unk>（外部据此决定要不要调 recover）。
@@ -44,14 +57,19 @@ class CodeSwitchRecovery(
     /**
      * 加载 EN 验证模型（幂等，首次调用后复用）。
      */
+    @Synchronized
     fun ensureLoaded(): LoadResult? {
 
-        if (enLoaded) {
+        if (enLoaded || released) {
             return null
         }
 
-        val result =
+        val result = try {
             enEngine.load()
+        } catch (e: Exception) {
+            enEngine.release()
+            throw e
+        }
 
         enLoaded =
             true
@@ -65,7 +83,29 @@ class CodeSwitchRecovery(
      * @param zhText        ZH CTC 输出文本（含字面 "<unk>"）
      * @param unkTimestampsSec 每个 <unk> token 的起始时间（秒）
      */
+    @Synchronized
     fun recover(
+        samples: FloatArray,
+        sampleRate: Int,
+        zhText: String,
+        unkTimestampsSec: FloatArray,
+    ): RecoveryResult {
+        return try {
+            recoverWithEnglish(samples, sampleRate, zhText, unkTimestampsSec)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // 英文回填是增强步骤，失败不能丢掉已经识别出的中文。
+            RecoveryResult(
+                recoveredText = stripUnk(zhText),
+                regionCount = 0,
+                enTexts = emptyList(),
+                error = "${e.javaClass.simpleName}: ${e.message}",
+            )
+        }
+    }
+
+    private fun recoverWithEnglish(
         samples: FloatArray,
         sampleRate: Int,
         zhText: String,
@@ -88,6 +128,17 @@ class CodeSwitchRecovery(
         val enLoadMs =
             ensureLoaded()
                 ?.loadMs
+
+        if (released) {
+            // 用户已点释放：不加载模型、不做回填，只清掉 <unk> 占位符。
+            return RecoveryResult(
+                recoveredText = stripUnk(zhText),
+                regionCount = 0,
+                enTexts = emptyList(),
+                enLoadMs = null,
+                error = "已释放，跳过英文回填",
+            )
+        }
 
         val durationSec =
             samples.size /
@@ -139,14 +190,14 @@ class CodeSwitchRecovery(
          */
         val enTexts =
             regions.map {
-                (startSec, endSec) ->
+                region ->
 
                 val enText =
                     verifyRegion(
                         samples = samples,
                         sampleRate = sampleRate,
-                        startSec = startSec,
-                        endSec = endSec,
+                        startSec = region.startSec,
+                        endSec = region.endSec,
                     )
 
                 enText
@@ -161,8 +212,7 @@ class CodeSwitchRecovery(
         val recovered =
             rebuildText(
                 zhText = zhText,
-                unkTimestampsSec =
-                    unkTimestampsSec,
+                    unkCount = unkTimestampsSec.size,
                 regions = regions,
                 enTexts = enTexts,
             )
@@ -181,9 +231,12 @@ class CodeSwitchRecovery(
         )
     }
 
+    @Synchronized
     fun release() {
 
         enEngine.release()
+        released =
+            true
         enLoaded =
             false
     }
@@ -469,12 +522,18 @@ class CodeSwitchRecovery(
      * 把 <unk> 时间戳按"词组 run"分组，每个 run 展开成
      * [run.first - pad, run.last + pad] 一个区域。
      */
+    private data class RunRegion(
+        val startSec: Float,
+        val endSec: Float,
+        val unkIndices: List<Int>,
+    )
+
     private fun buildRunRegions(
         unkTimesSec: FloatArray,
         padSec: Float,
         maxRunGapSec: Float,
         durationSec: Float,
-    ): List<FloatArray> {
+    ): List<RunRegion> {
 
         if (
             unkTimesSec.isEmpty()
@@ -485,25 +544,22 @@ class CodeSwitchRecovery(
 
         val runs =
             mutableListOf<
-                    MutableList<Float>
+                    MutableList<Int>
                     >()
 
         var current =
-            mutableListOf<Float>()
+            mutableListOf<Int>()
 
         runs.add(
             current
         )
 
-        for (
-        ts
-        in unkTimesSec
-        ) {
+        for ((index, ts) in unkTimesSec.withIndex()) {
 
             if (
                 current.isNotEmpty() &&
                 ts -
-                current.last() >
+                unkTimesSec[current.last()] >
                 maxRunGapSec
             ) {
 
@@ -515,22 +571,21 @@ class CodeSwitchRecovery(
                 )
             }
 
-            current.add(
-                ts
-            )
+            current.add(index)
         }
 
         return runs.map { run ->
 
-            floatArrayOf(
-                (run.first() -
+            RunRegion(
+                (unkTimesSec[run.first()] -
                         padSec)
                     .coerceAtLeast(0f),
-                (run.last() +
+                (unkTimesSec[run.last()] +
                         padSec)
                     .coerceAtMost(
                         durationSec
                     ),
+                unkIndices = run.toList(),
             )
         }
     }
@@ -541,58 +596,18 @@ class CodeSwitchRecovery(
      */
     private fun rebuildText(
         zhText: String,
-        unkTimestampsSec: FloatArray,
-        regions: List<FloatArray>,
+        unkCount: Int,
+        regions: List<RunRegion>,
         enTexts: List<String>,
     ): String {
 
-        /*
-         * 每个 <unk> 属于哪个 region：
-         * unk 落在 [start, end] 内的第一个 region。
-         */
-        val regionIndexOfUnk =
-            unkTimestampsSec.map { ts ->
-
-                regions.indexOfFirst {
-                    region ->
-
-                    ts >=
-                            region[0] &&
-                            ts <=
-                            region[1]
-                }
-            }
-
-        /*
-         * region 内的第几个 <unk>。
-         */
-        val unkIndexInRegion =
-            IntArray(
-                unkTimestampsSec.size
-            )
-
-        val regionUnkCount =
-            IntArray(
-                regions.size
-            )
-
-        regionIndexOfUnk.forEachIndexed {
-            i,
-            regionIndex ->
-
-            if (
-                regionIndex >= 0
-            ) {
-
-                unkIndexInRegion[i] =
-                    regionUnkCount[
-                        regionIndex
-                    ]
-
-                regionUnkCount[
-                    regionIndex
-                ] +=
-                    1
+        // 裁剪窗口可以重叠，token 归属必须沿用 padding 前的原始分组。
+        val regionIndexOfUnk = IntArray(unkCount) { -1 }
+        val unkIndexInRegion = IntArray(unkCount)
+        regions.forEachIndexed { regionIndex, region ->
+            region.unkIndices.forEachIndexed { indexInRegion, unkIndex ->
+                regionIndexOfUnk[unkIndex] = regionIndex
+                unkIndexInRegion[unkIndex] = indexInRegion
             }
         }
 
@@ -796,4 +811,5 @@ data class RecoveryResult(
      * 已加载过时为 null，可用作真机基准指标。
      */
     val enLoadMs: Long? = null,
+    val error: String? = null,
 )

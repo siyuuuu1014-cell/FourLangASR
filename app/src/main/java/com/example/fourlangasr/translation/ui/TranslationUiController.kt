@@ -78,6 +78,9 @@ class TranslationUiController(
         textTargetSpinner.onItemSelectedListener =
             com.example.fourlangasr.SimpleItemSelectedListener { updateTextEngineHint() }
         updateTextEngineHint()
+
+        // 旋转/重建后把进程里留存的记录重新画出来（不重绘就看不见历史）。
+        renderTranslationLog()
     }
 
     private fun selectedTextSource(): AppLanguage =
@@ -133,8 +136,10 @@ class TranslationUiController(
     /**
      * 翻译记录（与 ASR 记录同构）：每条 = 原文 + 译文（模型），按时间累积，
      * 由 [resetTranslationLog] 随对话开始清空。
+     * 实体存在进程单例 [TranslationModules] 里——本控制器随 Activity 重建，
+     * 放在自己字段里旋转就全丢。
      */
-    private val translationLog = StringBuilder()
+    private val translationLog = modules.translationLog
 
     /** 对话开始时清空翻译记录（MainActivity 与 ASR transcript 同步调用）。 */
     fun resetTranslationLog() {
@@ -230,7 +235,6 @@ class TranslationUiController(
         }
         val source = selectedTextSource()
         val target = selectedTextTarget()
-        editManualText.text.clear()
         showTranslating()
         scope.launch {
             val result = try {
@@ -241,6 +245,8 @@ class TranslationUiController(
                 appendFailure(e, null)
                 return@launch
             }
+            // 成功才清空：失败时用户输入被抹掉就只能重新打字。
+            editManualText.text.clear()
             appendEntry(
                 source = text,
                 body = result.outputText,
@@ -269,6 +275,10 @@ class TranslationUiController(
             "engine hint: ${selectedSource().code}->${selectedTarget().code} => $label",
         )
         textEngineHint.text = "当前翻译引擎：$label"
+
+        // 文字模块的提示走同一批事件源（同步完成 / onResume 返回专项页）：
+        // 只刷新语音提示会让文字区一直停在"本地模型下载中"。
+        updateTextEngineHint()
     }
 
     /** TranslationResult.modelLabel → 展示文案。 */

@@ -91,7 +91,9 @@ object MetricsFormatter {
             pipeline.recovery
 
         val codeSwitchText =
-            if (
+            if (recovery.error != null) {
+                "FALLBACK (original text): ${recovery.error}"
+            } else if (
                 pipeline.routedLanguage
                     .code == "zh" &&
                 recovery.regionCount > 0

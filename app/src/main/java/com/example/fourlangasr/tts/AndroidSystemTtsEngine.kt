@@ -6,6 +6,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.util.Log
 import com.example.fourlangasr.model.AppLanguage
 import java.util.Locale
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -24,6 +25,11 @@ import java.util.concurrent.atomic.AtomicInteger
 class AndroidSystemTtsEngine(
     context: Context,
     private val listener: TtsEngine.Listener,
+    private val createEngine: (Context, TextToSpeech.OnInitListener, String?) -> TextToSpeech =
+        { appContext, onInit, packageName ->
+            if (packageName == null) TextToSpeech(appContext, onInit)
+            else TextToSpeech(appContext, onInit, packageName)
+        },
 ) : TtsEngine {
 
     private val appContext =
@@ -55,6 +61,59 @@ class AndroidSystemTtsEngine(
     private val utteranceCounter =
         AtomicInteger(0)
 
+    private val playbackLock = Any()
+    private var activeUtteranceId: String? = null
+
+    @Volatile
+    private var released = false
+
+    private fun finishUtterance(utteranceId: String?): Boolean = synchronized(playbackLock) {
+        if (utteranceId == null || utteranceId != activeUtteranceId) return@synchronized false
+        activeUtteranceId = null
+        isSpeaking = false
+        cancelWatchdog()
+        true
+    }
+
+    /*
+     * 看门狗：部分 vendor 引擎在异常路径上一个回调都不给
+     * （既不 onStart，也不 onDone/onStop），isSpeaking 会永久停在 true，
+     * MainActivity 的麦克风控门就此一直静音，只能靠手动"停止朗读"救回。
+     */
+    private val watchdogHandler =
+        android.os.Handler(android.os.Looper.getMainLooper())
+
+    private var watchdogTask: Runnable? = null
+
+    private fun cancelWatchdog() {
+        watchdogTask?.let { watchdogHandler.removeCallbacks(it) }
+        watchdogTask = null
+    }
+
+    private fun scheduleWatchdog(utteranceId: String, textLength: Int) {
+        cancelWatchdog()
+
+        // 约 250ms/字、15s 起步：宁可宽估，也不要在正常播报中途插队。
+        val timeoutMs = 15_000L + textLength * 250L
+
+        val task = Runnable {
+            if (finishUtterance(utteranceId)) {
+                Log.w(
+                    TAG,
+                    "watchdog: $utteranceId ${timeoutMs}ms 内无任何回调，按播完收尾",
+                )
+                listener.onSpeakDone()
+            }
+        }
+
+        watchdogTask = task
+
+        watchdogHandler.postDelayed(
+            task,
+            timeoutMs,
+        )
+    }
+
     /*
      * 共享进度监听：主引擎与 Google fallback 引擎都挂同一个实例，
      * isSpeaking 状态机全局唯一，utterance 事件统一上报。
@@ -67,8 +126,10 @@ class AndroidSystemTtsEngine(
                 utteranceId: String?
             ) {
 
-                isSpeaking =
-                    true
+                synchronized(playbackLock) {
+                    if (utteranceId == null || utteranceId != activeUtteranceId) return
+                    isSpeaking = true
+                }
 
                 Log.d(
                     TAG,
@@ -82,8 +143,7 @@ class AndroidSystemTtsEngine(
                 utteranceId: String?
             ) {
 
-                isSpeaking =
-                    false
+                if (!finishUtterance(utteranceId)) return
 
                 Log.d(
                     TAG,
@@ -104,16 +164,14 @@ class AndroidSystemTtsEngine(
                 interrupted: Boolean,
             ) {
 
-                isSpeaking =
-                    false
+                finishUtterance(utteranceId)
             }
 
             override fun onError(
                 utteranceId: String?
             ) {
 
-                isSpeaking =
-                    false
+                if (!finishUtterance(utteranceId)) return
 
                 Log.w(
                     TAG,
@@ -130,8 +188,7 @@ class AndroidSystemTtsEngine(
                 errorCode: Int,
             ) {
 
-                isSpeaking =
-                    false
+                if (!finishUtterance(utteranceId)) return
 
                 Log.w(
                     TAG,
@@ -151,7 +208,7 @@ class AndroidSystemTtsEngine(
      * （Google TTS、讯飞等自带多语言 voice 的引擎）。
      */
     private val fallbackEngines =
-        mutableMapOf<
+        ConcurrentHashMap<
                 String,
                 FallbackEngine
                 >()
@@ -173,56 +230,59 @@ class AndroidSystemTtsEngine(
 
     init {
         tts =
-            TextToSpeech(
+            createEngine(
                 appContext,
-            ) { status ->
+                TextToSpeech.OnInitListener { status ->
+                    if (released) return@OnInitListener
 
-                val engine =
-                    tts
+                    val engine =
+                        tts
 
-                if (
-                    engine == null ||
-                    status !=
-                    TextToSpeech.SUCCESS
-                ) {
+                    if (
+                        engine == null ||
+                        status !=
+                        TextToSpeech.SUCCESS
+                    ) {
 
-                    initError =
-                        "TextToSpeech init failed (status $status)"
+                        initError =
+                            "TextToSpeech init failed (status $status)"
+
+                        ready =
+                            false
+
+                        Log.w(
+                            TAG,
+                            "init failed: status=$status"
+                        )
+
+                        listener.onEngineReady(
+                            emptyMap()
+                        )
+
+                        return@OnInitListener
+                    }
+
+                    Log.d(
+                        TAG,
+                        "init OK, engine=${engine.voice?.name ?: "?"}"
+                    )
+
+                    engine.setOnUtteranceProgressListener(
+                        progressListener
+                    )
 
                     ready =
-                        false
+                        true
 
-                    Log.w(
-                        TAG,
-                        "init failed: status=$status"
-                    )
+                    initError =
+                        null
 
                     listener.onEngineReady(
-                        emptyMap()
+                        voiceAvailability()
                     )
-
-                    return@TextToSpeech
-                }
-
-                Log.d(
-                    TAG,
-                    "init OK, engine=${engine.voice?.name ?: "?"}"
-                )
-
-                engine.setOnUtteranceProgressListener(
-                    progressListener
-                )
-
-                ready =
-                    true
-
-                initError =
-                    null
-
-                listener.onEngineReady(
-                    voiceAvailability()
-                )
-            }
+                },
+                null,
+            )
     }
 
     override fun setSpeechRate(
@@ -344,6 +404,7 @@ class AndroidSystemTtsEngine(
         return result
     }
 
+    @Synchronized
     override fun speak(
         text: String,
         language: AppLanguage,
@@ -353,7 +414,7 @@ class AndroidSystemTtsEngine(
             tts
 
         if (
-            primary == null ||
+            released || primary == null ||
             !ready
         ) {
 
@@ -447,21 +508,30 @@ class AndroidSystemTtsEngine(
                     utteranceCounter
                         .incrementAndGet()
 
-        val result =
+        // 在提交前登记 ID，旧任务的 onStop/onDone 不得清掉新任务状态。
+        synchronized(playbackLock) {
+            activeUtteranceId = utteranceId
+            isSpeaking = true
+        }
+        val result = try {
             engine.speak(
                 text,
                 TextToSpeech.QUEUE_FLUSH,
                 null,
                 utteranceId,
             )
+        } catch (e: Exception) {
+            finishUtterance(utteranceId)
+            listener.onSpeakError("TTS speak failed: ${e.message}")
+            return false
+        }
 
         if (
             result ==
             TextToSpeech.ERROR
         ) {
 
-            isSpeaking =
-                false
+            finishUtterance(utteranceId)
 
             Log.e(
                 TAG,
@@ -475,31 +545,37 @@ class AndroidSystemTtsEngine(
             return false
         }
 
-        /*
-         * 提交成功即视为播放中：gate 从这一刻生效，
-         * 不等异步 onStart（避免极端情况下漏帧）。
-         */
-        isSpeaking =
-            true
-
         Log.d(
             TAG,
             "speak submitted: $utteranceId"
         )
 
+        scheduleWatchdog(utteranceId, text.length)
+
         return true
     }
 
+    @Synchronized
     override fun stop() {
-
-        isSpeaking =
-            false
-
-        tts
-            ?.stop()
+        cancelWatchdog()
+        synchronized(playbackLock) {
+            activeUtteranceId = null
+            isSpeaking = false
+        }
+        // 当前播放可能来自任意备用引擎。先作废回调，再停止所有实例。
+        val engines = listOfNotNull(tts) + fallbackEngines.values.map { it.tts }
+        for (engine in engines) {
+            try {
+                engine.stop()
+            } catch (e: Exception) {
+                Log.w(TAG, "TTS stop failed", e)
+            }
+        }
     }
 
+    @Synchronized
     override fun release() {
+        released = true
 
         stop()
 
@@ -608,6 +684,8 @@ class AndroidSystemTtsEngine(
     private fun ensureFallbackEngines():
             List<FallbackEngine> {
 
+        if (released) return emptyList()
+
         val primary =
             tts
                 ?: return emptyList()
@@ -640,15 +718,16 @@ class AndroidSystemTtsEngine(
             }
 
             val engine =
-                TextToSpeech(
+                createEngine(
                     appContext,
-                    { status ->
+                    TextToSpeech.OnInitListener { status ->
+                        if (released) return@OnInitListener
 
                         val fb =
                             fallbackEngines[
                                 pkg
                             ]
-                                ?: return@TextToSpeech
+                                ?: return@OnInitListener
 
                         if (
                             status ==

@@ -240,9 +240,23 @@ class OfflineNeuralTtsEngine(
 
         stop()
 
-        executor.shutdownNow()
+        /*
+         * engines.clear() 只丢 Java 引用，原生句柄必须显式 release，
+         * 否则 Piper ru（约 80MB）滞留在进程里。释放任务排在单线程
+         * executor 队列尾部，等在途 play 退出后才动原生对象；
+         * 这里不能 awaitTermination——调用方是 onDestroy 主线程。
+         */
+        val pending = ArrayList(engines.values)
 
         engines.clear()
+
+        runCatching {
+            executor.execute {
+                pending.forEach { runCatching { it.release() } }
+            }
+        }
+
+        executor.shutdown()
     }
 
     /**

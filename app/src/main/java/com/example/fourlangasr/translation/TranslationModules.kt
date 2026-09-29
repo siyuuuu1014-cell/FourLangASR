@@ -40,6 +40,13 @@ class TranslationModules private constructor(
     )
     /** 下载队列/进度协调器（ModelDownloadService 写、UI 订阅读）。 */
     val downloadCoordinator = ModelDownloadCoordinator()
+
+    /**
+     * 翻译记录。放在这个进程单例里，而不是 UI 控制器的私有字段：
+     * 控制器随 Activity 重建，日志会整段丢失（旋转即清空）。
+     */
+    val translationLog = StringBuilder()
+
     val service = TranslationService(
         registry = registry,
         packageManager = packages,

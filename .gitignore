@@ -49,3 +49,6 @@ experiments/tts/convert_uzb_v2/
 translation_pkg/
 experiments/translation/models/
 libort4jrt.so
+
+# 真机测试的语音样本同样不入库（与 experiments/**/audio/ 一致：真实人声）
+app/src/androidTest/assets/audio/

@@ -15,7 +15,9 @@ AsrManager                      仅当语种变化时才切换/重载 ASR 模型
  ↓
 "[Speaker N][LANG] text"        追加到会话转录
  ↓
-TranslationEngine               目前是 Placeholder，接口已预留
+TranslationEngine               本机 M2M100/SMaLL-100 int8 ONNX，路由：专项→总模型→服务器
+ ↓
+TTS                             朗读译文（翻译不可用时回退原文）；系统离线语音优先，内置 Piper 俄语兜底
 ```
 
 | Language | Engine | Model |
@@ -73,9 +75,27 @@ app/src/main/assets/
 
 ## 5. 已知边界 / 下一步
 
-- 无流式 partial 输出；无 TTS；翻译仍是 Placeholder。
-- 短外语词（"嗯 hello 我的名字叫……"）检测路线已从 VoxLingua 短窗口
-  转向"主语言 ASR 不确定度触发候选验证"（见
-  `experiments/codeswitch_ascend/README.txt` 的结论）。
+- 无流式 partial 输出。翻译已接入本机 int8 ONNX（M2M100 总模型 + 六组 SMaLL-100 专项），
+  路由为「专项（启用+就绪）→ 总模型 → 服务器 API」；翻译模型不在 APK 里，
+  由 Wi-Fi 下的清单同步 + 前台服务下载（约 734 MB）到 `filesDir/translation/models/`。
+- TTS 已支持自动朗读开关与语速调整；播放及结束后的 900 ms 内丢弃识别输入。
+  乌兹别克内置 MMS TTS 因 Android 原生兼容性问题已回退，仍依赖系统语音。
+- 中文句内夹英文词已接入 `ZH <unk> → EN 局部识别 → 原位回填`；
+  音频窗口可重叠，但 token 归属沿用原始分组。回填失败保留 ASR 原文（剥掉 `<unk>` 占位符），
+  并在指标中显示 FALLBACK（见 `experiments/codeswitch_unk/README.txt`）。
 - 说话人采用 v0.3 观察模式（低置信即新建档案），真机验证后再考虑
   tentative-speaker 阶段。
+
+## 6. 回归检查
+
+```powershell
+.\gradlew.bat :app:testDebugUnitTest :app:assembleDebug
+```
+
+- JVM 用例使用假的 ASR / 系统 TTS，不加载原生模型：覆盖窗口重叠丢词、
+  回填失败降级、识别与释放互斥、备用引擎停止及迟到的播放回调。
+- 真机仍需检查：识别中退出页面、最后一句未识别完就结束对话、
+  使用备用系统引擎时关闭朗读，以及停止后是否出现回声自触发。
+- 若 Windows JDK 报 `UnixDomainSockets.connect0: Invalid argument`，
+  可为本次构建设置 `-Djdk.net.unixdomain.tmpdir` 指向现有的项目内临时目录；
+  不需要修改应用代码或系统全局环境。
