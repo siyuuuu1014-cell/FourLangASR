@@ -1,0 +1,71 @@
+{
+  "name": "shared",
+  "version": "2.0.0",
+  "family": "m2m100",
+  "quantization": "int8 dynamic (recursive MatMul/Gather, per-tensor symmetric)",
+  "base_model": "facebook/m2m100_418M",
+  "base_license": "MIT",
+  "source_checkpoint": "results/student/fourlang_m2m100/m2m100_error_replay_v1/best_model/shared",
+  "source_sha256": "65d0d7b928e19893cf19e3fe524f8171764b4ded2602f8b579317a4ec0dfa7a7",
+  "languages": {
+    "en": {
+      "token_id": 128022
+    },
+    "zh": {
+      "token_id": 128102
+    },
+    "uz": {
+      "token_id": 128096
+    },
+    "ru": {
+      "token_id": 128077
+    }
+  },
+  "special_tokens": {
+    "bos_token_id": 0,
+    "eos_token_id": 2,
+    "pad_token_id": 1
+  },
+  "direction_mechanism": "src_lang prefix + forced_bos(target)",
+  "layout": "2-file merged decoder (KV cache retained)",
+  "quantized_weights": 122,
+  "runtime_note": "onnxruntime must use ORT_ENABLE_BASIC graph optimization",
+  "files": {
+    "encoder_model.onnx": {
+      "size_bytes": 287317499
+    },
+    "decoder_model_merged.onnx": {
+      "size_bytes": 473810586
+    },
+    "sentencepiece.bpe.model": {
+      "size_bytes": 2423393
+    },
+    "vocab.json": {
+      "size_bytes": 3708092
+    },
+    "vocab.txt": {
+      "size_bytes": 2330563
+    },
+    "config.json": {
+      "size_bytes": 886
+    },
+    "tokenizer_config.json": {
+      "size_bytes": 19818
+    },
+    "special_tokens_map.json": {
+      "size_bytes": 2129
+    },
+    "added_tokens.json": {
+      "size_bytes": 2006
+    },
+    "generation_config.json": {
+      "size_bytes": 228
+    },
+    "MANIFEST.json": {
+      "size_bytes": 1950
+    },
+    "README.md": {
+      "size_bytes": 5785
+    }
+  }
+}

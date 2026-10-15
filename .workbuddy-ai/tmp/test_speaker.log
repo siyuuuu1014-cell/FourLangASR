@@ -1,0 +1,913 @@
+--------- beginning of main
+09-17 15:07:05.645  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:05.646  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:05.647  1205  1205 D SensorFeature: write 39 bytes:455526261472063,455526278138730,33761,0
+09-17 15:07:05.681  1167  1361 I OriginChannel: now system_time:455526313	pwm_rgb: system_time:455526048, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20097, g:16882, b:10770, c:46342, algo:2, end:33759, ts:455525790037019	pwm_rgb: system_time:455526048, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19825, g:16661, b:10625, c:45670, algo:2, end:33759, ts:455525806703019	pwm_rgb: system_time:455526048, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20009, g:16823, b:10729, c:46148, algo:2, end:33759, ts:455525823369019	pwm_rgb: system_time:455526048, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20100, g:16851, b:10773, c:46288, algo:2, end:33759, ts:455525840035019	pwm_rgb: system_time:455526048, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19831, g:16680, b:10635, c:45703, algo:2, end:99295, ts:455525856701019	
+09-17 15:07:05.734  2838  7399 W OPLUS_LOG_LOAD: ==LOGS PROG INFO, prog(com.android.launcher) ==
+09-17 15:07:05.734  2838  7399 I DRS_SDK_COMMON_SdkRuleManager: reportFiltered: appId=20110, reason=client_prefilter_status_drop, count=3
+09-17 15:07:05.736  2838  7399 I DRS_SDK_COMMON_SdkRuleManager: reportFiltered: appId=20110, reason=client_prefilter_sample_drop, count=2
+09-17 15:07:05.740  2779 13391 I DRS_LOG_ExceptionDataHandler[9241]: handle: receive exception from IPC, appId=20110, group=sdk_prefilter, id=client_prefilter_status_drop, time=1789628825730, reason=client_prefilter_status_drop|3
+09-17 15:07:05.740  2779 13391 I DRS_LOG_ExceptionDataHandler[9241]: Prefilter drop recorded as RECEIVED+FILTERED: appId=20110, count=3, reason=SDK_PREFILTER_STATUS_DROP
+09-17 15:07:05.741  2779 13392 I DRS_LOG_ExceptionDataHandler[9242]: handle: receive exception from IPC, appId=20110, group=sdk_prefilter, id=client_prefilter_sample_drop, time=1789628825735, reason=client_prefilter_sample_drop|2
+09-17 15:07:05.741  2779 13392 I DRS_LOG_ExceptionDataHandler[9242]: Prefilter drop recorded as RECEIVED+FILTERED: appId=20110, count=2, reason=SDK_PREFILTER_SAMPLE_DROP
+09-17 15:07:05.742  2838 13255 I IPCClientManager: reportException: IPC call success
+09-17 15:07:05.743  2838 13393 I IPCClientManager: reportException: IPC call success
+09-17 15:07:05.837  5625 16890 W OPLUS_LOG_LOAD: ==LOGS PROG INFO, prog(com.coloros.assistantscreen) ==
+09-17 15:07:05.837  5625 16890 I TeaLog  : s worked:true 60000
+09-17 15:07:05.888  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:05.889  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:05.890  1205  1205 D SensorFeature: write 39 bytes:455526504465909,455526521132576,33762,0
+09-17 15:07:05.945  1167  1361 I OriginChannel: now system_time:455526578	pwm_rgb: system_time:455526313, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19970, g:16793, b:10716, c:46026, algo:2, end:33761, ts:455526204679938	pwm_rgb: system_time:455526313, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20133, g:16907, b:10792, c:46405, algo:2, end:33761, ts:455526221345938	pwm_rgb: system_time:455526313, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19817, g:16650, b:10616, c:45700, algo:2, end:33761, ts:455526238011938	pwm_rgb: system_time:455526313, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20029, g:16849, b:10744, c:46109, algo:2, end:33761, ts:455526254677938	pwm_rgb: system_time:455526313, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20109, g:16888, b:10773, c:46327, algo:2, end:99297, ts:455526271343938	
+09-17 15:07:05.948  1555  1723 D AALLightSensor: oldLux=360 [SA:-1 LA:-1] newLux=360 (oriLux: 370)
+09-17 15:07:06.001  1119  5290 E TetherController: property_get sys.radio.data.modem_share_flag return 0, 1!
+09-17 15:07:06.131  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:06.132  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:06.133  1205  1205 D SensorFeature: write 39 bytes:455526747085294,455526763751961,33763,0
+09-17 15:07:06.159  1950  2034 D AES     : AEEIOCTL_GET/SET_SF_STATE IOCTL,cmd= 1074294797, lParam=0. 
+09-17 15:07:06.160  1950  2034 D AES     : AEEIOCTL_RT_MON_Kick IOCTL,cmd= 2147774474, lParam=300. 
+09-17 15:07:06.209  1167  1361 I OriginChannel: now system_time:455526842	pwm_rgb: system_time:455526578, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19955, g:16759, b:10694, c:45993, algo:2, end:33762, ts:455526469358399	pwm_rgb: system_time:455526578, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19879, g:16683, b:10650, c:45777, algo:2, end:33762, ts:455526486024399	pwm_rgb: system_time:455526578, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20145, g:16916, b:10792, c:46420, algo:2, end:33762, ts:455526502690399	pwm_rgb: system_time:455526578, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19923, g:16753, b:10685, c:45915, algo:2, end:33762, ts:455526519356399	pwm_rgb: system_time:455526578, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19896, g:16723, b:10653, c:45825, algo:2, end:99298, ts:455526536022399	
+09-17 15:07:06.288  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:06.288  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:06.325  5254  5343 E WeatherS_PrivacyStatementExport: isAgreed1
+09-17 15:07:06.375  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:06.376  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:06.377  1205  1205 D SensorFeature: write 39 bytes:455526991009909,455527007676576,33764,0
+09-17 15:07:06.387  1214  1263 D vendor.oplus.hardware.charger-V11-service: ret_value:127, read content:,320,320,3967,3967,-204,56,56,1,1,0,407,4987,56,1,4490,600,500,0,8,-22,8,0,1,0,2,0,0,0,1,60182,100,3277,3254,6018,0,0,0,0,0,71
+09-17 15:07:06.388  1214  1263 D vendor.oplus.hardware.charger-V11-service: gmtime: 2026-09-17-15-07-06
+09-17 15:07:06.388  1214  1263 D vendor.oplus.hardware.charger-V11-service: usb_online:1, ac_online:-2147483648, wireless_online:-2147483648
+09-17 15:07:06.412  2616  2616 W OPLUS_LOG_LOAD: ==LOGS PROG INFO, prog(com.android.systemui) ==
+09-17 15:07:06.412  2616  2616 D Tile.OplusCellularTile: refreshState: tile not listening, ignore
+09-17 15:07:06.412  3197  3197 D SubsysEventListenerManager-SubsysTelephonyCallback[1]: onSignalStrengthsChanged
+09-17 15:07:06.418  2616  2790 I SystemUi--Statusbar: MobileConnectionRepositoryImpl-->subId:3 isSoftSimCard:false slotId:1
+09-17 15:07:06.475  1167  1361 I OriginChannel: now system_time:455527107	pwm_rgb: system_time:455526842, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19811, g:16647, b:10638, c:45673, algo:2, end:33763, ts:455526717371711	pwm_rgb: system_time:455526842, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20015, g:16809, b:10735, c:46130, algo:2, end:33763, ts:455526734037711	pwm_rgb: system_time:455526842, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20097, g:16874, b:10773, c:46303, algo:2, end:33763, ts:455526750703711	pwm_rgb: system_time:455526842, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19811, g:16650, b:10628, c:45661, algo:2, end:33763, ts:455526767369711	pwm_rgb: system_time:455526842, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20047, g:16854, b:10770, c:46247, algo:2, end:99299, ts:455526784035711	
+09-17 15:07:06.476  1950  2229 D FusionLightNextGen: process end reported = 1, mode: 1, cnt: 69320, lux 371.0, cct -1.0, r/g/b/c: 19899.0/16711.0/10669.0/45846.0, R/G/B: 79.0/82.0/81.0, bri 1449.0, match 0.66, ir 0.015478, conf 0.0, ts 455527032040471
+09-17 15:07:06.525 12167 12167 D LocationManagerExtImpl: handleMessage: remove location cache
+09-17 15:07:06.618  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:06.620  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:06.620  1205  1205 D SensorFeature: write 39 bytes:455527234610217,455527251276884,33765,0
+09-17 15:07:06.713  1950  3099 D OplusHansManager : 1487/1013 to 3983/10311 | android.media.IMediaPlayerClient | 1 reason default_unfreezeForKernel
+09-17 15:07:06.739  1167  1361 I OriginChannel: now system_time:455527371	pwm_rgb: system_time:455527107, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19870, g:16694, b:10666, c:45789, algo:2, end:33764, ts:455526965376471	pwm_rgb: system_time:455527107, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20156, g:16935, b:10807, c:46411, algo:2, end:33764, ts:455526982042471	pwm_rgb: system_time:455527107, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19899, g:16711, b:10669, c:45846, algo:2, end:33764, ts:455526998708471	pwm_rgb: system_time:455527107, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19911, g:16711, b:10663, c:45867, algo:2, end:33764, ts:455527015374471	pwm_rgb: system_time:455527107, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20142, g:16930, b:10795, c:46426, algo:2, end:99300, ts:455527032040471	
+--------- beginning of system
+09-17 15:07:06.798  1950  2231 D ActivityManager: freezing 22134 com.oplus.wirelesssettings
+09-17 15:07:06.804  1950  2231 D ActivityManager: freezing 28980 com.oplus.securitypermission
+09-17 15:07:06.810  1950  2231 D ActivityManager: freezing 7731 com.android.keychain
+09-17 15:07:06.812  1950  2231 D ActivityManager: freezing 19335 com.oplus.safecenter
+09-17 15:07:06.814  1950  2231 D ActivityManager: freezing 23300 com.oplus.trafficmonitor:push
+09-17 15:07:06.861  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:06.862  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:06.863  1205  1205 D SensorFeature: write 39 bytes:455527477640371,455527494307038,33766,0
+09-17 15:07:06.977 13192 13209 I ilityengine:tts: HeapTask is not gc_task
+09-17 15:07:07.004  1167  1361 I OriginChannel: now system_time:455527636	pwm_rgb: system_time:455527371, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20026, g:16812, b:10726, c:46136, algo:2, end:33765, ts:455527213306154	pwm_rgb: system_time:455527371, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20050, g:16846, b:10763, c:46235, algo:2, end:33765, ts:455527229972154	pwm_rgb: system_time:455527371, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19817, g:16650, b:10657, c:45655, algo:2, end:33765, ts:455527246638154	pwm_rgb: system_time:455527371, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20065, g:16854, b:10773, c:46235, algo:2, end:33765, ts:455527263304154	pwm_rgb: system_time:455527371, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20038, g:16823, b:10726, c:46157, algo:2, end:99301, ts:455527279970154	
+09-17 15:07:07.104  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:07.105  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:07.105  1205  1205 D SensorFeature: write 39 bytes:455527720396063,455527737062730,33767,0
+09-17 15:07:07.268  1167  1361 I OriginChannel: now system_time:455527900	pwm_rgb: system_time:455527636, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19884, g:16720, b:10675, c:45834, algo:2, end:33766, ts:455527444622466	pwm_rgb: system_time:455527636, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20136, g:16913, b:10804, c:46432, algo:2, end:33766, ts:455527461288466	pwm_rgb: system_time:455527636, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19876, g:16683, b:10644, c:45789, algo:2, end:33766, ts:455527477954466	pwm_rgb: system_time:455527636, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19890, g:16717, b:10685, c:45870, algo:2, end:33766, ts:455527494620466	pwm_rgb: system_time:455527636, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20165, g:16919, b:10798, c:46411, algo:2, end:99302, ts:455527511286466	
+09-17 15:07:07.291  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:07.291  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:07.347  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:07.349  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:07.350  1205  1205 D SensorFeature: write 39 bytes:455527963040679,455527979707346,33768,0
+09-17 15:07:07.453  1950  2043 D ProcessCpuTrackerExtImpl: mContext is already set, return now! 
+09-17 15:07:07.533  1167  1361 I OriginChannel: now system_time:455528165	pwm_rgb: system_time:455527900, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20035, g:16846, b:10738, c:46199, algo:2, end:33767, ts:455527692543927	pwm_rgb: system_time:455527901, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20044, g:16843, b:10757, c:46199, algo:2, end:33767, ts:455527709209927	pwm_rgb: system_time:455527901, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19805, g:16644, b:10622, c:45661, algo:2, end:33767, ts:455527725875927	pwm_rgb: system_time:455527901, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20071, g:16874, b:10770, c:46259, algo:2, end:33767, ts:455527742541927	pwm_rgb: system_time:455527901, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20017, g:16807, b:10722, c:46118, algo:2, end:99303, ts:455527759207927	
+09-17 15:07:07.591  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:07.593  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:07.595  1205  1205 D SensorFeature: write 39 bytes:455528207609909,455528224276576,33769,0
+09-17 15:07:07.797  1167  1361 I OriginChannel: now system_time:455528430	pwm_rgb: system_time:455528165, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20133, g:16941, b:10801, c:46402, algo:2, end:33768, ts:455527940495774	pwm_rgb: system_time:455528165, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19858, g:16686, b:10647, c:45760, algo:2, end:33768, ts:455527957161774	pwm_rgb: system_time:455528165, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19923, g:16739, b:10682, c:45924, algo:2, end:33768, ts:455527973827774	pwm_rgb: system_time:455528165, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:20147, g:16930, b:10804, c:46417, algo:2, end:33768, ts:455527990493774	pwm_rgb: system_time:455528165, lux:381, time_delta:16, pwm_turbo:1, bri:1449, r:19837, g:16675, b:10635, c:45703, algo:2, end:99304, ts:455528007159774	
+09-17 15:07:07.798  1950  2229 D FusionLightNextGen: process end reported = 1, mode: 1, cnt: 69325, lux 369.7, cct -1.0, r/g/b/c: 19843.0/16661.0/10628.0/45691.0, R/G/B: 79.0/82.0/81.0, bri 1449.0, match 0.73, ir 0.015623, conf 0.0, ts 455528255142034
+09-17 15:07:07.822  1950  2231 D ActivityManager: Freezer deadlock watchdog
+09-17 15:07:07.836  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:07.837  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:07.838  1205  1205 D SensorFeature: write 39 bytes:455528452531756,455528469198423,33770,0
+09-17 15:07:07.853 12888 12888 I PSN-DmpDataWrapper: PersonalizationProvider onChange:content://com.oplus.oss.provider.PersonalizationProvider/events?event=idle
+09-17 15:07:07.854 12888 12888 I PSN-DmpDataWrapper: PersonalizationProvider onDmpWorkEvent:idle
+09-17 15:07:07.854 12888 12970 I PSN-DmpStateListener: onDmpWorkEvent DMP_IDLE
+09-17 15:07:07.856 12888 12974 W PSN-ai.engine.business.CardMiningStaticUpdateUseCase: execute::no need to check frequently
+09-17 15:07:07.872 12888 12970 I PSN-DatabasePwdHelper: prepareEncryptedDatabase databaseName: album_mining.db
+09-17 15:07:07.872 12888 12970 I PSN-DatabasePwdHelper: getDatabasePwd ignoreDebugMode: false
+09-17 15:07:07.873 12888 12970 I PSN-DatabasePwdHelper: getDatabasePwd from cache
+09-17 15:07:07.873 12888 12970 I PSN-DatabasePwdHelper: updateDatabase databaseName: album_mining.db mmkvKey: album_mining_migrated_to_encrypted
+09-17 15:07:07.873 12888 12970 I PSN-DatabasePwdHelper: getDatabasePwd ignoreDebugMode: true
+09-17 15:07:07.873 12888 12970 I PSN-DatabasePwdHelper: getDatabasePwd from cache
+09-17 15:07:07.877 12888 12974 I PSN-PersonaConfig: getAiAskStartupSwitchValue: 1
+09-17 15:07:07.877 12888 12974 I PSN-PersonaConfig: getPersonaSwitchStatus aiAskStartupSwitchValue: 1
+09-17 15:07:07.878 12888 12974 I PSN-PersonaConfig: getPersonaSwitchValue: -1
+09-17 15:07:07.879 12888 12974 I PSN-PersonaConfig: getPersonaSwitchStatus status: true
+09-17 15:07:07.880 12888 12970 E PSN-DatabasePwdHelper: Failed to open with empty password, trying with password
+09-17 15:07:07.888 12888 12974 I PSN-DmpDataWrapper: queryDmpData resourceName:AIMemory startDocId:-1 limit:2147483647
+09-17 15:07:07.890 12888 12974 I DMP-PersonalizationProvider: query, projection: [docID, valid, identification, summaryCom, titleCom, createdTimeCom, appNameCom, sceneTypeCom, labelsCom, memoryTypeCom] selection:docID>? uri: content://com.oplus.oss.provider.PersonalizationProvider/com.oplus.aimemory#donate_AIMemory
+09-17 15:07:07.894 12888 12974 I DMP-ConfigManager: setExternalConfig resource:com.oplus.aimemory#donate_AIMemory, id:10003
+09-17 15:07:07.899 12888 12974 I DMP-ExternalConfigManager: createIndexCoreConfig:IndexCoreConfig{mAllocField=87, mFieldMapArray=[{attachmentsTexts=4, recycleTime=33, schedulesContents=35, vectorMultilingual=47, attachmentsPaths=3, notes=30, keywords=23, extraData=19, scores=38, dataEntity=11, description=16, memoryType=26, screenshot=39, title=42, identification=20, dataText=12, dataCategory=10, checksum=6, subSceneData=40, createdTime=8, ttlMillis=44, creationTimestampMillis=9, packageName=31, audioDuration=5, potentialActions=32, summary=41, image=21, entitiesContents=17, appName=2, schedulesTimes=36, titleSummary=43, deeplink=14, merged=27, updateTime=45, addressListJson=0, dataTextClean=13, intent=22, url=46, labels=24, alternateNames=1, combineMemories=7, deleted=15, entitiesPois=18, sceneType=34, name=28, namespace=29, schemaType=37, memoryId=25}, {entitiesContents_pinyin=59, schedulesContents=70, notes=66, keywords=62, labels_pinyin=65, dataEntity=54, schedulesContents_pinyin=71, dataCategory_pinyin=53, intent_pinyin=61, schedulesTimes_pinyin=73, title=76, dataEntity_pinyin=55, notes_pinyin=67, dataText=56, dataCategory=52, keywords_pinyin=63, summary=74, addressListJson_pinyin=49, title_pinyin=79, entitiesContents=58, appName=50, schedulesTimes=72, titleSummary=77, appName_pinyin=51, dataText_pinyin=57, titleSummary_pinyin=78, addressListJson=48, intent=60, summary_pinyin=75, labels=64, sceneType_pinyin=69, sceneType=68}, {recycleTime=84, namespace=83, schemaType=85, createdTime=81, updateTime=86, creationTimestampMillis=82, audioDuration=80}, {}], mFieldConfigArray={0=StoreFieldConfig{mFieldName=addressListJson, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=0, mType=-1, mFieldNameType=3, mDbIndex=false}, 1=StoreFieldConfig{mFieldName=alternateNames, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=1, mType=-1, mFieldNameType=3, mDbIndex=false}, 2=StoreFieldConfig{mFieldName=appName, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=2, mType=-1, mFieldNameType=3, mDbIndex=false}, 3=StoreFieldConfig{mFieldName=attachmentsPaths, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=3, mType=-1, mFieldNameType=3, mDbIndex=false}, 4=StoreFieldConfig{mFieldName=attachmentsTexts, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=4, mType=-1, mFieldNameType=3, mDbIndex=false}, 5=StoreFieldConfig{mFieldName=audioDuration, mTypeName=long, mNullable=true, mSource=null, mDisplay=false, mField=5, mType=-1, mFieldNameType=3, mDbIndex=false}, 6=StoreFieldConfig{mFieldName=checksum, mTypeName=long, mNullable=false, mSource=null, mDisplay=false, mField=6, mType=-1, mFieldNameType=1, mDbIndex=false}, 7=StoreFieldConfig{mFieldName=combineMemories, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=7, mType=-1, mFieldNameType=3, mDbIndex=false}, 8=StoreFieldConfig{mFieldName=createdTime, mTypeName=long, mNullable=true, mSource=null, mDisplay=false, mField=8, mType=-1, mFieldNameType=3, mDbIndex=false}, 9=StoreFieldConfig{mFieldName=creationTimestampMillis, mTypeName=long, mNullable=false, mSource=null, mDisplay=false, mField=9, mType=-1, mFieldNameType=3, mDbIndex=false}, 10=StoreFieldConfig{mFieldName=dataCategory, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=10, mType=-1, mFieldNameType=3, mDbIndex=false}, 11=StoreFieldConfig{mFieldName=dataEntity, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=11, mType=-1, mFieldNameType=3, mDbIndex=false}, 12=StoreFieldConfig{mFieldName=dataText, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=12, mType=-1, mFieldNameType=3, mDbIndex=false}, 13=StoreFieldConfig{mFieldName=dataTextClean, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=13, mType=-1, mFieldNameType=3, mDbIndex=false}, 14=StoreFieldConfig{mFieldName=deeplink, mTypeName=string, mNullable=true, mSource=null, mDisplay=false, mField=14, mType=-1, mFieldNameType=3, mDbIndex=false}, 15=StoreFieldConfig{mFieldName=deleted,
+09-17 15:07:07.909 12888 12974 I DMP-ConfigManager: init default WorkConfig
+09-17 15:07:07.913 12888 12974 W DMP-JsonFileReader: assetManager.list:14,15,16,stopwords.txt,version,fileName:WorkConfig.json
+09-17 15:07:07.914 12888 12974 I DMP-WorkConfig: init, resource: dmp, path: dmp/, fileName: WorkConfig.json failed, using default one
+09-17 15:07:07.915 12888 12974 I DMP-ConfigManager: init default WorkConfig succeed
+09-17 15:07:07.922 12888 12974 I DMP-WorkConfig: init, resource: com.oplus.aimemory#donate_AIMemory, path: com.oplus.aimemory#donate_aimemory/, fileName: WorkConfig.json
+09-17 15:07:07.928 12888 12974 I DMP-ChunkConfig: init, resource: com.oplus.aimemory#donate_AIMemory, path: com.oplus.aimemory#donate_aimemory/0/, fileName: ChunkConfig.json
+09-17 15:07:07.929 12888 12974 I DMP-ConfigManager: setExternalConfig success
+09-17 15:07:07.941 12888 12974 I DMP-DatabaseHelper: getDatabaseHelper by :10003
+09-17 15:07:07.942 12888 12974 I DMP-DatabaseHelper: getDbVersion, resource:com.oplus.aimemory#donate_AIMemory, version:1, internalVer:0, rusInternalVer:0
+09-17 15:07:07.943 12888 12974 I DMP-DatabaseHelper: DatabaseHelper resID:10003, version:184549377
+09-17 15:07:07.965 12888 12974 W DMP-PersonalizationProvider: no claw, no download buried
+09-17 15:07:07.997  3197  3197 D RadioMessenger: handleMessage Request msgid 2311
+09-17 15:07:07.999  3197  3197 D RadioProxyJ[1]: [10036]> getAllCellularCellInfo
+09-17 15:07:08.009  1439  1538 D MipcProxy: handleMessage msg is 4001, instance 1
+09-17 15:07:08.009  1439  1538 D RadioProxy: getAllCellularCellInfo : response cb for instance 1
+09-17 15:07:08.010  3197  3222 D SubsysRadioResponse: getAllCellularCellInfoResponse
+09-17 15:07:08.010  3197  3222 D SubsysRadioResponse: responseAllCellularCellInfo len:12
+09-17 15:07:08.010  3197  3222 D RadioProxyJ[1]: [10036]< getAllCellularCellInfoResponse ******
+09-17 15:07:08.010  3197  3197 D MessengerResponseHandler: handleMessage Response msgid 281
+09-17 15:07:08.010  3197  3197 I OnnxMoveStateCollection: handleAllCellularCellInfo
+09-17 15:07:08.010  3197  3197 D RadioCellInfo: RadioCellInfo
+09-17 15:07:08.012  3197  6111 D MoveStateCollection:  mCurrentAccState == 4 mCurrentOnnxState <<< 0
+09-17 15:07:08.062  1167  1361 I OriginChannel: now system_time:455528694	pwm_rgb: system_time:455528430, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:20023, g:16812, b:10729, c:46178, algo:2, end:33769, ts:455528188478034	pwm_rgb: system_time:455528430, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:19843, g:16661, b:10628, c:45691, algo:2, end:33769, ts:455528205144034	pwm_rgb: system_time:455528430, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:20106, g:16877, b:10773, c:46300, algo:2, end:33769, ts:455528221810034	pwm_rgb: system_time:455528430, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:19988, g:16821, b:10729, c:46091, algo:2, end:33769, ts:455528238476034	pwm_rgb: system_time:455528430, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:19846, g:16666, b:10628, c:45733, algo:2, end:99305, ts:455528255142034	
+09-17 15:07:08.079  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:08.080  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:08.080  1205  1205 D SensorFeature: write 39 bytes:455528694986525,455528711653192,33771,0
+09-17 15:07:08.295  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:08.295  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:08.309  3011  3011 D OplusTelephonyController: onSignalStrengthChanged: SignalStrength=SignalStrength:{mCdma=CellSignalStrengthCdma: cdmaDbm=2147483647 cdmaEcio=2147483647 evdoDbm=2147483647 evdoEcio=2147483647 evdoSnr=2147483647 level=0,mGsm=CellSignalStrengthGsm: rssi=2147483647 ber=2147483647 mTa=2147483647 mLevel=0,mWcdma=CellSignalStrengthWcdma: ss=2147483647 ber=2147483647 rscp=2147483647 ecno=2147483647 level=0,mTdscdma=CellSignalStrengthTdscdma: rssi=2147483647 ber=2147483647 rscp=2147483647 level=0,mLte=CellSignalStrengthLte: rssi=-77 rsrp=-84 rsrq=-8 rssnr=13 cqiTableIndex=2147483647 cqi=0 ta=0 level=4 parametersUseForLevel=0,mNr=CellSignalStrengthNr:{ csiRsrp = 2147483647 csiRsrq = 2147483647 csiCqiTableIndex = 2147483647 csiCqiReport = [] ssRsrp = 2147483647 ssRsrq = 2147483647 ssSinr = 2147483647 level = 0 parametersUseForLevel = 0 timingAdvance = 2147483647 },primary=CellSignalStrengthLte}
+09-17 15:07:08.314  2616  2790 I SystemUi--Statusbar: MobileConnectionRepositoryImpl-->subId:2 isSoftSimCard:false slotId:0
+09-17 15:07:08.321  3197  3197 D SubsysEventListenerManager-SubsysTelephonyCallback[0]: onSignalStrengthsChanged
+09-17 15:07:08.323  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:08.324  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:08.324  1205  1205 D SensorFeature: write 39 bytes:455528939215833,455528955882500,33772,0
+09-17 15:07:08.327  1167  1361 I OriginChannel: now system_time:455528960	pwm_rgb: system_time:455528694, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19849, g:16678, b:10641, c:45760, algo:2, end:33770, ts:455528436460341	pwm_rgb: system_time:455528694, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19970, g:16767, b:10704, c:45990, algo:2, end:33770, ts:455528453126341	pwm_rgb: system_time:455528694, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20145, g:16924, b:10801, c:46444, algo:2, end:33770, ts:455528469792341	pwm_rgb: system_time:455528694, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19858, g:16666, b:10638, c:45751, algo:2, end:33770, ts:455528486458341	pwm_rgb: system_time:455528694, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19994, g:16784, b:10716, c:46079, algo:2, end:99306, ts:455528503124341	
+09-17 15:07:08.392  2467  2469 D WifiHAL : WifiRequest::create vendor command to iface 40, vendor_id=0x1a11, subcmd=0x1200, res=0
+09-17 15:07:08.398  2467  2469 I WifiHAL : LLS RSP: data=0xb400007ed009e420, len=4500
+09-17 15:07:08.398  2467  2469 I WifiHAL : LLS check_data_sanity: 1829: current_radio_stat->num_channels=24
+09-17 15:07:08.398  2467  2469 I WifiHAL : LLS check_data_sanity: 1829: current_radio_stat->num_channels=13
+09-17 15:07:08.398  2467  2469 I WifiHAL : LLS check_data_sanity: confirmed_size=4500, len=4500
+09-17 15:07:08.401  1950  2361 E WifiStaIfaceAidlImpl: getCachedScanData failed with service-specific exception: android.os.ServiceSpecificException:  (code 4)
+09-17 15:07:08.422  3197  3197 D VendorWifiService: onEvent event:9,action:1
+09-17 15:07:08.426  1950  2460 D OplusWifiPower_TriggerCenter: mComponentCallback: wifistat
+09-17 15:07:08.426  1950  2479 D OplusWifiPower_PolicyComponent: out config triggered , ignore in config.
+09-17 15:07:08.430  4277  4390 E horae   : 0: target_temp:34206, back:33532,back_1:32944,back_2:33646,frame:33230,frame_1:34206,frame_2:32959,front:33785,front_1:33685, 23 3, +(794), 1 ,37589,36000,37709,37385,34842,31900,37415,35800,37596,37103,34947,31900,37071,35500,37244,36866,35000,32000,36794,35300,36951,36594,35000,32000, algo:0
+09-17 15:07:08.433  8219 12148 D ShellSubscriberWorkerThread: the first 8 bytes empty, and RestData length > 8 
+09-17 15:07:08.506  2343  2645 W OPLUS_LOG_LOAD: ==LOGS PROG INFO, prog(com.oplus.camera) ==
+09-17 15:07:08.506  2343  2645 I APS_ALOG: flushRoutine g_immediateFlush=0 g_pendingCount=0 g_oobCount=0
+09-17 15:07:08.566  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:08.567  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:08.567  1205  1205 D SensorFeature: write 39 bytes:455529182215140,455529198881807,33773,0
+09-17 15:07:08.591  1167  1361 I OriginChannel: now system_time:455529223	pwm_rgb: system_time:455528960, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:20112, g:16871, b:10766, c:46327, algo:2, end:33771, ts:455528700624350	pwm_rgb: system_time:455528960, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:20000, g:16790, b:10713, c:46049, algo:2, end:33771, ts:455528717290350	pwm_rgb: system_time:455528960, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:19861, g:16683, b:10647, c:45730, algo:2, end:33771, ts:455528733956350	pwm_rgb: system_time:455528960, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:20124, g:16907, b:10788, c:46417, algo:2, end:33771, ts:455528750622350	pwm_rgb: system_time:455528960, lux:384, time_delta:16, pwm_turbo:1, bri:1449, r:19955, g:16773, b:10710, c:45996, algo:2, end:99307, ts:455528767288350	
+09-17 15:07:08.745 13405 13405 W libprocessgroup: JoinCgroup: controller schedtune is not found
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: BfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: BfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: BfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: BfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: BfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqGroupIdle
+09-17 15:07:08.746 13405 13405 W libprocessgroup: SetAttribute: unknown attribute: CfqWeight
+09-17 15:07:08.746 13405 13405 W libprocessgroup: Unknown profile action: SetClamps
+09-17 15:07:08.746 13405 13405 W libprocessgroup: Unknown profile action: SetClamps
+09-17 15:07:08.747 13405 13405 W libprocessgroup: Unknown profile action: SetClamps
+09-17 15:07:08.747 13405 13405 W libprocessgroup: Unknown profile action: SetClamps
+09-17 15:07:08.748 13405 13405 W libprocessgroup: SetCgroup::ExecuteForTask: failed to open /dev/cpuctl/top-app/tasks: Permission denied
+09-17 15:07:08.748 13405 13405 W libprocessgroup: SetCgroup::ExecuteForTask: failed to open /dev/blkio/tasks: Permission denied
+09-17 15:07:08.748 13405 13405 E libprocessgroup: set_timerslack_ns write failed: Operation not permitted
+09-17 15:07:08.749 12888 12970 I PSN-DatabasePwdHelper: Database opened successfully after update
+09-17 15:07:08.756 12888 13406 I PSN-DatabasePwdHelper: getWritableDatabase: album_mining.db, retryCount: 2, passphrase isEmpty: false
+09-17 15:07:08.811  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:08.812  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:08.813  1205  1205 D SensorFeature: write 39 bytes:455529427704756,455529444371423,33774,0
+09-17 15:07:08.856  1167  1361 I OriginChannel: now system_time:455529488	pwm_rgb: system_time:455529223, lux:211, time_delta:16, pwm_turbo:1, bri:1449, r:19825, g:16658, b:10619, c:45703, algo:2, end:33773, ts:455529115721118	pwm_rgb: system_time:455529224, lux:211, time_delta:16, pwm_turbo:1, bri:1449, r:20118, g:16885, b:10785, c:46342, algo:2, end:33773, ts:455529132387118	pwm_rgb: system_time:455529224, lux:211, time_delta:16, pwm_turbo:1, bri:1449, r:20023, g:16815, b:10735, c:46127, algo:2, end:33773, ts:455529149053118	pwm_rgb: system_time:455529224, lux:211, time_delta:16, pwm_turbo:1, bri:1449, r:19867, g:16694, b:10647, c:45766, algo:2, end:33773, ts:455529165719118	pwm_rgb: system_time:455529224, lux:211, time_delta:16, pwm_turbo:1, bri:1449, r:20118, g:16896, b:10782, c:46357, algo:2, end:99309, ts:455529182385118	
+09-17 15:07:09.013 13404 13404 D ExtensionsLoader: createInstance(64bit) : createExtendedFactory
+09-17 15:07:09.013 13404 13404 D ExtensionsLoader: Opened libguiextimpl.so
+09-17 15:07:09.050 13404 13404 D AVStageFactory: Opened liboplusavenhancements.so
+09-17 15:07:09.050 13404 13404 D AVStageFactory: createInstance(64bit): createVendorAVFactory success!
+09-17 15:07:09.051 13404 13404 D AVStageUtils: Opened liboplusavenhancements.so
+09-17 15:07:09.051 13404 13404 D AVStageUtils: createInstance(64bit): createVendorAVUtils success!
+09-17 15:07:09.051 13404 13404 D OplusUtils: OplusUtils [84]: 
+09-17 15:07:09.051 13404 13404 D AVStageUtils: createInstance(64bit): createVendorAVUtils success!
+09-17 15:07:09.051 13404 13404 D OplusUtils: OplusUtils [84]: 
+09-17 15:07:09.053 13404 13404 D AVMediaServiceFactory: Opened liboplusavenhancements.so
+09-17 15:07:09.053 13404 13404 D AVMediaServiceFactory: createInstance(64bit): createExtendedMediaServiceFactory success!
+09-17 15:07:09.053 13404 13404 D AVNuFactory: Opened liboplusavenhancements.so
+09-17 15:07:09.053 13404 13404 D AVNuFactory: createInstance(64bit): createExtendedNuFactory success!
+09-17 15:07:09.053 13404 13404 D AVStageFactory: createInstance(64bit): createVendorAVFactory success!
+09-17 15:07:09.053 13404 13404 D AVStageUtils: createInstance(64bit): createVendorAVUtils success!
+09-17 15:07:09.053 13404 13404 D OplusUtils: OplusUtils [84]: 
+09-17 15:07:09.053 13404 13404 D AVMediaServiceFactory: createInstance(64bit): createExtendedMediaServiceFactory success!
+09-17 15:07:09.053 13404 13404 D AVNuFactory: createInstance(64bit): createExtendedNuFactory success!
+09-17 15:07:09.053 13404 13404 D AVStageFactory: Opened liboplusavenhancements.so
+09-17 15:07:09.053 13404 13404 D AVStageFactory: createInstance(64bit): createVendorAVFactory success!
+09-17 15:07:09.054 13404 13404 D AVStageUtils: Opened liboplusavenhancements.so
+09-17 15:07:09.054  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:09.054 13404 13404 D AVStageUtils: createInstance(64bit): createVendorAVUtils success!
+09-17 15:07:09.054 13404 13404 D OplusUtils: OplusUtils [84]: 
+09-17 15:07:09.054  1181  1202 D power@timer: [mtkPowerTimer] visRead:0
+09-17 15:07:09.054  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:09.055  1205  1205 D SensorFeature: write 39 bytes:455529669952063,455529686618730,33775,0
+09-17 15:07:09.057 13404 13404 E app_process: createInstance(64bit) : createExtendedFactory
+09-17 15:07:09.059 13404 13404 E app_process: createInstance(64bit) : createExtendedFactory
+09-17 15:07:09.059 13404 13404 E app_process: Opened libinputextensionsimpl.so
+09-17 15:07:09.059 13404 13404 E app_process: Opened libinputextensionsimpl.so
+09-17 15:07:09.061 13404 13404 D AndroidRuntime: >>>>>> START com.android.internal.os.RuntimeInit uid 2000 <<<<<<
+09-17 15:07:09.072 13404 13404 I AndroidRuntime: Using default boot image
+09-17 15:07:09.072 13404 13404 I AndroidRuntime: Leaving lock profiling enabled
+09-17 15:07:09.074 13404 13404 I app_process: Using CollectorTypeCMC GC.
+09-17 15:07:09.075 13404 13404 I app_process: isSwordfishLaunchAppEnabled_ 1 isSwordfishInstallAppEnabled_ 1
+09-17 15:07:09.110 12888 12970 I PSN-AlbumMiningJobScheduler: scheduleJobIfNeeded:no need schedule
+09-17 15:07:09.120  1167  1361 I OriginChannel: now system_time:455529753	pwm_rgb: system_time:455529488, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20145, g:16910, b:10807, c:46447, algo:2, end:33774, ts:455529380369441	pwm_rgb: system_time:455529488, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19846, g:16686, b:10653, c:45751, algo:2, end:33774, ts:455529397035441	pwm_rgb: system_time:455529488, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19938, g:16776, b:10694, c:46023, algo:2, end:33774, ts:455529413701441	pwm_rgb: system_time:455529488, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20136, g:16930, b:10820, c:46423, algo:2, end:33774, ts:455529430367441	pwm_rgb: system_time:455529488, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19817, g:16672, b:10635, c:45697, algo:2, end:99310, ts:455529447033441	
+09-17 15:07:09.122  1950  2229 D FusionLightNextGen: process end reported = 1, mode: 1, cnt: 69330, lux 375.2, cct -1.0, r/g/b/c: 19973.0/16781.0/10713.0/46020.0, R/G/B: 79.0/82.0/81.0, bri 1449.0, match 0.62, ir 0.015575, conf 0.0, ts 455529711681749
+09-17 15:07:09.212 13404 13404 I app_process: isSwordfishLaunchAppEnabled_ 1 isSwordfishInstallAppEnabled_ 1
+09-17 15:07:09.214 13404 13404 D nativeloader: InitDefaultPublicLibraries for_preload=1: libandroid.so:libaaudio.so:libamidi.so:libbinder_ndk.so:libc.so:libcamera2ndk.so:libdl.so:libEGL.so:libGLESv1_CM.so:libGLESv2.so:libGLESv3.so:libicu.so:libicui18n.so:libicuuc.so:libjnigraphics.so:liblog.so:libmediandk.so:libm.so:libnativehelper.so:libnativewindow.so:libOpenMAXAL.so:libOpenSLES.so:libRS.so:libstdc++.so:libsync.so:libvulkan.so:libwebviewchromium_plat_support.so:libz.so
+09-17 15:07:09.260 13404 13404 D nativeloader: Load libicu_jni.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+09-17 15:07:09.260 13404 13404 D app_process: u_setTimeZoneFilesDirectory("/apex/com.android.tzdata/etc/tz/versioned/9/icu") succeeded. 
+09-17 15:07:09.260 13404 13404 D app_process: I18n APEX ICU file found: /apex/com.android.i18n/etc/icu/icudt76l.dat
+09-17 15:07:09.267 13404 13404 D nativeloader: Load libjavacore.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+09-17 15:07:09.274 13404 13404 D nativeloader: Load libopenjdk.so using APEX ns com_android_art for caller /apex/com.android.art/javalib/core-oj.jar: ok
+09-17 15:07:09.296  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:09.296  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:09.296  1205  1205 D SensorFeature: write 39 bytes:455529911710910,455529928377577,33776,0
+09-17 15:07:09.299  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:09.299  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:09.310  1180  1180 D android.hardware.thermal-service.mediatek: i=3 tz_data[i].tz_idx[0]=58
+09-17 15:07:09.311  1180  1180 D android.hardware.thermal-service.mediatek: i=2 tz_data[i].tz_idx[0]=0
+09-17 15:07:09.313  1180  1180 D android.hardware.thermal-service.mediatek: i=3 tz_data[i].tz_idx[0]=58
+09-17 15:07:09.314  1180  1180 D android.hardware.thermal-service.mediatek: i=2 tz_data[i].tz_idx[0]=0
+09-17 15:07:09.315  4286 11181 I midasd  : OplusObrainService::notifyEventInt eventId:21 iParam:0
+09-17 15:07:09.316  8219 12231 I OplusObrain: OplusObrainClientInvoke.nativeGetTelephonyInfo
+09-17 15:07:09.317  8219 12231 I OplusObrain: OplusObrainClientInvoke.nativeGetTrafficTypeInfoForNetworkType networkType 0
+09-17 15:07:09.317  1950  2646 D KernelStatsHelper: getKernelStats start!
+09-17 15:07:09.318  1185  1185 E android.hardware.power.stats-impl.oplus: HandleFactory::read open charger_input_current_now(/proc/charger/input_current_now) failed! fd: -1 errno: 2
+09-17 15:07:09.318  1185  1185 W android.hardware.power.stats-impl.oplus: PruneException: Unknown binder exception (2) pruned into EX_TRANSACTION_FAILED
+09-17 15:07:09.318  4286 12202 W midasd  : handleFactory read failed.
+09-17 15:07:09.319  1950  2442 D OplusNetlinkSocket: handleNetlinkRecvKernelMessage:nlmsghdr:StructNlMsgHdr{ nlmsg_len{3004}, nlmsg_type{65()}, nlmsg_flags{0()}, nlmsg_seq{0}, nlmsg_pid{127797642} }
+09-17 15:07:09.319 13404 13404 W libc    : Access denied finding property "ro.vendor.mtk.hbt_binfmt_misc_support"
+09-17 15:07:09.319  1950  2442 D KernelStatsHelper: get magic :[-1, -1, -1, 77, 65, 71, 73, 67]
+09-17 15:07:09.319  1950  2442 D KernelStatsHelper: magic matched count:194 data_len:10088
+09-17 15:07:09.319 13404 13404 W libc    : Access denied finding property "ro.vendor.mtk.app32_boost_support"
+09-17 15:07:09.319 13404 13404 W libc    : Access denied finding property "ro.vendor.oplus.tango_binfmt_misc_support"
+09-17 15:07:09.319  1950  2442 D OplusNetlinkSocket: handleNetlinkRecvKernelMessage:nlmsghdr:StructNlMsgHdr{ nlmsg_len{2988}, nlmsg_type{65()}, nlmsg_flags{0()}, nlmsg_seq{0}, nlmsg_pid{127797642} }
+09-17 15:07:09.319 13404 13404 W libc    : Access denied finding property "ro.vendor.oplus.otranslator_64only_chip"
+09-17 15:07:09.319  1950  2442 D OplusNetlinkSocket: handleNetlinkRecvKernelMessage:nlmsghdr:StructNlMsgHdr{ nlmsg_len{2988}, nlmsg_type{65()}, nlmsg_flags{0()}, nlmsg_seq{0}, nlmsg_pid{127797642} }
+09-17 15:07:09.320  1950  2442 D OplusNetlinkSocket: handleNetlinkRecvKernelMessage:nlmsghdr:StructNlMsgHdr{ nlmsg_len{1220}, nlmsg_type{65()}, nlmsg_flags{0()}, nlmsg_seq{0}, nlmsg_pid{127797642} }
+09-17 15:07:09.320  1950  2442 D KernelStatsHelper: data over! check: true
+09-17 15:07:09.320 13404 13404 W libc    : Access denied finding property "ro.vendor.oplus.app32_boost_support"
+09-17 15:07:09.320 13404 13404 W libc    : Access denied finding property "ro.vendor.mtk.app32_boost_support"
+09-17 15:07:09.323 13404 13404 D nativeloader: Load libonetrace_jni.so using system ns (caller=/system/framework/oplus-framework.jar): ok
+09-17 15:07:09.323 13404 13404 D OplusTrace: register_android_os_OplusTrace
+09-17 15:07:09.338 13404 13404 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-17 15:07:09.339 13404 13404 D AndroidRuntime: Calling main entry com.android.commands.am.Am
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.nfc.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.admin.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.database.sqlite is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.providers.calendar is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.power.feature.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.media.performance.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.contextualsearch.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.ondeviceintelligence.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.media.projection.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.companion is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.service.controls.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.text.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.providers.contactkeys.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.intentresolver is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.companion.virtualdevice.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.uprobestats.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.net.thread.platform.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.view.contentprotection.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.dreams is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.graphics.surfaceflinger.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.hardware.input is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.sdk is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.input.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.tracing is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.biometrics is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.view.contentcapture.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.job is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.content.res is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.net.platform.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.aconfig.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.graphics.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.server.app is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.speech.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.stats is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.hardware.biometrics is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.car.feature is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.adpf is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.location.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.settingslib.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.managedprovisioning.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.assist.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.net is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.settingslib.widget.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.internal.camera.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.hardware.libsensor.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.internal.jank is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.providers.settings is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.multiuser is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.power.optimization is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.calllogbackup is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.media.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.server.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.graphics.libvulkan.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.appfunctions.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: android.app.smartspace.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.providers.contacts.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.shell.flags is mapped to system
+09-17 15:07:09.343 13404 13404 I AconfigPackage: com.android.media.aaudio is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.hardware.radio is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: suspend_service.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.media.midi is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.libcore.readonly is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settingslib.widget.selectorwithwidgetpreference.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.notification is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.systemui.shared is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.app.jank is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.app.wearable is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.media.audio is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.chooser is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.compat is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.alarm is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.apex.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.quickaccesswallet is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.app.usage is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.accessibility is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.app.supervision.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.utils is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.chre.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.content.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.media.codec is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.internal.os is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.nfc.nci.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.app is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.security.keystore2 is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.crashrecovery.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.tradeinmode.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.hardware.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.telecom.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settingslib.media.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.policy is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.media.audiopolicy is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.egg.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.internal.compat.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.security is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.autofill is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.example.android.aconfig.demo.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.view.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.companion.virtual.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.aconfig_new_storage is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.feature.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.systemui is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.power.batterysaver is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.widget.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.media.editing.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.media.codec.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.powerstats is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.graphics.egl.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.media.audioserver is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.deviceidle is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.nfc is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.permission.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.voice.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.content.pm is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.power.hint is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.os is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.service.dreams is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.graphics.libgui.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.hardware.usb.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.provider is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.job is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.internal.foldables.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.internal.telephony.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.webkit is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.credentials.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.display.feature.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.notification is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.oplus.framework.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.appwidget.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.frameworks.sensorservice.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.window.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.adaptiveauth is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.net.wifi.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.media.tv.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.usb.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.os.vibrator is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.hardware.devicestate.feature.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.usage is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.server is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.wm.shell is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.view.inputmethod is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.graphics.hwui.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.backup is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.internal.pm.pkg.component.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.view.accessibility is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: android.media.audio is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.am is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.media.playback.flags is mapped to system
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settings.accessibility is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settings.keyboard is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settings.factory_reset is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.systemui.accessibility.accessibilitymenu is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.server.policy.feature.flags is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settings.flags is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.settings.media_drm is mapped to system_ext
+09-17 15:07:09.344 13404 13404 I AconfigPackage: com.android.launcher3 is mapped to system_ext
+09-17 15:07:09.345 13404 13404 I AconfigPackage: com.android.adservices.ondevicepersonalization.flags is mapped to com.android.ondevicepersonalization
+09-17 15:07:09.345 13404 13404 I AconfigPackage: com.android.wifi.flags is mapped to com.android.wifi
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.net.ct.flags is mapped to com.android.tethering
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.net.flags is mapped to com.android.tethering
+09-17 15:07:09.346 13404 13404 I AconfigPackage: android.net.vcn is mapped to com.android.tethering
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.nearby.flags is mapped to com.android.tethering
+09-17 15:07:09.346 13404 13404 I AconfigPackage: android.net.http is mapped to com.android.tethering
+09-17 15:07:09.346  1950  2670 I Osense-BaseDecisionMaker: notifySceneToAthenaPolicy: SCENE_RES_IO_PSI, bundle: Bundle[{ioLevel=3}]
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.net.thread.flags is mapped to com.android.tethering
+09-17 15:07:09.346  1950  2670 I Osense-BaseDecisionMaker: scene: SCENE_RES_IO_PSI, excutingPolicy: reentrant
+09-17 15:07:09.346  1950  2670 D Osense-BaseDecisionMaker: invoke reentrant policy
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.devicelock.flags is mapped to com.android.devicelock
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.org.conscrypt.flags is mapped to com.android.conscrypt
+09-17 15:07:09.346 13404 13404 I AconfigPackage: com.android.ipsec.flags is mapped to com.android.ipsec
+09-17 15:07:09.347 13404 13404 I AconfigPackage: android.uprobestats.mainline.flags is mapped to com.android.uprobestats
+09-17 15:07:09.347 13404 13404 I AconfigPackage: com.android.art.flags is mapped to com.android.art
+09-17 15:07:09.347 13404 13404 I AconfigPackage: com.android.libcore is mapped to com.android.art
+09-17 15:07:09.347 13404 13404 I AconfigPackage: com.android.healthfitness.flags is mapped to com.android.healthfitness
+09-17 15:07:09.347 13404 13404 I AconfigPackage: android.os.profiling is mapped to com.android.profiling
+09-17 15:07:09.348 13404 13404 I AconfigPackage: android.media.swcodec.flags is mapped to com.android.media.swcodec
+09-17 15:07:09.348 13404 13404 W AconfigPackage: failed to map some package from com.android.cellbroadcast.package.map: android.os.flagging.AconfigStorageReadException: ERROR_CANNOT_READ_STORAGE_FILE: Fail to mmap storage
+09-17 15:07:09.348 13404 13404 I AconfigPackage: com.android.media.extractor.flags is mapped to com.android.media
+09-17 15:07:09.348 13404 13404 I AconfigPackage: com.android.media.mainline.flags is mapped to com.android.media
+09-17 15:07:09.348 13404 13404 I AconfigPackage: com.android.os.statsd.flags is mapped to com.android.os.statsd
+09-17 15:07:09.348 13404 13404 I AconfigPackage: com.android.system.virtualmachine.flags is mapped to com.android.virt
+09-17 15:07:09.348 13404 13404 I AconfigPackage: com.android.icu is mapped to com.android.i18n
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.uwb.flags is mapped to com.android.uwb
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.ranging.flags is mapped to com.android.uwb
+09-17 15:07:09.349 13404 13404 I AconfigPackage: android.provider.flags is mapped to com.android.configinfrastructure
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.server.deviceconfig is mapped to com.android.configinfrastructure
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.adservices.flags is mapped to com.android.adservices
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.sdksandbox.flags is mapped to com.android.adservices
+09-17 15:07:09.349 13404 13404 I AconfigPackage: android.graphics.pdf.flags is mapped to com.android.mediaprovider
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.providers.media.flags is mapped to com.android.mediaprovider
+09-17 15:07:09.349 13404 13404 I AconfigPackage: android.graphics.pdf.flags.readonly is mapped to com.android.mediaprovider
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.appsearch.flags is mapped to com.android.appsearch
+09-17 15:07:09.349  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, event: 112
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.permission.flags is mapped to com.android.permission
+09-17 15:07:09.349 13404 13404 I AconfigPackage: com.android.permissioncontroller.flags is mapped to com.android.permission
+09-17 15:07:09.349 13404 13404 E FeatureFlagsImplExport: android.os.flagging.AconfigStorageReadException: ERROR_PACKAGE_NOT_FOUND: package android.xr cannot be found on the device
+09-17 15:07:09.349  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] startTime: 1789628829344
+09-17 15:07:09.349  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] currentAvailmem: 4931
+09-17 15:07:09.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] killTriggerMem: 2200
+09-17 15:07:09.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] ioLevel: 3
+09-17 15:07:09.350  2343  2732 D OCAM_Performance: onOsenseEventSceneChanged, pressure IO eventStateType: 2, startTime: 1789628829344, currentAvailmem: 4931, killTriggerMem: 2200, ioLevel: 3
+09-17 15:07:09.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, event: 104
+09-17 15:07:09.350  2343  2896 W OCAM_Performance: onOsenseEventSceneChanged, high I/O pressure
+09-17 15:07:09.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] startTime: 1789628829346
+09-17 15:07:09.350 13404 13404 W PlatformAconfigPackage: android.os.flagging.AconfigStorageReadException: ERROR_CANNOT_READ_STORAGE_FILE: Fail to mmap storage
+09-17 15:07:09.354 13404 13404 D UiAutomationConnection: Created on user UserHandle{0}
+09-17 15:07:09.355  1950  2646 I ActivityManager: Force stopping com.example.fourlangasr appid=10389 user=0: start instr
+09-17 15:07:09.356  1950  2646 I ActivityManager: Killing 30090:com.example.fourlangasr/u0a389 (adj 450): stop com.example.fourlangasr due to start instr
+09-17 15:07:09.356  1950  2040 I UserAwareMgr: process killed: {pkgName='com.example.fourlangasr', serviceName='', procName=com.example.fourlangasr, pid=30090, uid=10389, appId=0, owner='null', flags='bg', renderTid=13181, hwuiTids=[13200, 13201], glTids=null, threadInfos=null, mVideoActivityList=[], mStates=0}
+09-17 15:07:09.356  1950  2040 I UserAwareMgr: handleProcessKilled, pkgName: com.example.fourlangasr, pid: 30090
+09-17 15:07:09.357  1950  2464 I OplusHansManager : onUidGone(), 10389 com.example.fourlangasr exit SM
+09-17 15:07:09.357  1950  2646 I mtkpower_client: [PowerHal_Wrap_notifyAppState] com.example.fourlangasr/com.example.fourlangasr pid=30090 activityId:30090 state:3
+09-17 15:07:09.358  1950  2464 I OplusHansManager : onUidGone(), 10389 com.example.fourlangasr alarm removed
+09-17 15:07:09.358  1950  2646 D MAGT_SYNC_FRAME: MAGT App State [NOTIFY]: package = com.example.fourlangasr, action = com.example.fourlangasr, pid = 30090, state = 3, uid = 10389
+09-17 15:07:09.358  1179  1179 I vendor.mediatek.hardware.mtkpower_applist-service.mediatek: packName: com.example.fourlangasr actName: com.example.fourlangasr pid: 30090 activityId: 30090 uid: 10389 state: 3
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [notifyAPPstate] com.example.fourlangasr/com.example.fourlangasr, pid=30090, activityId=30090, uid=10389, state:DEAD, fps:120, win:0
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [notifyAPPstate] multi_resumed_app_count: 1
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [notifyAPPstate] multi_resumed_app_info[0] com.android.launcher/com.android.launcher.Launcher, pid:2838, activityId:168696319, fps:-1, isMultiWindow:1
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [getForegroundAPPCount] 1
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [notifyAPPstate] pack:com.example.fourlangasr, pid:30090, STATE_DEAD
+09-17 15:07:09.358  1179  1179 I MTK_APPList: [notifyNetdUID] 10389
+09-17 15:07:09.358  1950  3110 I OPM     : handleAppExit info: ApplicationExitInfo(timestamp=2026/9/17 15:07 pid=30090 realUid=10389 packageUid=10389 definingUid=10389 user=0 process=com.example.fourlangasr reason=10 (USER REQUESTED) subreason=21 (FORCE STOP) status=0 importance=400 pss=0.00 rss=0.00 description=stop com.example.fourlangasr due to start instr state=empty trace=null
+09-17 15:07:09.358  1950  3110 I OPM     : handleUidGone uid: 10389, disabled: false
+09-17 15:07:09.358  1950  2646 W ActivityTaskManager: Force removing ActivityRecord{28378418 u0 com.example.fourlangasr/.MainActivity t756 f}}: app died, no saved state
+09-17 15:07:09.359  1950  2217 W UsageStatsService: Unexpected activity event reported! (com.example.fourlangasr/com.example.fourlangasr.MainActivity event : 23 instanceId : 40340537)
+09-17 15:07:09.359  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr F exit SM
+09-17 15:07:09.359  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr F exit(), F stay=17, reason=UidGone, FrozenActionKeepProxy=false
+09-17 15:07:09.360  1179  1179 I MTK_APPList: [notifyPID] 30090
+09-17 15:07:09.360  3197  9222 D ActivityAdapter: uid gone, uid=10389
+09-17 15:07:09.360  1950  2646 D SnapshotCache: removeRunningEntry id: 756, callers=com.android.server.wm.SnapshotCache.onAppRemoved:110 com.android.server.wm.AbsAppSnapshotController.onAppRemoved:764 com.android.server.wm.SnapshotController.onAppRemoved:97 
+09-17 15:07:09.360  1950  2646 D ActivityTaskManager: removeAppToken: ActivityRecord{28378418 u0 com.example.fourlangasr/.MainActivity t756 f}} delayed=false parent=Task{3b4c00 #756 type=standard A=10389:com.example.fourlangasr} animating=false Callers=com.android.server.wm.DisplayContent.removeAppToken:1757 com.android.server.wm.ActivityRecord.removeFromHistory:4996 com.android.server.wm.ActivityRecord.handleAppDied:5355 com.android.server.wm.WindowProcessController.handleAppDied:1723 
+09-17 15:07:09.361  1950  3089 I OplusHansManager : unfreeze uid: 10389 com.example.fourlangasr pids: [30090] reason: UidGone scene: LcdOn
+09-17 15:07:09.362  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr M exit(), M stay=0
+09-17 15:07:09.362  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr R exit(), R stay=0
+09-17 15:07:09.362  1950  3175 D MediaFocusControlExtImpl: onUidFrozenChanged success + uid = 10389, frozen = false
+09-17 15:07:09.362  1950  2646 D QuickBackInputPolicy: hasMultiChildrenInTask: false
+09-17 15:07:09.362  1950  2646 D WindowManager: NFW_findFocusedWindowIfNeeded:Window{998a123 u0 com.android.launcher/com.android.launcher.Launcher} mCurrentFocus:Window{998a123 u0 com.android.launcher/com.android.launcher.Launcher}
+09-17 15:07:09.362  1462  8461 D HoloAudio::SpecailizerPLService_Aidl: callClient:clientID:1 exist:1, event:18, isOneWay:0
+09-17 15:07:09.363  1462  8461 D HoloAudio::SpecailizerPLService_Aidl: getMssEnable --- com.example.fourlangasr[0]
+09-17 15:07:09.363  1950  2646 D OplusMirageWindowManagerService: onTaskRemoved displayid:0 taskId:756 callers:com.android.server.wm.MirageWindowManagerExtImpl.onTaskRemoved:47 com.android.server.wm.TaskDisplayArea.removeChildTask:391 com.android.server.wm.TaskDisplayArea.removeChild:380 com.android.server.wm.WindowContainer.removeImmediately:1097 com.android.server.wm.TaskFragment.removeImmediately:3773 
+09-17 15:07:09.364  1950  2646 D OplusAlwaysAliveManager: removing: 756, ComponentInfo{com.example.fourlangasr/com.example.fourlangasr.MainActivity}
+09-17 15:07:09.364  2515  2725 I metis_v2_AppDiedObserver: shortcutAppDiedCallback, fenceKey = app_died_shortcut
+09-17 15:07:09.365  2515  2885 D HLog-UpMgr: [metis]CheckWhetherUploadBody Mgr:com.oplus.sdp.cf.c@a186e20
+09-17 15:07:09.365  2515  2885 D HLog-MultiConfigManage: [metis]checkAllPushTask
+09-17 15:07:09.365  2515  2885 D HLog-MultiConfigManage: [metis]checkAllPushTask existPushInfo : 
+09-17 15:07:09.366  2616  2697 D ZoomController: onTaskRemoved
+09-17 15:07:09.366  1950  2646 W ProcessStats: Tracking association SourceState{1cbd44e com.nearme.gamecenter/10301 Service #96244} whose proc state 8 is better than process ProcessState{715acac com.oplus.games/10131 pkg=com.oplus.games} proc state 15 (8 skipped)
+09-17 15:07:09.366  2616  2697 D ZoomController: onTaskRemoved
+09-17 15:07:09.366  1950  2646 D BootPressureHolder:  clear delayed queue records for com.example.fourlangasr
+09-17 15:07:09.367  1950  2646 D ActivityTaskManager: The isLandscapeFullscreenEnabled is: com.android.launcher/.Launcher
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostSceneManager: sceneStateUpdate: 5023,com.example.fourlangasr,switch:[false, true, true, false]
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostGame: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: false
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostMeeting: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: true
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostCommon: onSceneUpdated: 5023,com.example.fourlangasr, caller: com.android.launcher
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostConcert: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: true,rus:true
+09-17 15:07:09.368  3081  3518 D OplusLinkBoostLiver: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: false
+09-17 15:07:09.368  1950  2464 I OplusHansManager : onUidActive(), uid=10389, pkgName=com.example.fourlangasr, can enter SM
+09-17 15:07:09.368  2838  8100 I TaskStackChangeListeners: onTaskRemoved(), cur=756
+09-17 15:07:09.368  1950  2464 I OplusHansManager : onUidActive() update stay time, uid=10389, pkgName=com.example.fourlangasr, U stay=0
+09-17 15:07:09.368  2838  8100 I TaskStackChangeListeners: onTaskRemoved(), cur=756
+09-17 15:07:09.369  2838  3231 I SystemUiProxy: SystemUiProxy#getRecentTasks isInGoRecentsAnim: false
+09-17 15:07:09.369  1950  3101 D BroadcastQueue: setDeferPolicy processName: {} uid: 10389 policy: 1 defer: false
+09-17 15:07:09.370  1950  3101 I OplusHansManager : rm p_bc uid 10389, r: uidGone
+09-17 15:07:09.370  1122 13259 I app_process: HeapTask is not gc_task
+09-17 15:07:09.370  1950  3101 I OplusBinderProxy: proxyBinder uid: 10389 pkg: com.example.fourlangasr proxy: false calling: OFreezer
+09-17 15:07:09.371  1950  2646 D ActivityTaskManager: Skipping, invisible task: Task{3b749f7 #5 type=undefined I=com.android.launcher/.Launcher}
+09-17 15:07:09.371  1950  3101 I OplusHansManager : up_alarm 10389
+09-17 15:07:09.371  1950  3101 D OplusAlarmAdjustment: unproxyAlarmsByUid(), uid=10389, pkgName=com.example.fourlangasr, requester=1
+09-17 15:07:09.371  1950  3101 I OplusHansManager : up_job: 10389
+09-17 15:07:09.371  1950  3101 I OplusHansManager : up_service: 10389
+09-17 15:07:09.371  1950  2517 D OAppNetControlService: Hans update:[10389=false][0|0] blackList:[10042, 10359, 10337, 10238, 10384, 10311, 10336, 10322]
+09-17 15:07:09.372  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr enter SM
+09-17 15:07:09.372  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr R enter(), D stay=0
+09-17 15:07:09.372  1950  2234 D OplusAlarmAdjustMap: removeProxyUid, uid=10389, requester=1
+09-17 15:07:09.373  1950  2646 D OplusSplitScreenManagerService: com.lemon.lv unSupportsSplitScreen by blockList or ForbidActivityList
+09-17 15:07:09.374  1950  2646 D ActivityTaskManager: after skip size:19,pre-Filtered:[com.tencent.mm 751, com.phoenix.read 741, com.baidu.baijia 748, com.ss.android.article.news 750, com.tencent.mp 749, com.heytap.music 740, com.heytap.market 676, com.sina.weibo 704, com.example.minicpm_v_demo 719, com.android.contacts 711, com.ss.android.ugc.aweme 752, com.coloros.weather2 715, com.lemon.lv 725, com.android.mms 666, tv.danmaku.bili 723, com.android.settings 716, com.xunmeng.pinduoduo 635, com.oplus.wirelesssettings 728, com.example.fourlangasr 756]
+09-17 15:07:09.374  1950  2031 V GrammaticalInflectionUtils: AttributionSource: android.content.AttributionSource@1887d900 does not have READ_SYSTEM_GRAMMATICAL_GENDER permission.
+09-17 15:07:09.374  1157 21433 I hwcomposer: [HWCDisplay] (0 updateFps():4519), (type:1, mode:2) fps:0.214162,dur:9338.74,max:9130.33,min:208.41  
+09-17 15:07:09.376  1950  2686 W ParceledListSlice: Element #4 is 47272 bytes.
+09-17 15:07:09.378  1950  2032 D OplusFlexibleWindowMinimizedManagerHelper: onTaskVanished taskInfo:756 task:Task{3b4c00 #756 type=standard A=10389:com.example.fourlangasr}
+09-17 15:07:09.378  1950  2032 D OplusFlexibleDragToSplitAnimController: visibleFlexibleTaskInfos delete:756
+09-17 15:07:09.378  1950  2032 D FlexibleTaskController: no need releaseFlexibleCaptionView or destroyFlexibleDragLeash when non-caption-view-task vanished, task=Task{3b4c00 #756 type=standard A=10389:com.example.fourlangasr}
+09-17 15:07:09.378  1950  2032 D FlexibleWindowManagerService: notifyFlexibleTaskVanish taskId : 756 is not taskEmbedded
+09-17 15:07:09.378  1950  2032 D FlexibleWindowManagerService: onFlexibleWindowTaskVanished: task = 756,size:1
+09-17 15:07:09.379  1950  2032 D OplusFlexibleWindowMinimizedManagerHelper: onTaskVanished taskInfo:756 task:Task{3b4c00 #756 type=standard A=10389:com.example.fourlangasr}
+09-17 15:07:09.379  1950  2032 D OplusFlexibleDragToSplitAnimController: visibleFlexibleTaskInfos delete:756
+09-17 15:07:09.379  1950  2032 D FlexibleTaskController: no need releaseFlexibleCaptionView or destroyFlexibleDragLeash when non-caption-view-task vanished, task=Task{3b4c00 #756 type=standard A=10389:com.example.fourlangasr}
+09-17 15:07:09.379  1950  2032 D FlexibleWindowManagerService: notifyFlexibleTaskVanish taskId : 756 is not taskEmbedded
+09-17 15:07:09.379  1950  2032 D FlexibleWindowManagerService: onFlexibleWindowTaskVanished: task = 756,size:1
+09-17 15:07:09.379  2838  2980 E EmbeddedWindowTaskOrganizer: onTaskVanished: get unknown taskId=756
+09-17 15:07:09.379  2616  2697 D ShellTaskOrganizer: Task vanished taskId=756
+09-17 15:07:09.380  2616  2697 D ShellTaskOrganizerExt: visibleFlexibleTaskInfos delete:756
+09-17 15:07:09.380  2616  2697 D ShellTaskOrganizerExt: isOnCanvas size:0
+09-17 15:07:09.380  2616  2697 D ShellTaskOrganizerExt: isOnThreeFlexibleCanvas size:0
+09-17 15:07:09.380  2616  2697 D FlexibleSeekBarManager: removeAlpha for taskId=756
+09-17 15:07:09.380  2838  2980 E EmbeddedWindowTaskOrganizer: onTaskVanished: get unknown taskId=756
+09-17 15:07:09.385  1167  1361 I OriginChannel: now system_time:455530017	pwm_rgb: system_time:455529753, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19870, g:16675, b:10647, c:45748, algo:2, end:33775, ts:455529645017749	pwm_rgb: system_time:455529753, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20142, g:16910, b:10795, c:46405, algo:2, end:33775, ts:455529661683749	pwm_rgb: system_time:455529753, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19973, g:16781, b:10713, c:46020, algo:2, end:33775, ts:455529678349749	pwm_rgb: system_time:455529753, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19876, g:16694, b:10657, c:45807, algo:2, end:33775, ts:455529695015749	pwm_rgb: system_time:455529753, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20165, g:16924, b:10804, c:46402, algo:2, end:99311, ts:455529711681749	
+09-17 15:07:09.386  1950  2040 W UserAwareMgr: event can not be released, id: 2020, count: 2, releasePid: 2838
+09-17 15:07:09.386  2838  3231 I SystemUiProxy: SystemUiProxy#getRecentTasks isInGoRecentsAnim: false
+09-17 15:07:09.387  1122  1122 D Zygote  : Forked child process 13422
+09-17 15:07:09.388  1950  2686 D ActivityTaskManager: Skipping, invisible task: Task{3b749f7 #5 type=undefined I=com.android.launcher/.Launcher}
+09-17 15:07:09.389  1950  2044 I ActivityManager: Start proc 13422:com.example.fourlangasr/u0a389 for added application com.example.fourlangasr
+09-17 15:07:09.389  1950  2029 I ActivityManager: ProcessObserver broadcast disabled
+09-17 15:07:09.389  1950 28052 I OStatsManager_OplusBatteryStatsManager: updateStateTime: PkgName = com.example.fourlangasr, uid = 10389, state to bg, mForegroundCnt = 0, isFg = false
+09-17 15:07:09.389  1950  3110 I OPM     : handleProcessStart : ProcessRecord{ae58b5d 13422:com.example.fourlangasr/u0a389}
+09-17 15:07:09.390  1950  2686 D OplusSplitScreenManagerService: com.lemon.lv unSupportsSplitScreen by blockList or ForbidActivityList
+09-17 15:07:09.390  1950  2101 I MemoryOperationUtils: add 13422 to com.example.fourlangasr
+09-17 15:07:09.391  1950  2686 D ActivityTaskManager: after skip size:19,pre-Filtered:[com.tencent.mm 751, com.phoenix.read 741, com.baidu.baijia 748, com.ss.android.article.news 750, com.tencent.mp 749, com.heytap.music 740, com.heytap.market 676, com.sina.weibo 704, com.example.minicpm_v_demo 719, com.android.contacts 711, com.ss.android.ugc.aweme 752, com.coloros.weather2 715, com.lemon.lv 725, com.android.mms 666, tv.danmaku.bili 723, com.android.settings 716, com.xunmeng.pinduoduo 635, com.oplus.wirelesssettings 728, com.example.fourlangasr 756]
+09-17 15:07:09.394  1950  2686 W ParceledListSlice: Element #4 is 47272 bytes.
+09-17 15:07:09.397 13422 13422 I ple.fourlangasr: isSwordfishLaunchAppEnabled_ 1 isSwordfishInstallAppEnabled_ 1
+09-17 15:07:09.397 13422 13422 I ple.fourlangasr: Late-enabling -Xcheck:jni
+09-17 15:07:09.404  1950  2101 I resRelease: policy type is 1
+09-17 15:07:09.420 13422 13422 E ple.fourlangasr: Unknown bits set in runtime_flags: 0x40000000
+09-17 15:07:09.420 13422 13422 I ple.fourlangasr: Using CollectorTypeCMC GC.
+09-17 15:07:09.423  4615  4652 I adbd    : jdwp connection from 13422
+09-17 15:07:09.428 13422 13422 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+09-17 15:07:09.433 13422 13422 I OneTrace: Mark active for pid=13422? true
+09-17 15:07:09.433 13422 13422 D cutils-dev: otrace_set_tracing_enabled? true tag:0
+09-17 15:07:09.433 13422 13434 D cutils-dev: properties changed in otrace_seq_number_changed!
+09-17 15:07:09.433  4615  4615 I adbd    : Remote process closed the socket (on MSG_PEEK)
+09-17 15:07:09.435  1122  1122 I Zygote  : Process 30090 exited due to signal 9 (Killed)
+09-17 15:07:09.436  1311  1378 I ClientCache: removeProcess: Cache owner=0xb40000775355bfe0
+09-17 15:07:09.436  1311  2505 I SurfaceFlinger: [SF client] REMOVE (0xb400007781a73ce0) for (30090:com.example.fourlangasr)
+09-17 15:07:09.435  1950  2045 I libprocessgroup: Removed cgroup /sys/fs/cgroup/apps/uid_10389/pid_30090
+09-17 15:07:09.437  1950  3635 D TextToSpeechManagerPerUserService: Unbinding TTS engine: com.oplus.ttsaccessibilityengine. Reason: client process death is reported
+09-17 15:07:09.437  1950  2686 I ActivityManager: Death received, pid = 0, processName = com.example.fourlangasr for thread android.os.BinderProxy@e793ca8
+09-17 15:07:09.437  8419  8419 E InputEventReceiver: channel 'ClientState{5d12eb0 mUid=10389 mPid=30090 mSelfReportedDisplayId=0}' ~ Publisher closed input channel or an error occurred. events=0x9
+09-17 15:07:09.437  1950  1950 I ServiceConnector.Impl: unbindJobThread: connection = ServiceConnector@434(Intent { act=android.intent.action.TTS_SERVICE xflg=0x4 pkg=com.oplus.ttsaccessibilityengine mCallingUid=1000 }, user: 0)[Unbinding...]service = android.speech.tts.ITextToSpeechService$Stub$Proxy@9f48059 mBinding = false
+09-17 15:07:09.439  1950  3642 D SplitScreenAppReader: SPLIT_TOUCH support check:com.example.fourlangasr = false
+09-17 15:07:09.439  1950  3642 D ActivityTaskManagerServiceExtImpl: preBindApplication record is null
+09-17 15:07:09.439  1950  3642 D RGBNormalizeServer: OplusRGBNormalize feature enabled ? true
+09-17 15:07:09.439  1950  3642 D ResourcesManagerCache: For package com.example.fourlangasr we got cacheList [null] appInfoExt is null ? false hasFeature ? false
+09-17 15:07:09.442  1950  2031 W ActivityManager: setHasOverlayUi called on unknown pid: 30090
+09-17 15:07:09.442  1950  5666 V ActivityManager: Got obituary of 30090:com.example.fourlangasr
+09-17 15:07:09.443  1950  1950 D CompatChangeReporter: Compat change id reported: 311208629; UID 10199; state: ENABLED
+09-17 15:07:09.442  3197  9222 D ActivityAdapter: uid active, uid=10389
+09-17 15:07:09.444  1950  2040 I UserAwareMgr: handleAppChangedToBg, pkgName: com.oplus.ttsaccessibilityengine, pid: 13192
+09-17 15:07:09.444  1950  2040 W UserAwareMgr: app not not found or not visible: null
+09-17 15:07:09.444  1950  2040 W UserAwareMgr: handleAppChangedToBg process is empty
+09-17 15:07:09.444  1950  2355 W IPCThreadState: Sending oneway calls to frozen process.
+09-17 15:07:09.444  1950  1950 W TextToSpeechManagerPerUserService: Disconnected from TTS engine
+09-17 15:07:09.444  1950  1950 W ActivityManager: pid 1950 system sent binder code 2 with flags 1 to frozen apps and got error -32
+09-17 15:07:09.444  1950  1950 I TextToSpeechManagerPerUserService: Failed running callback method: android.os.DeadObjectException
+09-17 15:07:09.444  1950  1950 W ServiceConnector.Impl: mayInterruptIfRunning not supported - ignoring
+09-17 15:07:09.445 13192 13192 D TtsService: onUnbind: 剩余连接数=0
+09-17 15:07:09.445 13192 13192 D TtsService: onStop
+09-17 15:07:09.445 13192 13192 D SLP-ENGINE: --------stopSpeaking-------
+09-17 15:07:09.445  1950  2355 W IPCThreadState: Sending oneway calls to frozen process.
+09-17 15:07:09.445  1950  2231 W ActivityManager: pid 4809 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 5016 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 5041 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 5220 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 6352 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 9610 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 9680 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 10394 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 11802 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 16169 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 16628 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 19365 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 21832 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 22134 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 23920 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 25343 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 26096 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 26727 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 28171 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 29701 received async transactions while frozen
+09-17 15:07:09.446  1950  2231 W ActivityManager: pid 30472 received async transactions while frozen
+09-17 15:07:09.446 13192 13192 D breeno_offline_tts: release status=2
+09-17 15:07:09.446 13192 13192 D breeno_offline_tts: oai_unload_model!
+09-17 15:07:09.449 13192 13192 D breeno_offline_tts: oai_destroy_instance!
+09-17 15:07:09.450 13192 13192 D SLP-ENGINE: --------stopSpeaking-------
+09-17 15:07:09.450 13192 13192 D SLP-ENGINE: --------release------- 
+09-17 15:07:09.451  1950  3642 D ActivityManager: Async freezing 13192 com.oplus.ttsaccessibilityengine:tts
+09-17 15:07:09.455 13422 13435 I ple.fourlangasr: HeapTask is not gc_task
+09-17 15:07:09.456 13422 13422 D CompactWindowAppManager: initCompactApplicationInfo CompactMode: , NormalMode: 
+09-17 15:07:09.460 13422 13422 V Configuration: Updating configuration, locales updated from [] to [zh_CN_#Hans]
+09-17 15:07:09.461 13422 13422 D OplusScrollToTopManager: setIsInWhiteList false
+09-17 15:07:09.464 13422 13422 D OplusViewDebugManager: OplusViewDebugManager Constructor android.view.debug.OplusViewDebugManager@f5687e0 [mHasViewDebugProperty true] [mHasMsgDebugProperty false] [DEBUG false] [EXTRAINFOENABLE false] [LIGHT_OS false]
+09-17 15:07:09.467 13422 13422 E DynamicFramerate [AnimationConfigManager]: initAnimationConfig: animAwareItem is empty, return
+09-17 15:07:09.467 13422 13422 D CompatChangeReporter: Compat change id reported: 242716250; UID 10389; state: ENABLED
+09-17 15:07:09.473 13422 13422 W libc    : Access denied finding property "ro.odm.prev.product.name"
+09-17 15:07:09.474 13422 13422 W libc    : Access denied finding property "ro.vendor.oplus.gundam"
+09-17 15:07:09.475 13422 13422 W ActivityThread: Package uses different ABI(s) than its instrumentation: package[com.example.fourlangasr]: arm64-v8a, null instrumentation[com.example.fourlangasr.test]: null, null
+09-17 15:07:09.478 13422 13422 W ple.fourlangasr: ClassLoaderContext shared library size mismatch. Expected=2, found=0 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[])
+09-17 15:07:09.479 13422 13422 W ple.fourlangasr: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020])
+09-17 15:07:09.480 13422 13422 W ple.fourlangasr: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393])
+09-17 15:07:09.538  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:09.539  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:09.539  1205  1205 D SensorFeature: write 39 bytes:455530154440448,455530171107115,33777,0
+09-17 15:07:09.602 13422 13422 I Quality : Odex status:io-error-no-oat filter:run-from-apk reason:unknown location:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk cost:112
+09-17 15:07:09.605 13422 13422 D nativeloader: Configuring clns-9 for other apk /system/framework/android.test.runner.jar:/system/framework/android.test.mock.jar:/system/framework/android.test.base.jar:/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/base.apk:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk. target_sdk_version=34, uses_libraries=, library_path=/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/lib/arm64:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/lib/arm64:/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/base.apk!/lib/arm64-v8a:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.example.fourlangasr
+09-17 15:07:09.610 13422 13422 I ple.fourlangasr: AssetManager2(0xb4000071506a0428) locale list changing from [] to [zh-Hans-CN]
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment: Currently set values for:
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[]
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment:   angle_gl_driver_selection_values=[]
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment: com.example.fourlangasr is not listed in per-application setting
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment: ANGLE allowlist from config: 
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment: com.example.fourlangasr is not listed in ANGLE allowlist or settings, returning default
+09-17 15:07:09.614 13422 13422 V GraphicsEnvironment: App is not on the allowlist for updatable production driver.
+09-17 15:07:09.616 13422 13422 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+09-17 15:07:09.618 13422 13422 D nativeloader: Configuring clns-10 for other apk /system/framework/android.test.mock.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/lib/arm64:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/lib/arm64, permitted_path=/data:/mnt/expand
+09-17 15:07:09.618 13422 13422 D nativeloader: Extending system_exposed_libraries: libapuwareapusys.mtk.so:libapuwareapusys_v2.mtk.so:libapuwarexrp.mtk.so:libapuwarexrp_v2.mtk.so:libapuwareutils.mtk.so:libapuwareutils_v2.mtk.so:libapuwarehmp.mtk.so:libapuwareaiste.mtk.so:libneuron_graph_delegate.mtk.so:libneuronusdk_adapter.mtk.so:libtflite_mtk.mtk.so:libarmnn_ndk.mtk.so:libcmdl_ndk.mtk.so:libnir_neon_driver_ndk.mtk.so:libmvpu_runtime.mtk.so:libmvpu_runtime_pub.mtk.so:libmvpu_engine_pub.mtk.so:libmvpu_pattern_pub.mtk.so:libmvpuop_mtk_cv.mtk.so:libmvpuop_mtk_nn.mtk.so:libmvpu_runtime_25.mtk.so:libmvpu_runtime_25_pub.mtk.so:libmvpu_engine_25_pub.mtk.so:libmvpu_pattern_25_pub.mtk.so:libmvpuop25_mtk_cv.mtk.so:libmvpuop25_mtk_nn.mtk.so:libmvpu_config.mtk.so:libmvpu_engine_30.mtk.so:libmvpu_pattern_30.mtk.so:libmvpu_cic_ci_compiler_30.mtk.so:libmvpu_runtime_30.mtk.so:libmvpu_clc_30_mvpu_debuginfo.mtk.so:libmvpu_clc_30_mvpu_elf.mtk.so:libmvpu_clc_30_mvpu_utility.mtk.so:libneuronservice_adapter.mtk.so:libneuron_sys_util.mtk.so:libmvpuop30_mtk_nn.mtk.so:libneuron
+09-17 15:07:09.619 13422 13422 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+09-17 15:07:09.620 13422 13422 D nativeloader: Configuring clns-11 for other apk /system/framework/android.test.runner.jar. target_sdk_version=34, uses_libraries=ALL, library_path=/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/lib/arm64:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/lib/arm64, permitted_path=/data:/mnt/expand
+09-17 15:07:09.620 13422 13422 D nativeloader: Extending system_exposed_libraries: libapuwareapusys.mtk.so:libapuwareapusys_v2.mtk.so:libapuwarexrp.mtk.so:libapuwarexrp_v2.mtk.so:libapuwareutils.mtk.so:libapuwareutils_v2.mtk.so:libapuwarehmp.mtk.so:libapuwareaiste.mtk.so:libneuron_graph_delegate.mtk.so:libneuronusdk_adapter.mtk.so:libtflite_mtk.mtk.so:libarmnn_ndk.mtk.so:libcmdl_ndk.mtk.so:libnir_neon_driver_ndk.mtk.so:libmvpu_runtime.mtk.so:libmvpu_runtime_pub.mtk.so:libmvpu_engine_pub.mtk.so:libmvpu_pattern_pub.mtk.so:libmvpuop_mtk_cv.mtk.so:libmvpuop_mtk_nn.mtk.so:libmvpu_runtime_25.mtk.so:libmvpu_runtime_25_pub.mtk.so:libmvpu_engine_25_pub.mtk.so:libmvpu_pattern_25_pub.mtk.so:libmvpuop25_mtk_cv.mtk.so:libmvpuop25_mtk_nn.mtk.so:libmvpu_config.mtk.so:libmvpu_engine_30.mtk.so:libmvpu_pattern_30.mtk.so:libmvpu_cic_ci_compiler_30.mtk.so:libmvpu_runtime_30.mtk.so:libmvpu_clc_30_mvpu_debuginfo.mtk.so:libmvpu_clc_30_mvpu_elf.mtk.so:libmvpu_clc_30_mvpu_utility.mtk.so:libneuronservice_adapter.mtk.so:libneuron_sys_util.mtk.so:libmvpuop30_mtk_nn.mtk.so:libneuron
+09-17 15:07:09.621 13422 13422 W ple.fourlangasr: ClassLoaderContext shared library size mismatch. Expected=2, found=3 (PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]} | PCL[]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/base.apk*1952467036:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk*4149850899])
+09-17 15:07:09.622 13422 13422 W ple.fourlangasr: ClassLoaderContext classpath size mismatch. expected=0, found=1 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/base.apk*1952467036:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk*4149850899])
+09-17 15:07:09.623 13422 13422 W ple.fourlangasr: ClassLoaderContext classpath size mismatch. expected=0, found=2 (PCL[] | PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]#PCL[/system/framework/android.test.runner.jar*895143020]{PCL[/system/framework/android.test.base.jar*2789897741]#PCL[/system/framework/android.test.mock.jar*3361312393]}};PCL[/system/framework/android.test.runner.jar*895143020:/system/framework/android.test.mock.jar*3361312393:/system/framework/android.test.base.jar*2789897741:/data/app/~~fJ7UWRQ2jp5aoBNARXOa5Q==/com.example.fourlangasr.test-f7c1JyeiueQSPnvwUIdQAQ==/base.apk*1952467036:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk*4149850899])
+09-17 15:07:09.650  1167  1361 I OriginChannel: now system_time:455530282	pwm_rgb: system_time:455530017, lux:386, time_delta:16, pwm_turbo:1, bri:1449, r:19988, g:16798, b:10729, c:46046, algo:2, end:33776, ts:455529893000456	pwm_rgb: system_time:455530017, lux:386, time_delta:16, pwm_turbo:1, bri:1449, r:20136, g:16935, b:10801, c:46399, algo:2, end:33776, ts:455529909666456	pwm_rgb: system_time:455530017, lux:386, time_delta:16, pwm_turbo:1, bri:1449, r:19855, g:16652, b:10647, c:45712, algo:2, end:33776, ts:455529926332456	pwm_rgb: system_time:455530017, lux:386, time_delta:16, pwm_turbo:1, bri:1449, r:20003, g:16823, b:10722, c:46127, algo:2, end:33776, ts:455529942998456	pwm_rgb: system_time:455530017, lux:386, time_delta:16, pwm_turbo:1, bri:1449, r:20130, g:16907, b:10795, c:46384, algo:2, end:99312, ts:455529959664456	
+09-17 15:07:09.733 13422 13422 I Quality : Odex status:io-error-no-oat filter:run-from-apk reason:unknown location:/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk cost:100
+09-17 15:07:09.736 13422 13422 I ple.fourlangasr: AssetManager2(0xb4000071506a0d28) locale list changing from [] to [zh-Hans-CN]
+09-17 15:07:09.740 13422 13422 D ResourcesManagerExtImpl: applyConfigurationToAppResourcesLocked app.getDisplayId() return callback.displayId:-1
+09-17 15:07:09.741 13422 13422 I MonitoringInstr: newApplication called!
+09-17 15:07:09.754 13422 13422 D OplusGraphicsEvent: OplusGraphicsEventListener create now!
+09-17 15:07:09.756 13422 13422 D OplusGraphicsEvent: addEventListener success!
+09-17 15:07:09.761 13422 13422 D nativeloader: Load libpowerhalwrap_jni.so using system ns (caller=/system_ext/framework/mediatek-framework.jar): ok
+09-17 15:07:09.761 13422 13422 I PowerHalWrapper: PowerHalWrapper.getInstance 
+09-17 15:07:09.761 13422 13422 I PowerHalWrapper: PowerHalWrapper.getInstance 
+09-17 15:07:09.761 13422 13422 I M-ProMotion: M-ProMotion is disabled
+09-17 15:07:09.767 13422 13422 I MonitoringInstr: Instrumentation started!
+09-17 15:07:09.781  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:09.781  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:09.782  1205  1205 D SensorFeature: write 39 bytes:455530396782833,455530413449500,33778,0
+09-17 15:07:09.805 13422 13422 I AndroidJUnitRunner: onCreate Bundle[{class=com.example.fourlangasr.OnDevicePipelineTest#speaker_sameSpeakerMatchesExistingProfile}]
+09-17 15:07:09.807 13422 13422 V TestEventClient: No service name argument was given (testDiscoveryService, testRunEventService or orchestratorService)
+09-17 15:07:09.808 13422 13445 D AndroidJUnitRunner: onStart is called.
+09-17 15:07:09.810  1950  3642 I ActivityManager: Flag disabled. Ignoring finishAttachApplication from uid: 10389. pid: 13422
+09-17 15:07:09.811 13422 13422 D OplusActivityManager: get AMS extension: android.os.BinderProxy@aba37c2
+09-17 15:07:09.813 13422 13422 E SchedAssist: open sharedFd failed with error=No such file or directory
+09-17 15:07:09.813 13422 13422 E SchedAssist: open sharedFd failed with error=No such file or directory
+09-17 15:07:09.813 13422 13422 E SchedAssist: open sharedFd failed with error=Permission denied
+09-17 15:07:09.813 13422 13422 E SchedAssist: open sharedFd failed with error=Permission denied
+09-17 15:07:09.814 13422 13422 I MonitoringInstr: No JSBridge.
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: initFrameRateConfig: init with OplusDynamicFRTCConfig
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: 	levelsFor120hz: [120, 60]
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: 	thresholdsFor120hz: [300]
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: 	levelsFor90hz: [90, 45]
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: 	thresholdsFor90hz: [214]
+09-17 15:07:09.815 13422 13422 I DynamicFramerate [FRTCConfigManager]: FRTCConfigManager: FRTC_CAPABILITY = 120, package name = com.example.fourlangasr, WINDOW_ANIMATION_SPEED_RATE = 10, SCROLL_ANIMATION_SPEED_RATE = 20, PACKAGE_ENABLE = true
+09-17 15:07:09.816 13422 13422 I DynamicFramerate [DynamicFrameRateController]: init info: mPackageName = com.example.fourlangasr, mIsEnabled = true
+09-17 15:07:09.823  1950  2646 D CompatChangeReporter: Compat change id reported: 161145287; UID 10389; state: ENABLED
+09-17 15:07:09.824  1950  2646 E ActivityManager: registerReceiver failed.
+09-17 15:07:09.824  1950  2646 W System.err: java.lang.SecurityException: com.example.fourlangasr: One of RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED should be specified when a receiver isn't being registered exclusively for system broadcasts
+09-17 15:07:09.824  1950  2646 W System.err: 	at com.android.server.am.BroadcastController.registerReceiverWithFeatureTraced(BroadcastController.java:498)
+09-17 15:07:09.824  1950  2646 W System.err: 	at com.android.server.am.BroadcastController.registerReceiverWithFeature(BroadcastController.java:262)
+09-17 15:07:09.824  1950  2646 W System.err: 	at com.android.server.am.ActivityManagerService.registerReceiverWithFeature(ActivityManagerService.java:15711)
+09-17 15:07:09.824  1950  2646 W System.err: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:2803)
+09-17 15:07:09.824  1950  2646 W System.err: 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:3015)
+09-17 15:07:09.824  1950  2646 W System.err: 	at android.os.Binder.execTransactInternal(Binder.java:1443)
+09-17 15:07:09.824  1950  2646 W System.err: 	at android.os.Binder.execTransact(Binder.java:1382)
+09-17 15:07:09.825  1950 18280 D OplusStatistics--: drop by DRS prefilter: {appId=20120, logTag=20120, eventId=register_crash }
+09-17 15:07:09.825 13422 13445 I InstrConnection: Could not send broadcast or register receiver (isolatedProcess?)
+09-17 15:07:09.833 13422 13445 D TestRequestBuilder: Skipping class path scanning and directly running [com.example.fourlangasr.OnDevicePipelineTest]
+09-17 15:07:09.858 13422 13445 D AndroidJUnitRunner: Use the raw file system for managing file I/O.
+09-17 15:07:09.866 13422 13445 D TestExecutor: Adding listener androidx.test.internal.runner.listener.LogRunListener
+09-17 15:07:09.867 13422 13445 D TestExecutor: Adding listener androidx.test.internal.runner.listener.InstrumentationResultPrinter
+09-17 15:07:09.867 13422 13445 D TestExecutor: Adding listener androidx.test.internal.runner.listener.ActivityFinisherRunListener
+09-17 15:07:09.867 13422 13445 D TestExecutor: Adding listener androidx.test.internal.runner.listener.TraceRunListener
+09-17 15:07:09.872 13422 13445 I TestRunner: run started: 1 tests
+09-17 15:07:09.873 13422 13445 I TestRunner: started: speaker_sameSpeakerMatchesExistingProfile(com.example.fourlangasr.OnDevicePipelineTest)
+09-17 15:07:09.885 13422 13445 W libc    : Access denied finding property "ro.hardware.chipname"
+09-17 15:07:09.887 13422 13445 D nativeloader: Load /data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk!/lib/arm64-v8a/libsherpa-onnx-jni.so using class loader ns clns-9 (caller=/data/app/~~T8YwurY9U2CGzSLjfFstkA==/com.example.fourlangasr-bEDYChRAEc6j9HD5ViEIqg==/base.apk): ok
+09-17 15:07:09.888 13422 13445 W sherpa-onnx: /home/runner/work/sherpa-onnx/sherpa-onnx/sherpa-onnx/jni/speaker-embedding-extractor.cc:Java_com_k2fsa_sherpa_onnx_SpeakerEmbeddingExtractor_newFromAsset:54
+09-17 15:07:09.888 13422 13445 W sherpa-onnx: new config:
+09-17 15:07:09.888 13422 13445 W sherpa-onnx: SpeakerEmbeddingExtractorConfig(model="speaker_embedding.onnx", num_threads=1, debug=False, provider="cpu")
+09-17 15:07:09.914  1167  1361 I OriginChannel: now system_time:455530547	pwm_rgb: system_time:455530282, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19855, g:16680, b:10657, c:45739, algo:2, end:33777, ts:455530124285994	pwm_rgb: system_time:455530283, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20115, g:16905, b:10782, c:46360, algo:2, end:33777, ts:455530140951994	pwm_rgb: system_time:455530283, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19961, g:16770, b:10722, c:46026, algo:2, end:33777, ts:455530157617994	pwm_rgb: system_time:455530283, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19873, g:16694, b:10650, c:45801, algo:2, end:33777, ts:455530174283994	pwm_rgb: system_time:455530283, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20162, g:16930, b:10801, c:46438, algo:2, end:99313, ts:455530190949994	
+09-17 15:07:09.968  1315  1325 D ccci_mdinit: (1):monitor_time_update_thread round:34127 ########
+09-17 15:07:10.023  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:10.025  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:10.025  1205  1205 D SensorFeature: write 39 bytes:455530639677910,455530656344577,33779,0
+09-17 15:07:10.135  1211  1229 I touch-main: [readTemper] read temperature 34206
+09-17 15:07:10.179  1167  1361 I OriginChannel: now system_time:455530811	pwm_rgb: system_time:455530547, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19991, g:16784, b:10697, c:46067, algo:2, end:33778, ts:455530372268840	pwm_rgb: system_time:455530547, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20162, g:16902, b:10798, c:46381, algo:2, end:33778, ts:455530388934840	pwm_rgb: system_time:455530547, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19837, g:16675, b:10631, c:45691, algo:2, end:33778, ts:455530405600840	pwm_rgb: system_time:455530547, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20017, g:16823, b:10738, c:46109, algo:2, end:33778, ts:455530422266840	pwm_rgb: system_time:455530547, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20100, g:16874, b:10776, c:46327, algo:2, end:99314, ts:455530438932840	
+09-17 15:07:10.181  1555  1723 D AALLightSensor: oldLux=360 [SA:-1 LA:-1] newLux=360 (oriLux: 372)
+09-17 15:07:10.268  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:10.270  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:10.270  1205  1205 D SensorFeature: write 39 bytes:455530884484140,455530901150807,33780,0
+09-17 15:07:10.302  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:10.303  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:10.349  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, event: 112
+09-17 15:07:10.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] startTime: 1789628830346
+09-17 15:07:10.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] currentAvailmem: 4961
+09-17 15:07:10.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] killTriggerMem: 2200
+09-17 15:07:10.350  2343  2896 V OCAM_Performance: onOsenseEventSceneChanged, [extra] ioLevel: 0
+09-17 15:07:10.350  2343  2732 D OCAM_Performance: onOsenseEventSceneChanged, pressure IO eventStateType: 2, startTime: 1789628830346, currentAvailmem: 4961, killTriggerMem: 2200, ioLevel: 0
+09-17 15:07:10.445  1167  1361 I OriginChannel: now system_time:455531077	pwm_rgb: system_time:455530811, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20147, g:16930, b:10801, c:46414, algo:2, end:33779, ts:455530620250863	pwm_rgb: system_time:455530811, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19947, g:16770, b:10701, c:45984, algo:2, end:33779, ts:455530636916863	pwm_rgb: system_time:455530811, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19870, g:16686, b:10641, c:45789, algo:2, end:33779, ts:455530653582863	pwm_rgb: system_time:455530811, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:20165, g:16935, b:10804, c:46453, algo:2, end:33779, ts:455530670248863	pwm_rgb: system_time:455530811, lux:379, time_delta:16, pwm_turbo:1, bri:1449, r:19929, g:16739, b:10707, c:45957, algo:2, end:99315, ts:455530686914863	
+09-17 15:07:10.445  1950  2229 D FusionLightNextGen: process end reported = 1, mode: 1, cnt: 69335, lux 372.3, cct -1.0, r/g/b/c: 19834.0/16686.0/10647.0/45718.0, R/G/B: 79.0/82.0/81.0, bri 1449.0, match 0.90, ir 0.015703, conf 0.0, ts 455530918231796
+09-17 15:07:10.455  4286 12201 E midasd  : getTotalFlipsFromSf mCurFrameCount: 185612
+09-17 15:07:10.456  4286 12201 I midasd  : DisplayAgent updateDisplayDevInfo getRenderFps mFps:60 mRenderFps:10 mWidth:1080 mHeight:2344
+09-17 15:07:10.494 13422 13445 I OnDeviceTest: Speaker enroll: Speaker 1 reason=NEW profiles=1
+09-17 15:07:10.511  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:10.512  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:10.514  1205  1205 D SensorFeature: write 39 bytes:455531127417294,455531144083961,33781,0
+09-17 15:07:10.709  1167  1361 I OriginChannel: now system_time:455531341	pwm_rgb: system_time:455531077, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20000, g:16784, b:10704, c:46046, algo:2, end:33780, ts:455530851567796	pwm_rgb: system_time:455531077, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20147, g:16924, b:10798, c:46393, algo:2, end:33780, ts:455530868233796	pwm_rgb: system_time:455531077, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:19834, g:16686, b:10647, c:45718, algo:2, end:33780, ts:455530884899796	pwm_rgb: system_time:455531077, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20015, g:16821, b:10754, c:46160, algo:2, end:33780, ts:455530901565796	pwm_rgb: system_time:455531077, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20109, g:16910, b:10766, c:46327, algo:2, end:99316, ts:455530918231796	
+09-17 15:07:10.755  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:10.756  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:10.756  1205  1205 D SensorFeature: write 39 bytes:455531371278833,455531387945500,33782,0
+09-17 15:07:10.911 13422 13445 I OnDeviceTest: Speaker same-speaker test: Speaker 2 reason=NEW score=0.39225003 margin=NaN profiles=2
+09-17 15:07:10.913 13422 13445 E TestRunner: failed: speaker_sameSpeakerMatchesExistingProfile(com.example.fourlangasr.OnDevicePipelineTest)
+09-17 15:07:10.913 13422 13445 E TestRunner: ----- begin exception -----
+09-17 15:07:10.914 13422 13445 E TestRunner: java.lang.AssertionError: 同一说话人不应新建档案 expected:<1> but was:<2>
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.Assert.fail(Assert.java:89)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.Assert.failNotEquals(Assert.java:835)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.Assert.assertEquals(Assert.java:120)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at com.example.fourlangasr.OnDevicePipelineTest.speaker_sameSpeakerMatchesExistingProfile(OnDevicePipelineTest.kt:231)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at java.lang.reflect.Method.invoke(Native Method)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.model.FrameworkMethod$1.runReflectiveCall(FrameworkMethod.java:59)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.internal.runners.model.ReflectiveCallable.run(ReflectiveCallable.java:12)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.model.FrameworkMethod.invokeExplosively(FrameworkMethod.java:56)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner$1.evaluate(BlockJUnit4ClassRunner.java:100)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.runLeaf(ParentRunner.java:366)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:103)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.BlockJUnit4ClassRunner.runChild(BlockJUnit4ClassRunner.java:63)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at androidx.test.ext.junit.runners.AndroidJUnit4.run(AndroidJUnit4.java:162)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:128)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.Suite.runChild(Suite.java:27)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$4.run(ParentRunner.java:331)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$1.schedule(ParentRunner.java:79)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.runChildren(ParentRunner.java:329)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.access$100(ParentRunner.java:66)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$2.evaluate(ParentRunner.java:293)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner$3.evaluate(ParentRunner.java:306)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runners.ParentRunner.run(ParentRunner.java:413)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:137)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at org.junit.runner.JUnitCore.run(JUnitCore.java:115)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:67)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at androidx.test.internal.runner.TestExecutor.execute(TestExecutor.java:58)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at androidx.test.runner.AndroidJUnitRunner.onStart(AndroidJUnitRunner.java:446)
+09-17 15:07:10.914 13422 13445 E TestRunner: 	at android.app.Instrumentation$InstrumentationThread.run(Instrumentation.java:2632)
+09-17 15:07:10.914 13422 13445 E TestRunner: ----- end exception -----
+09-17 15:07:10.915 13422 13445 I TestRunner: finished: speaker_sameSpeakerMatchesExistingProfile(com.example.fourlangasr.OnDevicePipelineTest)
+09-17 15:07:10.918 13422 13445 I TestRunner: run finished: 1 tests, 1 failed, 0 ignored
+09-17 15:07:10.934  1950  2646 W OPLUS_LOG_LOAD: ==LOGS PROG INFO, prog(system_server) ==
+09-17 15:07:10.934  1950  2646 I ActivityManager: Force stopping com.example.fourlangasr appid=10389 user=0: finished inst
+09-17 15:07:10.935  1950  2646 E ActivityManager: Unable to freeze binder for 13422: -11
+09-17 15:07:10.935  1950  2646 W ProcessList: skipFreezePackageCgroup: uid=10389, pid=13422, rc=-11
+09-17 15:07:10.935  1950  2646 I ActivityManager: Killing 13422:com.example.fourlangasr/u0a389 (adj 0): stop com.example.fourlangasr due to finished inst
+09-17 15:07:10.936  8219 12148 D ShellSubscriberWorkerThread: the first 8 bytes empty, and RestData length > 8 
+09-17 15:07:10.937 13404 13404 I app_process: System.exit called, status: 0
+09-17 15:07:10.937 13404 13404 I AndroidRuntime: VM exiting with result code 0.
+09-17 15:07:10.937  1950  2646 I mtkpower_client: [PowerHal_Wrap_notifyAppState] com.example.fourlangasr/com.example.fourlangasr pid=13422 activityId:13422 state:3
+09-17 15:07:10.938  3197  9222 D ActivityAdapter: uid gone, uid=10389
+09-17 15:07:10.938  1179  1179 I vendor.mediatek.hardware.mtkpower_applist-service.mediatek: packName: com.example.fourlangasr actName: com.example.fourlangasr pid: 13422 activityId: 13422 uid: 10389 state: 3
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [notifyAPPstate] com.example.fourlangasr/com.example.fourlangasr, pid=13422, activityId=13422, uid=10389, state:DEAD, fps:120, win:0
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [notifyAPPstate] multi_resumed_app_count: 1
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [notifyAPPstate] multi_resumed_app_info[0] com.android.launcher/com.android.launcher.Launcher, pid:2838, activityId:168696319, fps:-1, isMultiWindow:1
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [getForegroundAPPCount] 1
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [notifyAPPstate] pack:com.example.fourlangasr, pid:13422, STATE_DEAD
+09-17 15:07:10.938  1179  1179 I MTK_APPList: [notifyNetdUID] 10389
+09-17 15:07:10.938  1950  2646 D MAGT_SYNC_FRAME: MAGT App State [NOTIFY]: package = com.example.fourlangasr, action = com.example.fourlangasr, pid = 13422, state = 3, uid = 10389
+09-17 15:07:10.940  1950  2646 D BootPressureHolder:  clear delayed queue records for com.example.fourlangasr
+09-17 15:07:10.941  1950  2646 D ActivityTaskManager: The isLandscapeFullscreenEnabled is: com.android.launcher/.Launcher
+09-17 15:07:10.942  1950  2464 I OplusHansManager : onUidGone(), 10389 com.example.fourlangasr exit SM
+09-17 15:07:10.942  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr R exit SM
+09-17 15:07:10.942  1950  3089 I OplusHansManager : uid=10389, pkg=com.example.fourlangasr R exit(), R stay=1
+09-17 15:07:10.942  1950  2464 I OplusHansManager : onUidGone(), 10389 com.example.fourlangasr alarm removed
+09-17 15:07:10.943  1950  2355 W IPCThreadState: Sending oneway calls to frozen process.
+09-17 15:07:10.944  1462  8461 D HoloAudio::SpecailizerPLService_Aidl: callClient:clientID:1 exist:1, event:18, isOneWay:0
+09-17 15:07:10.944  1950  2355 W IPCThreadState: Sending oneway calls to frozen process.
+09-17 15:07:10.944  1179  1179 I MTK_APPList: [notifyPID] 30090
+09-17 15:07:10.945  1462  8461 D HoloAudio::SpecailizerPLService_Aidl: getMssEnable --- com.example.fourlangasr[0]
+09-17 15:07:10.945  1950  2375 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+09-17 15:07:10.945  1950 23031 I OStatsManager_OplusBatteryStatsManager: updateStateTime: PkgName = com.example.fourlangasr, uid = 10389, state to em, mForegroundCnt = 0, isFg = false
+09-17 15:07:10.946  1950  3110 I OPM     : handleUidGone uid: 10389, disabled: false
+09-17 15:07:10.945  3081  3518 D OplusLinkBoostSceneManager: sceneStateUpdate: 5023,com.example.fourlangasr,switch:[false, true, true, false]
+09-17 15:07:10.946  3081  3518 D OplusLinkBoostGame: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: false
+09-17 15:07:10.946  3081  3518 D OplusLinkBoostMeeting: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: true
+09-17 15:07:10.946  3081  3518 D OplusLinkBoostCommon: onSceneUpdated: 5023,com.example.fourlangasr, caller: com.android.launcher
+09-17 15:07:10.946  3081  3518 D OplusLinkBoostConcert: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: true,rus:true
+09-17 15:07:10.946  3081  3518 D OplusLinkBoostLiver: onSceneUpdated: 5023,com.example.fourlangasr,switchOn: false
+09-17 15:07:10.950  1950  2375 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+09-17 15:07:10.950  1950  2375 D InetDiagMessage: Destroyed live tcp sockets for uids={10389} in 10ms
+09-17 15:07:10.955  1950  2375 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET, states=14
+09-17 15:07:10.960  1950  2375 D InetDiagMessage: Destroyed 0 sockets, proto=IPPROTO_TCP, family=AF_INET6, states=14
+09-17 15:07:10.960  1950  2375 D InetDiagMessage: Destroyed live tcp sockets for uids={20389} in 9ms
+09-17 15:07:10.973  1167  1361 I OriginChannel: now system_time:455531605	pwm_rgb: system_time:455531341, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20159, g:16916, b:10801, c:46414, algo:2, end:33781, ts:455531099550176	pwm_rgb: system_time:455531341, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19994, g:16787, b:10704, c:46017, algo:2, end:33781, ts:455531116216176	pwm_rgb: system_time:455531341, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19899, g:16706, b:10647, c:45804, algo:2, end:33781, ts:455531132882176	pwm_rgb: system_time:455531341, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:20186, g:16952, b:10835, c:46480, algo:2, end:33781, ts:455531149548176	pwm_rgb: system_time:455531341, lux:380, time_delta:16, pwm_turbo:1, bri:1449, r:19941, g:16756, b:10691, c:45960, algo:2, end:99317, ts:455531166214176	
+09-17 15:07:10.984  4615  4615 I adbd    : Remote process closed the socket (on MSG_PEEK)
+09-17 15:07:10.985  1950  2045 I libprocessgroup: Removed cgroup /sys/fs/cgroup/apps/uid_10389/pid_13422
+09-17 15:07:10.986  1950  2646 I ActivityManager: Death received, pid = 0, processName = com.example.fourlangasr for thread android.os.BinderProxy@a10fca0
+09-17 15:07:10.986  1122  1122 I Zygote  : Process 13422 exited due to signal 9 (Killed)
+09-17 15:07:10.986  1950  2825 V ActivityManager: Got obituary of 13422:com.example.fourlangasr
+09-17 15:07:10.998  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:10.999  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:11.000  3197  3197 D RadioMessenger: handleMessage Request msgid 2311
+09-17 15:07:11.000  3197  3197 D RadioProxyJ[1]: [10037]> getAllCellularCellInfo
+09-17 15:07:11.000  1205  1205 D SensorFeature: write 39 bytes:455531613932063,455531630598730,33783,0
+09-17 15:07:11.010  1439  1538 D MipcProxy: handleMessage msg is 4001, instance 1
+09-17 15:07:11.010  1439  1538 D RadioProxy: getAllCellularCellInfo : response cb for instance 1
+09-17 15:07:11.012  3197  3222 D SubsysRadioResponse: getAllCellularCellInfoResponse
+09-17 15:07:11.012  3197  3222 D SubsysRadioResponse: responseAllCellularCellInfo len:12
+09-17 15:07:11.013  3197  3222 D RadioProxyJ[1]: [10037]< getAllCellularCellInfoResponse ******
+09-17 15:07:11.013  3197  3197 D MessengerResponseHandler: handleMessage Response msgid 281
+09-17 15:07:11.013  3197  3197 I OnnxMoveStateCollection: handleAllCellularCellInfo
+09-17 15:07:11.013  3197  3197 D RadioCellInfo: RadioCellInfo
+09-17 15:07:11.015  3197  6111 D MoveStateCollection:  mCurrentAccState == 4 mCurrentOnnxState <<< 0
+09-17 15:07:11.015  3197  3211 I om.oplus.subsys: Method exceeds compiler instruction limit: 22853 in double[] com.oplus.motionsense.omnisense.loc.model.MtkOnnxCodeWrapper.score(double[])
+09-17 15:07:11.238  1167  1361 I OriginChannel: now system_time:455531871	pwm_rgb: system_time:455531605, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20136, g:16882, b:10792, c:46318, algo:2, end:33782, ts:455531347532735	pwm_rgb: system_time:455531607, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19834, g:16669, b:10610, c:45661, algo:2, end:33782, ts:455531364198735	pwm_rgb: system_time:455531607, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20038, g:16807, b:10722, c:46109, algo:2, end:33782, ts:455531380864735	pwm_rgb: system_time:455531607, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:20097, g:16879, b:10770, c:46303, algo:2, end:33782, ts:455531397530735	pwm_rgb: system_time:455531607, lux:383, time_delta:16, pwm_turbo:1, bri:1449, r:19846, g:16647, b:10638, c:45664, algo:2, end:99318, ts:455531414196735	
+09-17 15:07:11.242  1157 21433 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:11.243  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:11.244  1205  1205 D SensorFeature: write 39 bytes:455531858146217,455531874812884,33784,0
+09-17 15:07:11.307  1214  1270 E BatteryDamageDetect: BddVoltDiffCheck begins
+09-17 15:07:11.308  1214  1270 E BatteryDamageDetect: volt diff trend not changed, volt_diff_trend = 0
+09-17 15:07:11.389  1214  1263 D vendor.oplus.hardware.charger-V11-service: ret_value:126, read content:,320,320,3963,3963,-27,56,56,1,1,0,407,4987,56,1,4490,600,500,0,8,-22,8,0,1,0,2,0,0,0,1,60182,100,3277,3254,6018,0,0,0,0,0,71
+09-17 15:07:11.389  1214  1263 D vendor.oplus.hardware.charger-V11-service: gmtime: 2026-09-17-15-07-11
+09-17 15:07:11.390  1214  1263 D vendor.oplus.hardware.charger-V11-service: usb_online:1, ac_online:-2147483648, wireless_online:-2147483648
+09-17 15:07:11.411  2467  2469 D WifiHAL : WifiRequest::create vendor command to iface 40, vendor_id=0x1a11, subcmd=0x1200, res=0
+09-17 15:07:11.416  2467  2469 I WifiHAL : LLS RSP: data=0xb400007ed009e420, len=4500
+09-17 15:07:11.416  2467  2469 I WifiHAL : LLS check_data_sanity: 1829: current_radio_stat->num_channels=24
+09-17 15:07:11.416  2467  2469 I WifiHAL : LLS check_data_sanity: 1829: current_radio_stat->num_channels=13
+09-17 15:07:11.416  2467  2469 I WifiHAL : LLS check_data_sanity: confirmed_size=4500, len=4500
+09-17 15:07:11.418  1950  2361 E WifiStaIfaceAidlImpl: getCachedScanData failed with service-specific exception: android.os.ServiceSpecificException:  (code 4)
+09-17 15:07:11.433  3197  3197 D VendorWifiService: onEvent event:9,action:1
+09-17 15:07:11.442  1950  2460 D OplusWifiPower_TriggerCenter: mComponentCallback: wifistat
+09-17 15:07:11.443  1950  2479 D OplusWifiPower_PolicyComponent: out config triggered , ignore in config.
+09-17 15:07:11.485  1157  1168 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:11.487  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:11.487  1205  1205 D SensorFeature: write 39 bytes:455532101875140,455532118541807,33785,0
+09-17 15:07:11.503  1167  1361 I OriginChannel: now system_time:455532135	pwm_rgb: system_time:455531871, lux:377, time_delta:16, pwm_turbo:1, bri:1449, r:19890, g:16605, b:10603, c:45637, algo:2, end:33783, ts:455531612150561	pwm_rgb: system_time:455531872, lux:377, time_delta:16, pwm_turbo:1, bri:1449, r:20192, g:16843, b:10751, c:46306, algo:2, end:33783, ts:455531628816561	pwm_rgb: system_time:455531872, lux:377, time_delta:16, pwm_turbo:1, bri:1449, r:19944, g:16658, b:10631, c:45772, algo:2, end:33783, ts:455531645482561	pwm_rgb: system_time:455531872, lux:377, time_delta:16, pwm_turbo:1, bri:1449, r:19893, g:16633, b:10613, c:45679, algo:2, end:33783, ts:455531662148561	pwm_rgb: system_time:455531872, lux:377, time_delta:16, pwm_turbo:1, bri:1449, r:20174, g:16863, b:10770, c:46288, algo:2, end:99319, ts:455531678814561	
+09-17 15:07:11.716  1950  3099 D OplusHansManager : 1487/1013 to 3983/10311 | android.media.IMediaPlayerClient | 1 reason default_unfreezeForKernel
+09-17 15:07:11.728  1157  1168 D CwbService: normal mode or switch to doze from power off/doze suspend mode, mPowerMode = 2
+09-17 15:07:11.729  1205  1205 D SensorFeature: name=ssc_screenshot_info ,index = 22
+09-17 15:07:11.730  1205  1205 D SensorFeature: write 39 bytes:455532344653987,455532361320654,33786,0
+09-17 15:07:11.768  1167  1361 I OriginChannel: now system_time:455532400	pwm_rgb: system_time:455532135, lux:385, time_delta:16, pwm_turbo:1, bri:1449, r:20239, g:16969, b:10823, c:46626, algo:2, end:131072, ts:455532026792947	
+09-17 15:07:11.769  1950  2229 D FusionLightNextGen: process end reported = 1, mode: 1, cnt: 69340, lux 370.6, cct -1.0, r/g/b/c: 20461.0/17067.0/10886.0/46817.0, R/G/B: 79.0/82.0/81.0, bri 1449.0, match 0.69, ir 0.016952, conf 0.0, ts 455532358074797
+09-17 15:07:11.821  1950  2261 E system_server: [theia_saupwk] start saupwkProcessKey
+09-17 15:07:11.821  1950  2261 E system_server: [theia_saupwk] prepare send key event by hidl
+09-17 15:07:11.821  1950  2261 E system_server: [theia_saupwk] send info to THEIA_NODE_ID_POWERKEY_REPORT
+09-17 15:07:11.822  1265  1265 D vendor.oplus.hardware.stability.oplus_project-V1-service: write 30 bytes
+09-17 15:07:11.823  1265  1265 D vendor.oplus.hardware.stability.oplus_project-V1-service: write_theia_proc path:/proc/theiaPwkReport ,theia_date:POWERKEY_InputReaderProcessKey
+09-17 15:07:11.824  1950  2261 D KEYLOG_KeyCombinationManager: down true downTime 325004501 action 0 count 0 isDefaultDisplayInteractive true eventTime 325004501 mDownTimes: {}
+09-17 15:07:11.824  1950  2261 D KEYLOG_PhoneWindowManagerExtImpl: overrideInterceptKeyBeforeQueueing:KeyEvent { action=ACTION_DOWN, keyCode=KEYCODE_POWER, scanCode=116, metaState=0, flags=0x8, repeatCount=0, eventTime=325004501400000, downTime=325004501400000, deviceId=2, source=0x101, displayId=-1 },  keyguardOn = false,  screenOn = true,  policyFlags = 570425344,  SosPowerKeyEnabled = true,  WalletSwitchState = 1,  IsQuickLaunchSupport = true,  IsDoubleCheckAppSupport = false,  isQuickAppOn=false,  canceled = false
+09-17 15:07:11.825  1265  1265 D vendor.oplus.hardware.stability.oplus_project-V1-service: write 35 bytes
+09-17 15:07:11.825  1265  1265 D vendor.oplus.hardware.stability.oplus_project-V1-service: write_theia_proc path:/proc/theiaPwkReport ,theia_date:POWERKEY_interceptKeyBeforeQueueing
+09-17 15:07:11.825  1950  2261 I KEYLOG_OplusKeyEventUtil: mIsPowerKeyDown =true
+09-17 15:07:11.827  1950  2261 D OplusCustomizeRestrictionManagerService: isLongPressVolumeUpDisabled start
+09-17 15:07:11.827  1950  2261 I STKeyLog_StrategyDisableBottomKey: onBeforeQueueing : mIsUpGestureMode=false,mDisableBottomKeyMode0
+09-17 15:07:11.827  1950  2261 D STKeyLog_StrategyUnusedPhoneDetection: notifyKeyBeforeQueueing + keycode =26
+09-17 15:07:11.827  1950  2261 D STKeyLog_StrategyBlackscreenshot: notifyKeyBeforeQueueing, downTime325004501, action=0, interactive=true
+09-17 15:07:11.828  1950  2261 D KEYLOG_PhoneWindowManager: interceptKeyBeforeQueueing downTime=325004501 action = 0 interactive=true keyguardActive=false policyFlags=22000000 isInjected=false isWakeKey=false isKeyGestureTriggered=false
+09-17 15:07:11.831  2303  2329 D XiaoBu.KeyEventManagerCompat: onKeyEvent KEYCODE_POWER ACTION_DOWN
+09-17 15:07:11.832  2303  2329 D XiaoBu.KeyEventManagerCompat: refreshPowerKeyPressStatus KEYCODE_POWER ACTION_DOWN

@@ -1,0 +1,37 @@
+########## chineseAsr_transcribesRealSpeech ##########
+OK (1 test)
+exit=0
+ZH load: 1277 ms, delta=99.549805 MB
+ZH text='一个是系统内例子的微观运动所产生的微观动能' rtf=0.05636777 infer=347ms unk=0
+
+########## englishAsr_transcribesRealSpeech ##########
+OK (1 test)
+exit=0
+EN load: 1565 ms, delta=193.17969 MB
+EN text='MOST OF HIS FIGHTS HAVE BEEN IN ASIA' rtf=0.04192872 infer=160ms
+
+########## lid_identifiesAllFourLanguages ##########
+OK (1 test)
+exit=0
+LID zh_1.wav -> zh (expect zh) conf4=1.0 margin=1.0 mass=0.9999942 infer=1067ms window=center_crop
+LID en_1.wav -> en (expect en) conf4=0.9702367 margin=0.94090056 mass=0.085880935 infer=972ms window=zero_pad
+LID ru_1.wav -> ru (expect ru) conf4=1.0 margin=1.0 mass=0.9931535 infer=958ms window=center_crop
+LID uz_1.wav -> uz (expect uz) conf4=0.9997971 margin=0.9996726 mass=0.4566412 infer=960ms window=zero_pad
+
+########## speaker_sameSpeakerMatchesExistingProfile ##########
+OK (1 test)
+exit=0
+Speaker enroll: Speaker 1 reason=NEW profiles=1
+Speaker same-speaker test: Speaker 1 reason=MATCH(score) score=0.70227605 margin=NaN profiles=1
+
+########## speaker_differentSpeakersDoNotCollapse ##########
+OK (1 test)
+exit=0
+Speaker cross test: first=Speaker 1 second=Speaker 2 reason=NEW score=0.24260022 margin=NaN profiles=2
+不同说话人已正确区分：profiles=2
+
+########## asrManager_switchesLanguageAndReusesWhenUnchanged ##########
+exit=0
+AsrManager ZH load: 1276 ms
+AsrManager EN load: 1475 ms
+

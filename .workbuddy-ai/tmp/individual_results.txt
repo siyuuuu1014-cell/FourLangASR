@@ -1,0 +1,49 @@
+########## vad_producesSegmentForRealSpeech ##########
+INSTRUMENTATION_RESULT: stream=
+OK (1 test)
+INSTRUMENTATION_CODE: -1
+VAD: input=39936 samples, segments=1, segmentSamples=7200
+
+########## chineseAsr_transcribesRealSpeech ##########
+INSTRUMENTATION_RESULT: stream=
+OK (1 test)
+INSTRUMENTATION_CODE: -1
+ZH load: 1281 ms, delta=89.75879 MB
+ZH text='九' rtf=0.060096156 infer=150ms unk=0
+
+########## englishAsr_transcribesRealSpeech ##########
+
+########## russianAsr_transcribesRealSpeech ##########
+INSTRUMENTATION_RESULT: stream=
+OK (1 test)
+INSTRUMENTATION_CODE: -1
+RU load: 1282 ms, delta=147.38672 MB
+RU text='снятие этих трёх характеристик даёт нам представление о живой социологии' rtf=0.23166667 infer=1251ms
+
+########## uzbekAsr_transcribesRealSpeech ##########
+INSTRUMENTATION_RESULT: stream=
+OK (1 test)
+INSTRUMENTATION_CODE: -1
+UZ load: 1169 ms, delta=225.04102 MB
+UZ text='bugun ertalab gyotenikka taklifnoma oldim' rtf=0.077067666 infer=369ms
+
+########## lid_identifiesAllFourLanguages ##########
+INSTRUMENTATION_RESULT: stream=
+OK (1 test)
+INSTRUMENTATION_CODE: -1
+LID zh_1.wav -> zh (expect zh) conf4=0.5764246 margin=0.25351083 mass=0.3124139 infer=1190ms window=zero_pad
+LID en_1.wav -> en (expect en) conf4=0.9702367 margin=0.94090056 mass=0.085880935 infer=963ms window=zero_pad
+LID ru_1.wav -> ru (expect ru) conf4=1.0 margin=1.0 mass=0.9931535 infer=957ms window=center_crop
+LID uz_1.wav -> uz (expect uz) conf4=0.9997971 margin=0.9996726 mass=0.4566412 infer=958ms window=zero_pad
+
+########## speaker_sameSpeakerMatchesExistingProfile ##########
+INSTRUMENTATION_STATUS: stack=java.lang.AssertionError: 同一说话人不应新建档案 expected:<1> but was:<2>
+java.lang.AssertionError: 同一说话人不应新建档案 expected:<1> but was:<2>
+INSTRUMENTATION_RESULT: stream=
+java.lang.AssertionError: 同一说话人不应新建档案 expected:<1> but was:<2>
+FAILURES!!!
+Tests run: 1,  Failures: 1
+Speaker enroll: Speaker 1 reason=NEW profiles=1
+Speaker same-speaker test: Speaker 2 reason=NEW score=0.39225003 margin=NaN profiles=2
+
+########## speaker_differentSpeakersDoNotCollapse ##########

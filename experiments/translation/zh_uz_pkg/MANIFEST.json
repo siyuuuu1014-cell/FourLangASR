@@ -1,0 +1,65 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "family": "small100",
+  "quantization": "int8 dynamic (recursive MatMul/Gather, per-tensor symmetric)",
+  "base_model": "alirezamsh/small100",
+  "base_license": "MIT",
+  "source_checkpoint": "results/experiments/weak_pair_ablation/zh_uz/flores_relaxed_8k_ep3/best_model/shared",
+  "source_sha256": "f6c6edbec93b17144cb8a8fc8e612453430c27490e12a0d5bfacbb446ce8263a",
+  "languages": {
+    "en": {
+      "token_id": 128022
+    },
+    "zh": {
+      "token_id": 128102
+    },
+    "uz": {
+      "token_id": 128096
+    },
+    "ru": {
+      "token_id": 128077
+    }
+  },
+  "special_tokens": {
+    "bos_token_id": 0,
+    "eos_token_id": 2,
+    "pad_token_id": 1
+  },
+  "direction_mechanism": "tgt_lang prefix (target), no forced_bos",
+  "layout": "2-file merged decoder (KV cache retained)",
+  "quantized_weights": 32,
+  "runtime_note": "onnxruntime must use ORT_ENABLE_BASIC graph optimization",
+  "files": {
+    "encoder_model.onnx": {
+      "size_bytes": 287317499
+    },
+    "decoder_model_merged.onnx": {
+      "size_bytes": 321591392
+    },
+    "config.json": {
+      "size_bytes": 822
+    },
+    "generation_config.json": {
+      "size_bytes": 202
+    },
+    "MANIFEST.json": {
+      "size_bytes": 1577
+    },
+    "sentencepiece.bpe.model": {
+      "size_bytes": 2423393
+    },
+    "vocab.json": {
+      "size_bytes": 3708092
+    },
+    "tokenization_small100.py": {
+      "size_bytes": 16019
+    },
+    "tokenizer_config.json": {
+      "size_bytes": 19832
+    },
+    "special_tokens_map.json": {
+      "size_bytes": 1559
+    }
+  }
+}
