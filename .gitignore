@@ -62,3 +62,6 @@ experiments/ocr/.cache/
 experiments/ocr/.tools/
 experiments/ocr/__pycache__/
 experiments/ocr/out/npy_*/
+
+# 阶段1：真机 OCR 验证用的权重与 golden（由 prepare_android_assets.py 生成，不入库）
+app/src/androidTest/assets/ocr/
