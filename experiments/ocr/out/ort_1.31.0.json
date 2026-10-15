@@ -1,0 +1,497 @@
+{
+ "onnxruntime": "1.31.0",
+ "providers": [
+  "AzureExecutionProvider",
+  "CPUExecutionProvider"
+ ],
+ "det_shape": [
+  1,
+  3,
+  640,
+  640
+ ],
+ "rec_shape": [
+  1,
+  3,
+  48,
+  320
+ ],
+ "repeats": 3,
+ "models": [
+  {
+   "model": "PP-OCRv5_mobile_det_onnx",
+   "inputs": [
+    [
+     "x",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "3",
+      "DynamicDimension.1",
+      "DynamicDimension.2"
+     ]
+    ]
+   ],
+   "outputs": [
+    [
+     "fetch_name_0",
+     "tensor(float)",
+     [
+      "ConvTranspose_521_o0__d0",
+      "1",
+      "ConvTranspose_521_o0__d2",
+      "ConvTranspose_521_o0__d3"
+     ]
+    ]
+   ],
+   "levels": {
+    "DISABLE_ALL": {
+     "mean_latency_ms": 134.28,
+     "min_latency_ms": 35.33,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "fddb00de38d40fd6e8c2bee26f3c781aa9e27ac6c23b10ff9084f372c35dd5af",
+      "sum": 0.22726133465766907,
+      "argmax_first": 209399,
+      "argmax_seq_sha256": "8311d7da3473127c69444d22445c2bcdc32f7b2db69dd811c015ae5d40ee84ee",
+      "argmax_seq_len": 640
+     }
+    },
+    "BASIC": {
+     "mean_latency_ms": 47.51,
+     "min_latency_ms": 32.93,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "af6a5ed06e6620f9d7e488d290059200ba6c7cd6fb8116f25c41bc4e4e835878",
+      "sum": 0.22722041606903076,
+      "argmax_first": 209399,
+      "argmax_seq_sha256": "34f2c2b62018cb7246ce8d118a392c9c41c7b0410a876f24d24682461fc5abe1",
+      "argmax_seq_len": 640
+     }
+    },
+    "EXTENDED": {
+     "mean_latency_ms": 50.41,
+     "min_latency_ms": 38.13,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "af6a5ed06e6620f9d7e488d290059200ba6c7cd6fb8116f25c41bc4e4e835878",
+      "sum": 0.22722041606903076,
+      "argmax_first": 209399,
+      "argmax_seq_sha256": "34f2c2b62018cb7246ce8d118a392c9c41c7b0410a876f24d24682461fc5abe1",
+      "argmax_seq_len": 640
+     }
+    },
+    "ALL": {
+     "mean_latency_ms": 44.35,
+     "min_latency_ms": 30.54,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "dfb13246f9523525abdcc6fab8c5737c038d54f2f90916d4b7634e942060d034",
+      "sum": 0.22726976871490479,
+      "argmax_first": 209399,
+      "argmax_seq_sha256": "b7186b385273e3aaccfc740c0c3f03d92b3e3ae37c2dd44b79714cc9b9561e77",
+      "argmax_seq_len": 640
+     }
+    }
+   }
+  },
+  {
+   "model": "PP-OCRv6_small_det_onnx",
+   "inputs": [
+    [
+     "x",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "3",
+      "DynamicDimension.1",
+      "DynamicDimension.2"
+     ]
+    ]
+   ],
+   "outputs": [
+    [
+     "fetch_name_0",
+     "tensor(float)",
+     [
+      "ConvTranspose_459_o0__d0",
+      "1",
+      "ConvTranspose_459_o0__d2",
+      "ConvTranspose_459_o0__d3"
+     ]
+    ]
+   ],
+   "levels": {
+    "DISABLE_ALL": {
+     "mean_latency_ms": 142.03,
+     "min_latency_ms": 84.47,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "259ab36b86fbcab79ae73946ab1afeb12491b05424f016ef43d70b28d6ebabaf",
+      "sum": 527.9654902517796,
+      "argmax_first": 213545,
+      "argmax_seq_sha256": "2df07daf63ffa8dc8975e96d8b2110f17f36c077cf4998c61eb86f8cc630cd0b",
+      "argmax_seq_len": 640
+     }
+    },
+    "BASIC": {
+     "mean_latency_ms": 58.68,
+     "min_latency_ms": 36.58,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "259ab36b86fbcab79ae73946ab1afeb12491b05424f016ef43d70b28d6ebabaf",
+      "sum": 527.9654902517796,
+      "argmax_first": 213545,
+      "argmax_seq_sha256": "2df07daf63ffa8dc8975e96d8b2110f17f36c077cf4998c61eb86f8cc630cd0b",
+      "argmax_seq_len": 640
+     }
+    },
+    "EXTENDED": {
+     "mean_latency_ms": 59.81,
+     "min_latency_ms": 45.59,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "267dda6684ec6a5db25fb9f920b128f5d22046d94a07a311f7434a3670405eaf",
+      "sum": 527.965473741293,
+      "argmax_first": 213545,
+      "argmax_seq_sha256": "2df07daf63ffa8dc8975e96d8b2110f17f36c077cf4998c61eb86f8cc630cd0b",
+      "argmax_seq_len": 640
+     }
+    },
+    "ALL": {
+     "mean_latency_ms": 35.47,
+     "min_latency_ms": 27.84,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "679b67b09688be2a7c39935f1a6dcdf451dc7156ac09df9c095a3caf24e8dcc5",
+      "sum": 527.9647672474384,
+      "argmax_first": 213545,
+      "argmax_seq_sha256": "2df07daf63ffa8dc8975e96d8b2110f17f36c077cf4998c61eb86f8cc630cd0b",
+      "argmax_seq_len": 640
+     }
+    }
+   }
+  },
+  {
+   "model": "PP-OCRv6_small_rec_onnx",
+   "inputs": [
+    [
+     "x",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "3",
+      "48",
+      "DynamicDimension.1"
+     ]
+    ]
+   ],
+   "outputs": [
+    [
+     "fetch_name_0",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "Reshape_471_o0__d2",
+      "18710"
+     ]
+    ]
+   ],
+   "levels": {
+    "DISABLE_ALL": {
+     "mean_latency_ms": 79.19,
+     "min_latency_ms": 28.02,
+     "output": {
+      "shape": [
+       1,
+       40,
+       18710
+      ],
+      "sha256": "b5239969f0f1752e1c0a34ada657b8dcba2e067e13f328f5ac434e6fa21c2410",
+      "sum": 40.00000160857757,
+      "argmax_first": 430330,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "BASIC": {
+     "mean_latency_ms": 14.79,
+     "min_latency_ms": 6.94,
+     "output": {
+      "shape": [
+       1,
+       40,
+       18710
+      ],
+      "sha256": "48fd9ea7751c4cc4c59717f0a38ed2fdb83b72a5824c86fca55868a97f9062e8",
+      "sum": 40.00000217381415,
+      "argmax_first": 430330,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "EXTENDED": {
+     "mean_latency_ms": 10.9,
+     "min_latency_ms": 7.23,
+     "output": {
+      "shape": [
+       1,
+       40,
+       18710
+      ],
+      "sha256": "cb36a2242d71dcbb2b8ed095e1acc51da5dce2dbcca6635aea9c888ca3a8b989",
+      "sum": 40.00000133064857,
+      "argmax_first": 430330,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "ALL": {
+     "mean_latency_ms": 11.06,
+     "min_latency_ms": 9.19,
+     "output": {
+      "shape": [
+       1,
+       40,
+       18710
+      ],
+      "sha256": "1cff9b5d237a2d51d7952bdd8391361b0cea1d4713b93285c2bea510ba6d46e5",
+      "sum": 40.00000142413116,
+      "argmax_first": 430330,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    }
+   }
+  },
+  {
+   "model": "PP-OCRv6_tiny_det_onnx",
+   "inputs": [
+    [
+     "x",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "3",
+      "DynamicDimension.1",
+      "DynamicDimension.2"
+     ]
+    ]
+   ],
+   "outputs": [
+    [
+     "fetch_name_0",
+     "tensor(float)",
+     [
+      "ConvTranspose_459_o0__d0",
+      "1",
+      "ConvTranspose_459_o0__d2",
+      "ConvTranspose_459_o0__d3"
+     ]
+    ]
+   ],
+   "levels": {
+    "DISABLE_ALL": {
+     "mean_latency_ms": 147.39,
+     "min_latency_ms": 89.13,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "0be616324742ddd975ae25bda0abc2b98833ffd83efcae6c7aa6c2c962c6326e",
+      "sum": 53.31870290637016,
+      "argmax_first": 267718,
+      "argmax_seq_sha256": "65fbf51dc9a82ed95b0c6f1ae2ddcfdcdf82c46973d145f8899f3f33509f2191",
+      "argmax_seq_len": 640
+     }
+    },
+    "BASIC": {
+     "mean_latency_ms": 34.56,
+     "min_latency_ms": 21.82,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "0be616324742ddd975ae25bda0abc2b98833ffd83efcae6c7aa6c2c962c6326e",
+      "sum": 53.31870290637016,
+      "argmax_first": 267718,
+      "argmax_seq_sha256": "65fbf51dc9a82ed95b0c6f1ae2ddcfdcdf82c46973d145f8899f3f33509f2191",
+      "argmax_seq_len": 640
+     }
+    },
+    "EXTENDED": {
+     "mean_latency_ms": 39.47,
+     "min_latency_ms": 32.88,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "83a10b4de5c042a00e93f39234310702ffce441f027a59f0b987dcf8666cc290",
+      "sum": 53.3187058866024,
+      "argmax_first": 267718,
+      "argmax_seq_sha256": "65fbf51dc9a82ed95b0c6f1ae2ddcfdcdf82c46973d145f8899f3f33509f2191",
+      "argmax_seq_len": 640
+     }
+    },
+    "ALL": {
+     "mean_latency_ms": 39.32,
+     "min_latency_ms": 29.56,
+     "output": {
+      "shape": [
+       1,
+       1,
+       640,
+       640
+      ],
+      "sha256": "98c81078587de339cb8cf3629cf5be453439ef49fc875e68a9a6a29c681216b8",
+      "sum": 53.31867936253548,
+      "argmax_first": 267718,
+      "argmax_seq_sha256": "f50ad87a3750a1d64aff9c8ecfc9f986a10b5f176a0ae387bc86284e80c5dd10",
+      "argmax_seq_len": 640
+     }
+    }
+   }
+  },
+  {
+   "model": "PP-OCRv6_tiny_rec_onnx",
+   "inputs": [
+    [
+     "x",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "3",
+      "48",
+      "DynamicDimension.1"
+     ]
+    ]
+   ],
+   "outputs": [
+    [
+     "fetch_name_0",
+     "tensor(float)",
+     [
+      "DynamicDimension.0",
+      "floor(floor(floor(DynamicDimension.1/2 - 1/2)/2)/2 - 1/2) + 1",
+      "6906"
+     ]
+    ]
+   ],
+   "levels": {
+    "DISABLE_ALL": {
+     "mean_latency_ms": 9.21,
+     "min_latency_ms": 8.42,
+     "output": {
+      "shape": [
+       1,
+       40,
+       6906
+      ],
+      "sha256": "1eeb45f86c3b70c6f0fcf6389839a9a1a6b5a4e5b342a486aa58d388c7cee204",
+      "sum": 40.00006376542572,
+      "argmax_first": 227898,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "BASIC": {
+     "mean_latency_ms": 18.88,
+     "min_latency_ms": 5.95,
+     "output": {
+      "shape": [
+       1,
+       40,
+       6906
+      ],
+      "sha256": "acc1f51f329523ba7ce7deaf725a7c57c23e65974813053aabe879b94c40a285",
+      "sum": 40.00006273135712,
+      "argmax_first": 227898,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "EXTENDED": {
+     "mean_latency_ms": 3.46,
+     "min_latency_ms": 1.76,
+     "output": {
+      "shape": [
+       1,
+       40,
+       6906
+      ],
+      "sha256": "a1ac0629c5d78d67ad39f9230a136c5cf682e1893f886a6b8d06387c61e9ed23",
+      "sum": 40.00006293118228,
+      "argmax_first": 227898,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    },
+    "ALL": {
+     "mean_latency_ms": 4.03,
+     "min_latency_ms": 2.7,
+     "output": {
+      "shape": [
+       1,
+       40,
+       6906
+      ],
+      "sha256": "f1afc5a7ccce4cc3885d3c6cc9ada23a9887312ec12b4d2c26f7ad8ecf869db2",
+      "sum": 40.00006378153295,
+      "argmax_first": 227898,
+      "argmax_seq_sha256": "7b6436b0c98f62380866d9432c2af0ee08ce16a171bda6951aecd95ee1307d61",
+      "argmax_seq_len": 40
+     }
+    }
+   }
+  }
+ ]
+}

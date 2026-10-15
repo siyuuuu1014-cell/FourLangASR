@@ -52,3 +52,13 @@ libort4jrt.so
 
 # 真机测试的语音样本同样不入库（与 experiments/**/audio/ 一致：真实人声）
 app/src/androidTest/assets/audio/
+
+# 第三方数据集(许可未声明)与其派生物：只留脚本与聚合指标，不提交图片/GT/逐图OCR文本
+experiments/ocr/samples/
+experiments/ocr/out/golden_*.json
+# OCR 阶段0：权重、虚拟环境、第三方数据集缓存与派生物一律不入库
+experiments/ocr/models/
+experiments/ocr/.cache/
+experiments/ocr/.tools/
+experiments/ocr/__pycache__/
+experiments/ocr/out/npy_*/
