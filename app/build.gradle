@@ -73,6 +73,20 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
+    /*
+     * 阶段1 B 路线：官方 ppocr-sdk 后处理用到 OpenCV 的 Java 绑定。
+     * 刻意只进 androidTest —— 生产 APK 与 jniLibs 组合保持原样。
+     *
+     * 依赖选型（真机实测得出，不是猜的）：
+     * 官方 SDK 用的 com.quickbirdstudios:opencv:4.5.3 在本机 OPPO PLW110/Android 16 上
+     * dlopen 失败：`cannot locate symbol "__sfp_handle_exceptions"`。
+     * 解析 ELF 后确认是该 AAR 自身的打包缺陷：它的 libopencv_java4.so 把这个符号
+     * 当 UNDEF 导入，而它自带的 libc++_shared.so 只在 .symtab 里定义、
+     * 没有导出到 .dynsym，运行时无法解析。
+     * 换成 OpenCV 官方在 Maven Central 发布的 org.opencv:opencv（4.9+ 用新 NDK 构建，
+     * 已不再引用该符号），加载即通过。
+     */
+    androidTestImplementation 'org.opencv:opencv:4.11.0'
     // VoxLingua LID runtime. Java Interpreter API; compatible with Kotlin 1.9 project.
     implementation 'org.tensorflow:tensorflow-lite:2.16.1'
     // VoxLingua107 LID runtime; separate from sherpa ONNX Runtime.

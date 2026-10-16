@@ -65,3 +65,8 @@ experiments/ocr/out/npy_*/
 
 # 阶段1：真机 OCR 验证用的权重与 golden（由 prepare_android_assets.py 生成，不入库）
 app/src/androidTest/assets/ocr/
+
+# 街景评测的照片与标注不入库
+experiments/ocr/scene_eval/images/
+experiments/ocr/scene_eval/out/
+experiments/ocr/scene_eval/labels.csv
