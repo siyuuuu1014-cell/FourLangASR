@@ -153,14 +153,44 @@ object Harness {
 
     fun round(v: Double): Double = Math.round(v * 1000.0) / 1000.0
 
-    /** 写报告并打一行标记，方便 `adb logcat -s System.out:I | grep OcrPhase1` 定位。 */
+    /**
+     * 写报告并打一行标记，方便 `adb logcat -s System.out:I | grep OcrPhase1` 定位。
+     *
+     * Android 16 (OPPO PLW110) 上 adb shell 读不到 `/sdcard/Android/data/<pkg>`（scoped storage），
+     * 且 connected test 跑完后包若被卸载，外部私有目录连同报告一起消失。所以这里除了落盘，
+     * 还把整段 JSON 按块通过 android.util.Log 打出来，保证 `adb logcat` 一定能取到结果。
+     */
     fun writeReport(name: String, payload: JSONObject): File {
         val dir = File(context().getExternalFilesDir(null), "ocr_phase1")
-        dir.mkdirs()
-        val out = File(dir, name)
-        out.writeText(payload.toString(1))
-        println("[OcrPhase1] report=$out")
-        return out
+        var outFile = dir
+        runCatching {
+            dir.mkdirs()
+            outFile = File(dir, name)
+            outFile.writeText(payload.toString(1))
+        }.onFailure {
+            // 外部目录不可写时退回内部 filesDir（run-as 可读）。
+            val internal = File(context().filesDir, "ocr_phase1").apply { mkdirs() }
+            outFile = File(internal, name)
+            runCatching { outFile.writeText(payload.toString(1)) }
+        }
+        println("[OcrPhase1] report=${outFile.absolutePath}")
+        // 落盘用 pretty，logcat 转储用压缩单行（toString() 无缩进 → 内部无换行，分块可精确重接）。
+        dumpToLogcat(name, payload.toString())
+        return outFile
+    }
+
+    /** 分块打日志，规避 logcat 单条约 4000 字符上限；pull 端按 `##NAME##` 重新拼接。 */
+    private fun dumpToLogcat(name: String, json: String) {
+        val chunk = 3000
+        var i = 0
+        var part = 0
+        while (i < json.length) {
+            val end = minOf(i + chunk, json.length)
+            android.util.Log.i(LOG_TAG, "REPORT[$name] part=$part ${json.substring(i, end)}")
+            i = end
+            part++
+        }
+        android.util.Log.i(LOG_TAG, "REPORT[$name] part=END")
     }
 
     fun jsonArray(items: List<JSONObject>): JSONArray {
