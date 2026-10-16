@@ -197,3 +197,94 @@ uz→en 同样：丢撇号时 `service networks` → `service cross-country netw
 - ≥100 张分层集的抽样方案与标注规范（下一步单独出文档）。
 - 俄语西里尔 OCR：`cyrillic/eslav_PP-OCRv5_mobile_rec_onnx` 的存在与许可证已核实，
   但**未下载、未实测**；且按你的要求不做 Unicode 自动判语种，改由 App 源语言选择驱动模型切换。
+
+---
+
+# 阶段 1：真机验证（OPPO PLW110 / Android 16 / arm64-v8a）
+
+分支 `feat/ocr-phase0-validation`。范围严格限定在：native 共存、官方后处理移植与对拍、
+撇号三态与单测、性能与内存。**未改动任何 ASR / 翻译 / TTS 生产逻辑**，
+OCR 全部代码在 `androidTest` 源集里（生产 APK 的 dex 与 jniLibs 不受影响）。
+
+## 设备
+
+| 项 | 值 |
+|---|---|
+| 机型 | OPPO PLW110，Android 16 (SDK 36)，arm64-v8a |
+| SoC / RAM / CPU | MT6899 / 15.1 GB / 8 核 |
+| Java 堆上限 | 256 MB（未开 largeHeap） |
+
+## 任务 A：native 共存 —— 已执行，通过
+
+| 用例 | 结果 | 关键数据 |
+|---|---|---|
+| a1 OpenCV 加载并可用 | 通过 | findContours 1 个轮廓，minAreaRect 30×40 |
+| a2 打过补丁的 ORT 桥加载 PP-OCRv6 并推理 | 通过 | 冷加载 **48ms**；det 预处理 20ms / 推理 88ms / 后处理 6ms；rec 推理 167ms；整链 **351ms**；PSS 加载后 **251.5MB** |
+| a3 zh/en/uz 共用同一引擎 + 冒烟识别 | 通过 | `liveEngineCount=1`，cacheKey 只有一条 `ppocrv6_tiny_det\|ppocrv6_tiny_rec`；中文路牌 4 行、置信 0.998、命中"上海/打浦路/酒店" |
+| a4a sherpa-onnx 中文 ASR（OCR 存活时） | 通过 | 见 `a4a_sherpa_zh.json` |
+| a4b Vosk 俄语 ASR（自带另一份 ORT + JNA） | 通过 | 见 `a4b_vosk_ru.json` |
+| a4c LiteRT LID | 通过 | 见 `a4c_lid.json` |
+| a5 OCR 后翻译引擎可用性 | **未验证** | 设备上没有 734MB 翻译包，`Assume` 跳过 |
+| a6 反复加载/释放内存回收 | 通过 | 5 轮：释放后 PSS 224→171→160→158→161MB，增长非单调，无泄漏 |
+
+**结论**：OpenCV + sherpa 自带 `libonnxruntime.so` + 我们补丁的 `libort4jrt.so`/桥 +
+Vosk/JNA + LiteRT 可在同一进程共存，OCR 推理与原有语音链路互不影响。
+
+### OpenCV 依赖选型（实测踩坑，别再用 quickbird 那个 AAR）
+
+官方 SDK 用的 `com.quickbirdstudios:opencv:4.5.3` 在这台机器上 **dlopen 失败**：
+`cannot locate symbol "__sfp_handle_exceptions"`。解析 ELF 确认是该 AAR 自身缺陷——
+它的 `libopencv_java4.so` 把该符号作为 `SHN_UNDEF` 导入，而它自带的 `libc++_shared.so`
+只在 `.symtab` 里定义、**没有导出到 `.dynsym`**。
+换成 OpenCV 官方发布在 Maven Central 的 `org.opencv:opencv:4.11.0` 后加载即通过
+（arm64 `libopencv_java4.so` 21.6MB + `libc++_shared.so` 1.3MB，主 APK 本来就没有
+`libc++_shared.so`，因此没有重复库冲突，构建也不需要 `pickFirst`）。
+
+## 任务 B：官方后处理移植与 PC golden 对拍 —— 已执行，通过
+
+移植方式：`deploy/ppocr-android/ppocr-sdk` 的 26 个 Kotlin 文件原样复制进
+`app/src/androidTest/java/com/example/fourlangasr/ocr/paddle/`（保留 Apache 头），
+只改两处：包名、`ORTSessionManager` 的 `ALL_OPT → BASIC_OPT`。
+Kotlin 1.9.22 编译通过（只有 2 条上游自身警告），**不需要 AAR 也不需要升级 Kotlin**。
+
+| 层 | 用例 | 结果 |
+|---|---|---|
+| 数值 | b1 检测概率图 vs PC | 通过：12 张图 **最大逐元素误差 1.8e-5，均值 4e-8**；`>0.3` 阈值穿越像素数最多差 1（约 3.6 万分之一） |
+| 几何 | b2 四角框 IoU | 通过：**平均 IoU 0.964**，golden 行匹配率 100%（6 图 ×5 行全部配对） |
+| 文本 | b2 整行 CER | 通过：**印刷层平均行 CER 0.009**，逐图 0.000–0.020 |
+| 顺序 | b2 阅读顺序 | 通过：6 张图逆序对数为 0 |
+
+按用户要求**没有把逐字节一致当门槛**：两侧都是 float32 裸数据比较，误差量级与阈值穿越差都被单独记录。
+
+## 任务 C：三态文本与撇号 —— 已执行，通过
+
+`ocr/text/UzbekText.kt`（main，纯新增）+ 9 个 JVM 单测全绿：
+`rawText / displayText / translationInput` 三态；词内撇号族统一为 U+02BB，
+词外引号不动；不变量"撇号数量只换写法不减少"由测试锁死。
+
+过程中发现并修掉一个真实陷阱：**U+02BB 的 Unicode 类别是 Lm**，
+`Char.isLetter()` 返回 true，最初用 `isLetter()` 做词内判定时撇号把自己也算成字母
+（实测计数 21→24）。现在用 `isWordLetter()` 排除 Lm/Sk。
+
+## 任务 D：性能与内存 —— 部分完成
+
+已拿到：冷加载 48ms、det/rec 分阶段耗时、整链 351ms、加载后 PSS 251.5MB、
+5 轮加载释放的 PSS 曲线（见 a2/a6）。
+`OcrPerfBenchmarkTest`（warm 重载 + mean/p50/p90 聚合）**未能跑出报告**，
+已提交但标记为待定位，不猜数字。
+
+## 已复现的性能缺陷（阶段 2 必须先修）
+
+真实照片与横线纸手写页会让 DB 后处理耗时爆炸：中文路牌照片、手写页在 400s 内都没跑完
+（印刷层同尺寸图只要 0.3s）。原因是 `findContours` 在复杂背景/横线上返回海量轮廓，
+而每个轮廓都要走一遍 `PolygonUnclip` 圆弧采样。
+阶段 2 需要：轮廓数上限 + 按面积提前剪 + 行数上限 + 可中断，并把 `detMaxCandidates`
+从 3000 降到与手机场景匹配的值。
+
+## 未验证清单（不得当作结论）
+
+- OCR + 翻译顺序执行的峰值内存（设备无翻译包）
+- 真实街景（招牌/路牌/包装）准确率 —— 接口已备好，等实拍数据（见 `scene_eval/`）
+- 手写页 OCR 延迟与准确率
+- warm 重载与 p90 统计（d1 未跑出报告）
+- 俄语西里尔识别模型（未下载、未实测）
