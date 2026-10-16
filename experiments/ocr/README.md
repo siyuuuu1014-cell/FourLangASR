@@ -288,3 +288,111 @@ Kotlin 1.9.22 编译通过（只有 2 条上游自身警告），**不需要 AAR
 - 手写页 OCR 延迟与准确率
 - warm 重载与 p90 统计（d1 未跑出报告）
 - 俄语西里尔识别模型（未下载、未实测）
+
+---
+
+# 阶段 2A：真实照片卡顿的定位与最小修复（OPPO PLW110 / Android 16 / arm64-v8a）
+
+本轮目标只有一个：**查清"真实照片 DB 后处理 >400s"到底成不成立、根因在哪，并做最小修复**。
+不改生产 ASR/翻译/TTS，不做 OCR 产品化迁移。所有新代码仍在 androidTest 内，可独立回滚。
+
+## 结论先行（推翻阶段 1 的猜测）
+
+**在现有全部资产上，DB 后处理根本复现不出 >400s。** 阶段 1 记的"中文路牌/手写页 400s 没跑完、
+根因是 findContours 海量轮廓 + PolygonUnclip 圆弧采样"这个归因，被本轮分段计时**证伪**：
+- 那些图（含上采样到 3200px、阈值下调到 0.03）DB 全程 ≤ 39ms，轮廓数只有 40~130，正像素比 ~2%。
+- 连造的 3600 连通块合成最坏图，DB 也只要 578ms（且 minAreaRect/boxScore/unclip 合计 ~2ms，
+  大头是 findContours 本身 + contour.toArray）。
+- 真正会随规模线性增长的是**逐行识别（rec）**：实测 ~22~30ms/行，框数才是总耗时主因。
+
+阶段 1 那次"400s"极可能是当时 logcat 过滤造成的**误判**（摘要里已记过一次同类误判），
+叠加 d1 基准"跑不出报告"——而 d1 跑不出报告的**真正原因本轮查清了**（见任务 4 的卡死缺陷）。
+
+## 任务 1：分段计时定位（已执行，e1~e4 + g1）
+
+给 `DBPostProcessor.process` 加了 opt-in 探针 `DbPostProcessProfile`（默认 null，null 时逐字节走官方路径，
+对拍不受影响），逐候选累加 threshold / findContours / contour→point / minAreaRect / boxScore(fillPoly+mean)
+/ unclip / 放缩 的耗时，并记录二值正像素比、轮廓总数、进入各阶段的候选数、最终框数、boxScore 外接面积和。
+`OCREngine` 另把"文字区域裁剪 crop"从 rec 里单独计时。报告经 logcat 分块转储后由
+`harvest_logcat_reports.py` 重组（Android 16 上 adb 读不到 app 外部私有目录）。
+
+整链分段（cap1280，ms）：解码 4~12 / det 推理 48~197 / **DB 后处理 2~15** / crop 3~30 / rec 19~541。
+det 输入尺寸扫描（真实照片上采样，cap4000）：
+
+| 长边 | 概率图 | 轮廓数 | 采纳框 | 正像素比 | DB 外推总耗时 |
+|---|---|---|---|---|---|
+| 1280 | 1280×960 | 40 | 4 | 1.85% | 21ms |
+| 1920 | 1920×1440 | 89 | 4 | 2.06% | 13ms |
+| 2560 | 2560×1920 | 118 | 3 | 2.17% | 21ms |
+| 3200 | 3200×2400 | 130 | 3 | 2.20% | **39ms** |
+
+阈值扫描（0.3→0.03）与 3600 块合成图（g1）同样证明 DB 有界。
+源码定位：`maxCandidates=3000` 确如用户所说**只在 findContours 返回之后**才截断
+（`DBPostProcessor.kt` 的 `numContours = minOf(contours.size, maxCandidates)`），
+所以爆炸风险在候选循环，不在 findContours 调用本身——只是真实照片产生的候选根本没到那个量级。
+
+## 任务 2：最小修复 + 安全降级（已执行，g1 验证）
+
+只动 androidTest 内的 OCR 代码，加两道**对正常图完全惰性**的护栏：
+1. **DB 工作预算** `detPostBudgetMs`（默认 2500ms）：逐候选循环超预算立即返回**已识别的部分框**，
+   并置 `truncated`。g1 实测：3600 块图无预算 578ms 跑完 3000 框，设 300ms 预算则在 301ms 截断、
+   返回 2046 框、`skippedByBudget=954`——证明"极复杂图也绝不无限期挂起"。
+2. **识别框上限** `maxRecBoxes`（默认 120）：按面积保留最可能是正文的前 N 框再识别，
+   超出丢弃并置 `degraded`。因为 rec 才是线性主因，这一条直接封顶总时长。
+3. `OCREngineResult` 新增 `degraded` / `detectedBoxCount`，供调用方决定"提示用户手动裁剪"。
+4. 协程取消 / 超时返回 / 原生不可中断**分开处理**：OpenCV/ORT 原生调用不可被中断，
+   所以不依赖 `future.cancel`，而靠 DB 预算 + rec 上限这两个**内部**有界点保证返回；
+   test 外层再套硬截止只为不挂死测试，不作为生产保证。
+未提高全局阈值、未改轮廓模式、未删小面积文字——正常图结果与官方逐字节一致（见任务 3）。
+
+## 任务 3：精度对拍 + 性能分布（已执行，b2 + f2）
+
+- **Golden 对拍（b2，printed 层）与阶段 1 完全一致**：meanIoU 0.964、行 CER 0.009、
+  整行命中 1.0、阅读顺序单调 true。护栏对正常图零影响。
+- 撇号：JVM 单测 `testDebugUnitTest` 全绿（9 项，含"撇号数只统一不删除"不变量）。
+- **耗时分布（f2，8 张印刷 golden）**：total p50=207 / p90=244 / max=244ms；
+  DB p90=9ms；rec 主导（~134ms）。`degraded` 全 false。印刷/常规自然图 p95 远低于 3s 目标。
+- 复杂/极端图：受限于资产里没有真正的 pathological 原图，"复杂图 ≤10s"只能在合成图（g1）上验证
+  有界性，真实 12MP 街景原图仍待用户提供后补测。
+
+## 任务 4：内存与共存（部分通过 + 一个新发现的关键缺陷）
+
+- **共存（a4a/a4b/a4c）重跑全绿**：OCR 引擎在场时 sherpa-zh / Vosk-ru / LiteRT-LID 均正常，
+  本轮改动没影响 ASR/LID 运行时。
+- **单轮内存回收（f1，8 轮重建/释放）**：native 堆释放后稳定 ~15.4MB（drift +0.2MB），
+  PSS 回到 ~114MB 基线，冷加载 ~40~85ms/轮。f3（池化复用 15 次）单帧 p50=235 / p90=248 / max=287ms，
+  平稳；`releaseAll` 后 native 堆 231.3→15.3MB，确实回收（OS 级 PSS 只降 ~3MB 是 malloc arena 保留，正常）。
+- ⚠️ **关键缺陷（未通过，交阶段 2B）**：**单进程内反复做模型操作会卡死**——
+  f1 紧循环"重建 OcrRuntime+释放"在约 8~32 次之间把进程挂死（线程停 S 态、无崩溃无 OOM）；
+  f3 对同一引擎连续 `run()` 到第 ~17 次也挂死，而挂死前 PSS/帧耗时全程平稳（**不是内存泄漏**，
+  是 ORT 会话 create/close 与推理累积的**原生句柄/线程/fd 未回收**，耗尽后死锁）。
+  这正是阶段 1 d1 基准"跑不出报告"的根因。生产绝不能"每张照片重建一次引擎/无上限连跑"，
+  必须：池化复用 + 每 N 次主动回收 + 可中断释放，或定位并修补 ORT 会话释放路径。
+- **未验证**：OCR + 本地翻译顺序执行峰值内存（设备无 734MB 翻译包，不得声称已通过）。
+
+## 本轮改动文件
+
+- `app/src/androidTest/.../ocr/paddle/postprocess/DBPostProcessor.kt`：加 `profile` 探针 + `workBudgetMs`
+  预算 + `truncatedOut`（默认参数，官方路径不变）。
+- `.../postprocess/DbPostProcessProfile.kt`（新）：分段计账器。
+- `.../paddle/PaddleOCRConfig.kt`：加 `detPostBudgetMs=2500`、`maxRecBoxes=120`。
+- `.../engine/DetectionEngine.kt`：透传预算 + `truncated`。
+- `.../engine/OCREngine.kt` / `OCREngineResult.kt`：rec 框上限 + `degraded`/`detectedBoxCount` + crop 计时。
+- `.../ocr/Harness.kt`：`writeReport` 增加 logcat 分块转储（Android 16 读不到外部私有目录）。
+- 新测试：`OcrDbProfileTest`(e1~e4)、`OcrDbGuardTest`(g1)、`OcrPhase2RegressionTest`(f1~f3)。
+- 工具：`experiments/ocr/harvest_logcat_reports.py`、`install_gate.sh`（绕开 ColorOS adb 安装闸）。
+- 报告：`experiments/ocr/out/{a_db_profile,a_db_profile_4000,a_db_threshold_sweep,a_det_size_sweep,g1_db_budget_guard,f1_memory_cycles,f2_timing_distribution,f3_pooled_reuse,b2_box_text_parity}.json`。
+
+## 阶段 2A 未通过 / 未验证（不得当作结论）
+
+- 30+ 轮模型重建/释放稳定性：**未通过**（约 8~17 次原生操作即死锁）。
+- 真实 12MP 街景原图的卡顿复现与准确率：等用户实拍数据。
+- OCR + 本地翻译峰值内存：设备无翻译包，未测。
+
+## 阶段 2B 建议
+
+1. **优先修死锁**：查 `ORTSessionManager` 会话 create/close 与 `session.run` 的原生资源回收
+   （线程池 / mmap / OrtValue），确立"可长期存活"的引擎生命周期；生产用池化单例，不逐张重建。
+2. 把这套 OCR runtime（含护栏）迁入生产 `main`，接相册导入 + 校对 UI + `TranslationService`。
+3. 用用户实拍 ≥100 张分层街景补真实准确率与"复杂图 ≤10s"验收。
+4. 下载并实测俄语 PP-OCRv5 Cyrillic rec，验证预留的 profile 切换。

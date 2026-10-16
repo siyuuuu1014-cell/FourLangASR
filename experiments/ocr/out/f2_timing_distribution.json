@@ -1,0 +1,125 @@
+{
+ "test": "f2_timingDistributionOnGoldenPrinted",
+ "device": {
+  "manufacturer": "OPPO",
+  "model": "PLW110",
+  "android": "16",
+  "sdkInt": 36,
+  "abi": "arm64-v8a",
+  "ramTotalMb": 15475,
+  "cpuCount": 8,
+  "javaMaxHeapMb": 256
+ },
+ "config": {
+  "detMaxSideLimit": 1280,
+  "detPostBudgetMs": 2500,
+  "maxRecBoxes": 120
+ },
+ "images": [
+  {
+   "image": "print_00.png",
+   "totalMs": 244,
+   "detInferMs": 61,
+   "dbPostMs": 9,
+   "recMs": 152,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_01.png",
+   "totalMs": 202,
+   "detInferMs": 51,
+   "dbPostMs": 3,
+   "recMs": 129,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_02.png",
+   "totalMs": 208,
+   "detInferMs": 62,
+   "dbPostMs": 2,
+   "recMs": 124,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_03.png",
+   "totalMs": 203,
+   "detInferMs": 45,
+   "dbPostMs": 2,
+   "recMs": 144,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_04.png",
+   "totalMs": 196,
+   "detInferMs": 50,
+   "dbPostMs": 2,
+   "recMs": 122,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_05.png",
+   "totalMs": 195,
+   "detInferMs": 52,
+   "dbPostMs": 3,
+   "recMs": 123,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_06.png",
+   "totalMs": 215,
+   "detInferMs": 52,
+   "dbPostMs": 2,
+   "recMs": 142,
+   "lines": 5,
+   "degraded": false
+  },
+  {
+   "image": "print_07.png",
+   "totalMs": 207,
+   "detInferMs": 50,
+   "dbPostMs": 2,
+   "recMs": 139,
+   "lines": 5,
+   "degraded": false
+  }
+ ],
+ "totalMs": {
+  "n": 8,
+  "mean": 208.75,
+  "min": 195,
+  "p50": 207,
+  "p90": 244,
+  "max": 244
+ },
+ "detInferMs": {
+  "n": 8,
+  "mean": 52.875,
+  "min": 45,
+  "p50": 52,
+  "p90": 62,
+  "max": 62
+ },
+ "dbPostMs": {
+  "n": 8,
+  "mean": 3.125,
+  "min": 2,
+  "p50": 2,
+  "p90": 9,
+  "max": 9
+ },
+ "recMs": {
+  "n": 8,
+  "mean": 134.375,
+  "min": 122,
+  "p50": 139,
+  "p90": 152,
+  "max": 152
+ },
+ "anyDegradedOnNormalImages": false
+}

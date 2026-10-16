@@ -1,0 +1,97 @@
+{
+ "test": "b2_boxesTextAndOrderMatchGolden",
+ "device": {
+  "manufacturer": "OPPO",
+  "model": "PLW110",
+  "android": "16",
+  "sdkInt": 36,
+  "abi": "arm64-v8a",
+  "ramTotalMb": 15475,
+  "cpuCount": 8,
+  "javaMaxHeapMb": 256
+ },
+ "images": [
+  {
+   "image": "print_00.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.963,
+   "lineCer": 0.012,
+   "exactLines": 4,
+   "orderMonotonic": true
+  },
+  {
+   "image": "print_01.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.964,
+   "lineCer": 0.017,
+   "exactLines": 3,
+   "orderMonotonic": true
+  },
+  {
+   "image": "print_02.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.968,
+   "lineCer": 0.02,
+   "exactLines": 2,
+   "orderMonotonic": true
+  },
+  {
+   "image": "print_03.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.955,
+   "lineCer": 0.004,
+   "exactLines": 4,
+   "orderMonotonic": true
+  },
+  {
+   "image": "print_04.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.959,
+   "lineCer": 0.004,
+   "exactLines": 4,
+   "orderMonotonic": true
+  },
+  {
+   "image": "print_05.png",
+   "tier": "printed_synth",
+   "goldenLines": 5,
+   "androidLines": 5,
+   "matched": 5,
+   "missed": 0,
+   "extra": 0,
+   "meanIoU": 0.975,
+   "lineCer": 0,
+   "exactLines": 5,
+   "orderMonotonic": true
+  }
+ ],
+ "meanIoU": 0.964,
+ "meanGoldenLineMatchRate": 1,
+ "meanPrintedTierLineCer": 0.009,
+ "note": "只覆盖 printed_synth：手写页检测后处理耗时不可接受（>3min/页），已列为阶段2 待修"
+}

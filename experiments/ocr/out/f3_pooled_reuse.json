@@ -1,0 +1,51 @@
+{
+ "test": "f3_pooledEngineReuseThenRelease",
+ "device": {
+  "manufacturer": "OPPO",
+  "model": "PLW110",
+  "android": "16",
+  "sdkInt": 36,
+  "abi": "arm64-v8a",
+  "ramTotalMb": 15475,
+  "cpuCount": 8,
+  "javaMaxHeapMb": 256
+ },
+ "runs": 15,
+ "samples": [
+  {
+   "run": 0,
+   "totalMs": 280,
+   "pssMb": 235.2,
+   "nativeMb": 149.6,
+   "javaHeapMb": 78.8
+  },
+  {
+   "run": 7,
+   "totalMs": 238,
+   "pssMb": 228.9,
+   "nativeMb": 231.9,
+   "javaHeapMb": 25.5
+  },
+  {
+   "run": 14,
+   "totalMs": 230,
+   "pssMb": 239.8,
+   "nativeMb": 231.7,
+   "javaHeapMb": 11.5
+  }
+ ],
+ "totalMs": {
+  "n": 15,
+  "mean": 238.733,
+  "min": 224,
+  "p50": 236,
+  "p90": 250,
+  "max": 280
+ },
+ "peakPssMb": 402.5,
+ "pssBeforeReleaseMb": 214.4,
+ "pssAfterReleaseMb": 208.5,
+ "nativeBeforeReleaseMb": 231.3,
+ "nativeAfterReleaseMb": 15.3,
+ "note": "releaseAll 后 native 堆应回落（见 f1：149->15MB）；OS 级 PSS 可能因 malloc arena 保留而只小幅下降，属正常，不代表泄漏。真正上限：单进程 ~17 次推理后卡死（见 README 阶段2A）。"
+}

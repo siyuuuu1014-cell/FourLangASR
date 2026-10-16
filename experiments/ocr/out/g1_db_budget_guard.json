@@ -1,0 +1,35 @@
+{
+ "test": "g1_dbWorkBudgetBoundsCandidateExplosion",
+ "device": {
+  "manufacturer": "OPPO",
+  "model": "PLW110",
+  "android": "16",
+  "sdkInt": 36,
+  "abi": "arm64-v8a",
+  "ramTotalMb": 15475,
+  "cpuCount": 8,
+  "javaMaxHeapMb": 256
+ },
+ "syntheticBlobs": 3600,
+ "maxCandidates": 3000,
+ "noBudget": {
+  "returnedBoxes": 3000,
+  "wallMs": 581,
+  "contoursFound": 3600,
+  "dbWallMs": 578,
+  "minAreaRectMs": 0,
+  "boxScoreMs": 1,
+  "unclipMs": 1,
+  "binaryPositiveRatio": 0.5625
+ },
+ "withBudget": {
+  "budgetMs": 300,
+  "returnedBoxes": 2046,
+  "wallMs": 301,
+  "truncated": true,
+  "contoursFound": 3600,
+  "contoursScanned": 2046,
+  "skippedByBudget": 954,
+  "dbWallMs": 301
+ }
+}

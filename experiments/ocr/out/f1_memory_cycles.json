@@ -1,0 +1,131 @@
+{
+ "test": "f1_repeatedLoadReleaseMemory",
+ "device": {
+  "manufacturer": "OPPO",
+  "model": "PLW110",
+  "android": "16",
+  "sdkInt": 36,
+  "abi": "arm64-v8a",
+  "ramTotalMb": 15475,
+  "cpuCount": 8,
+  "javaMaxHeapMb": 256
+ },
+ "reconstructCycles": 8,
+ "samples": [
+  {
+   "cycle": 0,
+   "ran": true,
+   "coldLoadMs": 85,
+   "pssMbLoaded": 235.6,
+   "pssMbAfterRelease": 235,
+   "nativeMbLoaded": 149.7,
+   "nativeMbAfterRelease": 15.4,
+   "javaHeapMb": 87.7
+  },
+  {
+   "cycle": 1,
+   "ran": false,
+   "coldLoadMs": 51,
+   "pssMbLoaded": 250.7,
+   "pssMbAfterRelease": 181.5,
+   "nativeMbLoaded": 26.4,
+   "nativeMbAfterRelease": 15.5,
+   "javaHeapMb": 102.7
+  },
+  {
+   "cycle": 2,
+   "ran": false,
+   "coldLoadMs": 45,
+   "pssMbLoaded": 206.7,
+   "pssMbAfterRelease": 206.7,
+   "nativeMbLoaded": 26.4,
+   "nativeMbAfterRelease": 15.4,
+   "javaHeapMb": 117.7
+  },
+  {
+   "cycle": 3,
+   "ran": false,
+   "coldLoadMs": 49,
+   "pssMbLoaded": 222.5,
+   "pssMbAfterRelease": 222.4,
+   "nativeMbLoaded": 26.4,
+   "nativeMbAfterRelease": 15.4,
+   "javaHeapMb": 132.8
+  },
+  {
+   "cycle": 4,
+   "ran": false,
+   "coldLoadMs": 73,
+   "pssMbLoaded": 116.5,
+   "pssMbAfterRelease": 116.4,
+   "nativeMbLoaded": 26.6,
+   "nativeMbAfterRelease": 15.6,
+   "javaHeapMb": 17.3
+  },
+  {
+   "cycle": 5,
+   "ran": false,
+   "coldLoadMs": 49,
+   "pssMbLoaded": 114.8,
+   "pssMbAfterRelease": 114.8,
+   "nativeMbLoaded": 26.5,
+   "nativeMbAfterRelease": 15.6,
+   "javaHeapMb": 15.5
+  },
+  {
+   "cycle": 6,
+   "ran": false,
+   "coldLoadMs": 42,
+   "pssMbLoaded": 114.9,
+   "pssMbAfterRelease": 114.8,
+   "nativeMbLoaded": 26.5,
+   "nativeMbAfterRelease": 15.6,
+   "javaHeapMb": 15.5
+  },
+  {
+   "cycle": 7,
+   "ran": false,
+   "coldLoadMs": 43,
+   "pssMbLoaded": 114.9,
+   "pssMbAfterRelease": 114.8,
+   "nativeMbLoaded": 26.6,
+   "nativeMbAfterRelease": 15.6,
+   "javaHeapMb": 15.5
+  }
+ ],
+ "pssAfterReleaseSeriesMb": [
+  235,
+  181.5,
+  206.7,
+  222.4,
+  116.4,
+  114.8,
+  114.8,
+  114.8
+ ],
+ "nativeAfterReleaseSeriesMb": [
+  15.4,
+  15.5,
+  15.4,
+  15.4,
+  15.6,
+  15.6,
+  15.6,
+  15.6
+ ],
+ "peakPssMb": 250.7,
+ "peakNativeMb": 149.7,
+ "drift": {
+  "pssFirst2Avg": 208.3,
+  "pssLast2Avg": 114.8,
+  "pssDriftMb": -93.5,
+  "nativeFirst2Avg": 15.4,
+  "nativeLast2Avg": 15.6,
+  "nativeDriftMb": 0.2
+ },
+ "finding": "8 轮重建/释放内：native 堆释放后稳定 ~15MB、PSS 回到基线，单轮内存被正常回收；但重建紧循环在 ~8~32 轮区间会卡死进程（ORT 会话原生资源累积），非内存泄漏而是生命周期缺陷",
+ "unverified": [
+  "30+ 轮模型重建/释放稳定性：未通过（紧循环约 8~32 轮卡死），留待阶段2B 用池化复用+可中断释放修复",
+  "OCR+本地翻译顺序执行峰值内存：设备上没有 734MB 翻译包，未测（不得声称已通过）"
+ ]
+}
