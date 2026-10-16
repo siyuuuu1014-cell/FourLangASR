@@ -137,6 +137,12 @@ object Harness {
         }
     }
 
+    /** 各 instrumented 测试都要先确保 OpenCV native 载入，失败即抛，避免后面撞 UnsatisfiedLinkError。 */
+    fun assertTrueOpenCv() {
+        val ok = com.example.fourlangasr.ocr.paddle.util.OpenCVUtils.init(testContext())
+        if (!ok) throw AssertionError("OpenCV native 加载失败")
+    }
+
     fun stats(values: List<Double>): JSONObject {
         if (values.isEmpty()) return JSONObject()
         val sorted = values.sorted()

@@ -34,6 +34,13 @@ class ORTSessionManager(
     var coldLoadTimeMs: Long = 0
         private set
 
+    companion object {
+        /** 阶段2B-0 诊断开关（默认关，保持对拍基线）：true 时关闭 CPU 内存 arena（省 ~200MB native）。 */
+        const val DISABLE_CPU_MEM_ARENA = false
+        /** 阶段2B-0 诊断开关：true 会抛错（单例 env 不支持），仅作记录，勿开。 */
+        const val DISABLE_PER_SESSION_THREADS = false
+    }
+
     fun loadModels(detAssetPath: String, recAssetPath: String) {
         val loadStart = System.currentTimeMillis()
         env = OrtEnvironment.getEnvironment()
@@ -45,6 +52,12 @@ class ORTSessionManager(
             // 也与 KitTranslationEngine.makeSession 的既有约束一致。
             setOptimizationLevel(OrtSession.SessionOptions.OptLevel.BASIC_OPT)
             setIntraOpNumThreads(config.numThreads)
+            // 阶段2B-0 诊断结论（见 README 2B-0）：挂起来自 libort4jrt.so(ORT 1.27) 内部线程池
+            // 在反复大张量推理后的 futex 等待；关 arena 能把 native 常驻从 ~232MB 降到 ~25MB，
+            // 但不解决挂起；disablePerSessionThreads() 因走的是单例 env 会直接抛错，不可用。
+            // 两个开关默认关闭，保持与阶段1/2A 一致的对拍基线；需要内存对照时再单独打开 arena 开关。
+            if (DISABLE_CPU_MEM_ARENA) setCPUArenaAllocator(false)
+            if (DISABLE_PER_SESSION_THREADS) disablePerSessionThreads()
         }
         try {
             val ortEnv = env ?: throw OCRError.ModelLoadFailed("OCR", Exception("Environment not initialized"))

@@ -1,0 +1,29 @@
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":0,"opMs":656,"threads":28,"fd":114,"javaMb":83.9,"nativeMb":149.4,"pssMb":231.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":1,"opMs":611,"threads":28,"fd":114,"javaMb":144.1,"nativeMb":231.5,"pssMb":336.3,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":2,"opMs":586,"threads":28,"fd":114,"javaMb":25.5,"nativeMb":231.7,"pssMb":228.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":3,"opMs":596,"threads":28,"fd":114,"javaMb":25.5,"nativeMb":231.7,"pssMb":223.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":4,"opMs":595,"threads":28,"fd":114,"javaMb":25.5,"nativeMb":231.8,"pssMb":228.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":5,"opMs":595,"threads":28,"fd":114,"javaMb":25.5,"nativeMb":231.8,"pssMb":227.1,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":6,"opMs":595,"threads":25,"fd":114,"javaMb":25.5,"nativeMb":231.6,"pssMb":228.5,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+I/OcrPhase1(15559): PROBE {"which":"single-thread","iter":7,"opMs":588,"threads":25,"fd":114,"javaMb":25.5,"nativeMb":231.7,"pssMb":227.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner","extra":"lines=5"}
+E/OcrPhase1(15559): HANGDUMP I-single stalledMs=14803 threads=25 fd=114 java=11.2MB native=232.2MB pss=212.0MB
+E/OcrPhase1(15559): JAVASTACKS<I-single> threadCount=18
+E/OcrPhase1(15559): JSTACK<I-single> [FramePolicy] state=RUNNABLE android.os.MessageQueue.nativePollOnce:-2 <- android.os.MessageQueue.nextLegacy:983 <- android.os.MessageQueue.next:1095 <- android.os.Looper.loopOnce:225 <- android.os.Looper.loop:416 <- android.os.HandlerThread.run:85
+E/OcrPhase1(15559): JSTACK<I-single> [FinalizerWatchdogDaemon] state=TIMED_WAITING java.lang.Thread.sleep:-2 <- java.lang.Thread.sleep:451 <- java.lang.Thread.sleep:356 <- java.lang.Daemons$FinalizerWatchdogDaemon.sleepForNanos:539 <- java.lang.Daemons$FinalizerWatchdogDaemon.waitForProgress:604 <- java.lang.Daemons$FinalizerWatchdogDaemon.runInternal:470
+E/OcrPhase1(15559): JSTACK<I-single> [binder:15559_3] state=RUNNABLE 
+E/OcrPhase1(15559): JSTACK<I-single> [HangWatchdog-I-single] state=RUNNABLE dalvik.system.VMStack.getThreadStackTrace:-2 <- java.lang.Thread.getStackTrace:1960 <- java.lang.Thread.getAllStackTraces:2028 <- com.example.fourlangasr.ocr.HangProbe.dumpJavaStacks:96 <- com.example.fourlangasr.ocr.HangProbe.watchdog$lambda$1:79 <- com.example.fourlangasr.ocr.HangProbe.$r8$lambda$GmysU36-Dtok-YlPFlWYE0q1Hs4:0
+E/OcrPhase1(15559): JSTACK<I-single> [HeapTaskDaemon] state=WAITING 
+E/OcrPhase1(15559): JSTACK<I-single> [Instr: androidx.test.runner.AndroidJUnitRunner] state=RUNNABLE ai.onnxruntime.OrtSession.run:-2 <- ai.onnxruntime.OrtSession.run:421 <- ai.onnxruntime.OrtSession.run:268 <- ai.onnxruntime.OrtSession.run:236 <- com.example.fourlangasr.ocr.paddle.engine.ORTSessionManager.runSession:135 <- com.example.fourlangasr.ocr.paddle.engine.ORTSessionManager.runDetection:87
+E/OcrPhase1(15559): JSTACK<I-single> [main] state=RUNNABLE androidx.appcompat.widget.AppCompatTextView.<init>:113 <- com.google.android.material.textview.MaterialTextView.<init>:92 <- com.google.android.material.textview.MaterialTextView.<init>:87 <- com.google.android.material.theme.MaterialComponentsViewInflater.createTextView:61 <- androidx.appcompat.app.AppCompatViewInflater.createView:148 <- androidx.appcompat.app.AppCompatDelegateImpl.createView:1678
+E/OcrPhase1(15559): JSTACK<I-single> [binder:15559_2] state=RUNNABLE 
+E/OcrPhase1(15559): JSTACK<I-single> [RenderThread] state=RUNNABLE 
+E/OcrPhase1(15559): JSTACK<I-single> [AnimTimer] state=RUNNABLE android.os.MessageQueue.nativePollOnce:-2 <- android.os.MessageQueue.nextLegacy:983 <- android.os.MessageQueue.next:1095 <- android.os.Looper.loopOnce:225 <- android.os.Looper.loop:416 <- android.os.HandlerThread.run:85
+E/OcrPhase1(15559): JSTACK<I-single> [FinalizerDaemon] state=WAITING java.lang.Object.wait:-2 <- java.lang.Object.wait:405 <- java.lang.ref.ReferenceQueue.remove:207 <- java.lang.ref.ReferenceQueue.remove:228 <- java.lang.Daemons$FinalizerDaemon.runInternal:353 <- java.lang.Daemons$Daemon.run:137
+E/OcrPhase1(15559): JSTACK<I-single> [Profile Saver] state=RUNNABLE 
+E/OcrPhase1(15559): JSTACK<I-single> [binder:15559_1] state=RUNNABLE 
+E/OcrPhase1(15559): JSTACK<I-single> [InstrumentationConnectionThread] state=RUNNABLE android.os.MessageQueue.nativePollOnce:-2 <- android.os.MessageQueue.nextLegacy:983 <- android.os.MessageQueue.next:1095 <- android.os.Looper.loopOnce:225 <- android.os.Looper.loop:416 <- android.os.HandlerThread.run:85
+E/OcrPhase1(15559): JSTACK<I-single> [oplus.view.bg] state=RUNNABLE android.os.MessageQueue.nativePollOnce:-2 <- android.os.MessageQueue.nextLegacy:983 <- android.os.MessageQueue.next:1095 <- android.os.Looper.loopOnce:225 <- android.os.Looper.loop:416 <- android.os.HandlerThread.run:85
+E/OcrPhase1(15559): JSTACK<I-single> [ReferenceQueueDaemon] state=WAITING java.lang.Object.wait:-2 <- java.lang.Object.wait:405 <- java.lang.Object.wait:543 <- java.lang.Daemons$ReferenceQueueDaemon.runInternal:265 <- java.lang.Daemons$Daemon.run:137 <- java.lang.Thread.run:1119
+E/OcrPhase1(15559): JSTACK<I-single> [Signal Catcher] state=WAITING 
+E/OcrPhase1(15559): JSTACK<I-single> [Jit thread pool worker thread 0] state=RUNNABLE 
+E/OcrPhase1(15559): HANGDUMP I-single end

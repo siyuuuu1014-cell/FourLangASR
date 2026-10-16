@@ -1,0 +1,2 @@
+E/TestRunner(27840): com.example.fourlangasr.ocr.paddle.model.OCRError$ModelLoadFailed: Failed to load detection model
+E/TestRunner(27840): Caused by: ai.onnxruntime.OrtException: Error code - ORT_FAIL - message: /onnxruntime_src/onnxruntime/core/session/inference_session.cc:638 void onnxruntime::InferenceSession::ConstructorCommon(const SessionOptions &, const Environment &) session_env.EnvCreatedWithGlobalThreadPools() was false. When the session is not configured to use per session threadpools, the env must be created with the the CreateEnvWithGlobalThreadPools API.

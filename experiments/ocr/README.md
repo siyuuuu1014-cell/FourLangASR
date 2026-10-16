@@ -396,3 +396,91 @@ det 输入尺寸扫描（真实照片上采样，cap4000）：
 2. 把这套 OCR runtime（含护栏）迁入生产 `main`，接相册导入 + 校对 UI + `TranslationService`。
 3. 用用户实拍 ≥100 张分层街景补真实准确率与"复杂图 ≤10s"验收。
 4. 下载并实测俄语 PP-OCRv5 Cyrillic rec，验证预留的 profile 切换。
+
+---
+
+# 阶段 2B-0：重复推理挂起 —— 定位与证据（OPPO PLW110 / Android 16 / arm64-v8a）
+
+本轮只做稳定性定位，不改生产 ASR/翻译/TTS，不接 UI。结论：**挂起被定位到 OCR 自带的
+ONNX Runtime 原生库 `libort4jrt.so`（ORT 1.27）内部线程池，在"反复大张量推理"后进入 futex 等待而卡死；
+与 OpenCV、与 ASR/双 runtime、与内存/句柄泄漏都无关。** 这是证据支持的定位，不是猜测；
+但"为什么 ORT 线程池会卡"的最后一层因设备无 root/无 NDK 调试器而无法符号化到函数名（见"取证受限"）。
+
+## 复现矩阵（同一进程内反复操作，OcrHangIsolationTest，非 root 真机）
+
+| 代号 | 内容 | 结果 | 线程/FD/native |
+|---|---|---|---|
+| A | 只反复 Det 推理（小张量 64×64） | 60 次 ✅ | 27 / 114 / 24.8MB 全平 |
+| B | 只反复 Rec 推理（小张量 48×320） | 60 次 ✅ | 27 / 114 / 33.8MB 全平 |
+| G | Det+Rec 交替（纯 ORT，小张量，240 次 run） | 40 轮 ✅ | 27 / 114 / 33.8MB 全平 |
+| H | 只跑 OpenCV（解码/前处理/DB/裁剪，无 ORT） | 40 轮 ✅ | 28 / 114 / 15.9MB 全平 |
+| **N** | **只 ORT，真实尺寸大张量(1×3×960×1280)，无 OpenCV** | **❌ ~14 轮挂** | 挂前 24 / 114 / 23.6MB 全平 |
+| C | 完整管线（OpenCV+ORT 真实图） | ❌ ~18 轮挂 | 35 / 114 / 232MB(arena) 全平 |
+| I | 完整管线，ORT intra-op=1 | ❌ ~8 轮挂 | — |
+| L | 完整管线，OpenCV 线程=1 | ❌ ~21 轮挂 | — |
+| M | 完整管线，两者都=1 | ❌ ~9 轮挂 | — |
+
+**决定性对照**：G（小 ORT 张量）不挂、N（大 ORT 张量、无 OpenCV）挂 → 触发条件是
+**ORT 处理"大到真正启用 intra-op 线程池并行"的张量、且反复多次**；OpenCV 不是必要条件
+（C 只是恰好也用了大图）。限线程数（I/L/M）、关 arena、独立复制缓冲都不能规避。
+
+## 任务 A：原生依赖 ELF 审计（experiments/ocr/elf_audit.py）
+
+- `libort4jrt.so`(OCR ORT 1.27) 与 `libonnxruntime.so`(sherpa)：DT_NEEDED 无 libc++_shared，
+  导出 C++ 符号=0 → **各自静态内嵌一份隐藏 libc++**。
+- `libopencv_java4.so`：DT_NEEDED **含 libc++_shared.so** → 用共享 libc++。
+- 全部共用同一 `libc.so`（同一 malloc）。
+- 结论：进程里确实有两套 C++ 运行时（ORT 静态隐藏 + OpenCV 共享），**但无导出符号冲突、malloc 统一**，
+  且 N 证明不加载 OpenCV 也挂 → **双 libc++/双 runtime 不是本挂起的原因**（推翻上一轮的猜测）。
+
+## 任务 B：JNI 与数据生命周期审查
+
+- `ORTSessionManager.runSession`：OnnxTensor 与 OrtSession.Result 均在 finally 关闭；
+  输出经 `copyFloatBuffer` 拷成 Java float[] 再返回，不持有原生张量。
+- OpenCV Mat（Det/Rec 前处理、DB、QuadTextCrop、BitmapUtils）正常与异常路径均 release。
+- OpenCV 与 ORT 之间**不共享原生缓冲**（经 Java float[] 拷贝桥接）。
+- 结合 N（无 OpenCV 也挂）：挂起**不是**对象提前/重复释放或跨库缓冲破坏。
+
+## 任务 C：最小交叉实验
+
+见上表 A/B/G/H/N/C/I/L/M。已把"大张量并行"与"OpenCV 交错"两个变量分离，锁定前者。
+
+## 任务 D：独立 OCR 进程可行性
+
+- 用 `/proc/<pid>/maps`（经 run-as，非 root 可读自身）确认：挂起进程里**只映射了
+  `libort4jrt.so` + `libonnxruntime4j_jni.so`**，sherpa 的 `libonnxruntime.so`/`libvosk`/TFLite **未加载**。
+- 即：N/C 已经等价于"只含 OCR 原生库的独立进程"，仍挂 → **拆独立 OCR 进程不能规避**该挂起。
+- 因此不建议把"独立 OCR Service + IPC"当作本问题的解法（它绕不开 libort4jrt.so 自身的 bug）。
+
+## 取证受限（如实记录，不推测替代）
+
+- `debuggerd -b <pid>`：`root is required`（非 root 不可用）。
+- `simpleperf record`：`cpu-cycles` 与 `cpu-clock` 均报 `not supported on the device`（ColorOS 关闭了 perf_event）。
+- 本机未装 NDK → 无 `lldb-server` 可经 run-as 附加；Android Studio GUI 调试不可用。
+- SIGQUIT 的 ART 线程栈写进 `/data/anr`，非 root 读不到。
+- **拿到的替代证据**：经 `/proc/<pid>/task/<tid>/syscall` 采 PC + `/proc/maps` 反查，
+  确认挂起时测试线程与约 10 个 ORT worker 线程全部停在 `libc.so` 的 futex 等待地址
+  （PC 0x7ad1f08d9c→libc+0x56d9c），另有线程 PC 落在 `libort4jrt.so` 段内（base.apk pgoff 0x21487000）。
+  即"卡在 ORT 原生线程池的 futex 等待"，但**函数名级别**的栈需要 root/NDK 才能给出。
+
+## 候选根因（按可能性，未定论）
+
+1. **`libort4jrt.so` 是被 patchelf 改名(SONAME libonnxruntime.so→libort4jrt.so)的 ORT 1.27**，
+   改名/重定位破坏了其线程池或 `dlopen` 自检，反复大推理后触发等待竞态。**最可疑**。
+2. ORT 1.27 本身在该机型/该模型上的 intra-op 线程池 bug。
+3. 与 `OrtEnvironment.getEnvironment()` 单例的全局状态累积有关（D 每轮新建 session 仍挂，env 未换）。
+
+## 推荐修复路线（需你拍板，涉及原生库的要先做兼容评估）
+
+- 首选：**做一份 ORT 运行时兼容性评估**（对应你 E 条）——比较 (a) 用未改名的官方 ORT Java AAR 跑 OCR、
+  (b) 让 OCR 复用 sherpa 的 `libonnxruntime.so`（去掉双 runtime hack）、(c) 升级/降级 ORT 版本。
+  评估含 ABI、minSdk、包体、与 ASR/翻译共存、Golden 对拍。**在你批准前不替换任何生产原生库。**
+- 在根因（尤其候选 1 的改名问题）用 NDK 调试器/root 设备拿到函数级栈确认前，**不建议进入正式 OCR 集成**。
+
+## 2B-0 交付物
+
+- 复现矩阵、ELF 审计、maps/PC 取证：`experiments/ocr/out/{hang_*.log,hung_maps.txt}`、`elf_audit.py`。
+- 隔离测试：`OcrHangIsolationTest`(A/B/G/H/N/C/I/L/M/D) + `HangProbe`（线程/FD/内存计数 + 反射 dump）。
+- Golden 回归：b2 在诊断开关复位后仍通过（IoU 0.964 / CER 0.009 / 顺序单调）。
+- 结论：**未找到不改原生库即可稳定跑 >~14 次大推理的方案**；根因锁定在 libort4jrt.so 内部，
+  需运行时兼容性评估 + 函数级栈取证后再修。
