@@ -1,0 +1,25 @@
+10-30 14:29:19.711 22472 22494 I OrtStress: ENV churn device=OPPO/PLW110 sdk=36 abi=arm64-v8a iters=100 stallMs=15000
+10-30 14:29:20.045 22472 22494 I OrtStress: START churn iter=0 threads=19 fd=106
+10-30 14:29:20.520 22472 22494 I OrtStress: END churn iter=0 opMs=416 threads=19 fd=106 pss=281.3MB native=13.9MB
+10-30 14:29:20.521 22472 22494 I OrtStress: START churn iter=1 threads=19 fd=106
+10-30 14:29:20.953 22472 22494 I OrtStress: END churn iter=1 opMs=370 threads=19 fd=106 pss=445.3MB native=13.8MB
+10-30 14:29:20.953 22472 22494 I OrtStress: START churn iter=2 threads=19 fd=106
+10-30 14:29:21.379 22472 22494 I OrtStress: END churn iter=2 opMs=361 threads=19 fd=106 pss=502.3MB native=13.8MB
+10-30 14:29:21.379 22472 22494 I OrtStress: START churn iter=3 threads=19 fd=106
+10-30 14:29:21.825 22472 22494 I OrtStress: END churn iter=3 opMs=388 threads=19 fd=106 pss=388.0MB native=14.1MB
+10-30 14:29:21.825 22472 22494 I OrtStress: START churn iter=4 threads=19 fd=106
+10-30 14:29:22.265 22472 22494 I OrtStress: END churn iter=4 opMs=376 threads=19 fd=106 pss=352.1MB native=14.1MB
+10-30 14:29:22.266 22472 22494 I OrtStress: START churn iter=5 threads=19 fd=106
+10-30 14:29:22.710 22472 22494 I OrtStress: END churn iter=5 opMs=383 threads=19 fd=106 pss=360.9MB native=14.1MB
+10-30 14:29:22.710 22472 22494 I OrtStress: START churn iter=6 threads=19 fd=106
+10-30 14:29:23.169 22472 22494 I OrtStress: END churn iter=6 opMs=395 threads=19 fd=106 pss=392.7MB native=14.1MB
+10-30 14:29:23.170 22472 22494 I OrtStress: START churn iter=7 threads=19 fd=106
+10-30 14:29:23.646 22472 22494 I OrtStress: END churn iter=7 opMs=411 threads=19 fd=106 pss=346.4MB native=14.1MB
+10-30 14:29:23.646 22472 22494 I OrtStress: START churn iter=8 threads=19 fd=106
+10-30 14:29:24.117 22472 22494 I OrtStress: END churn iter=8 opMs=412 threads=19 fd=106 pss=369.3MB native=14.1MB
+10-30 14:29:24.118 22472 22494 I OrtStress: START churn iter=9 threads=19 fd=106
+10-30 14:29:24.600 22472 22494 I OrtStress: END churn iter=9 opMs=417 threads=16 fd=106 pss=346.5MB native=13.8MB
+10-30 14:29:24.601 22472 22494 I OrtStress: START churn iter=10 threads=16 fd=106
+10-30 14:29:25.054 22472 22494 I OrtStress: END churn iter=10 opMs=384 threads=16 fd=106 pss=369.4MB native=13.8MB
+10-30 14:29:25.054 22472 22494 I OrtStress: START churn iter=11 threads=16 fd=106
+[halt] rc=124 pid=22472

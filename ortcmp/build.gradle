@@ -48,3 +48,47 @@ dependencies {
     androidTestImplementation 'androidx.test:core:1.5.0'
     androidTestImplementation 'junit:junit:4.13.2'
 }
+
+// 阶段2B-0：保证官方 ORT 测试与主 App OCR 测试用**完全相同**的模型文件。
+// 从主 App 的 androidTest 资产同步到本模块，并在构建时校验 sha256 一致，不一致直接失败。
+def appModelsDir = file("../app/src/androidTest/assets/ocr/models")
+def localModelsDir = file("src/androidTest/assets/ocr/models")
+def expectedModels = [
+    "det/inference.onnx",
+    "rec/inference.onnx",
+    "rec/inference.yml",
+]
+
+tasks.register("syncOrtcmpModels", Sync) {
+    from(appModelsDir)
+    into(localModelsDir)
+    doFirst {
+        if (!appModelsDir.isDirectory()) {
+            throw new GradleException("主 App 模型目录不存在: $appModelsDir（先跑 experiments/ocr/prepare_android_assets.py 或阶段0 下载脚本）")
+        }
+    }
+}
+
+tasks.register("verifyOrtcmpModels") {
+    dependsOn("syncOrtcmpModels")
+    doLast {
+        def sha = { File f ->
+            java.security.MessageDigest.getInstance("SHA-256")
+                .digest(f.bytes).encodeHex().toString()
+        }
+        expectedModels.each { rel ->
+            def a = new File(appModelsDir, rel)
+            def b = new File(localModelsDir, rel)
+            if (!a.isFile() || !b.isFile()) throw new GradleException("缺模型文件: $rel")
+            def ha = sha(a); def hb = sha(b)
+            if (ha != hb) throw new GradleException("模型不一致 $rel: app=$ha ortcmp=$hb")
+            logger.lifecycle("ortcmp model OK $rel sha256=$ha")
+        }
+    }
+}
+
+// 测试资产编译前先同步并校验。
+tasks.matching { it.name == "preBuild" || it.name == "mergeDebugAndroidTestAssets" }.configureEach {
+    dependsOn("verifyOrtcmpModels")
+}
+

@@ -1,2 +1,15 @@
-E/TestRunner(27840): com.example.fourlangasr.ocr.paddle.model.OCRError$ModelLoadFailed: Failed to load detection model
-E/TestRunner(27840): Caused by: ai.onnxruntime.OrtException: Error code - ORT_FAIL - message: /onnxruntime_src/onnxruntime/core/session/inference_session.cc:638 void onnxruntime::InferenceSession::ConstructorCommon(const SessionOptions &, const Environment &) session_env.EnvCreatedWithGlobalThreadPools() was false. When the session is not configured to use per session threadpools, the env must be created with the the CreateEnvWithGlobalThreadPools API.
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":0,"opMs":360,"threads":25,"fd":106,"javaMb":108.3,"nativeMb":372,"pssMb":293,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":1,"opMs":323,"threads":25,"fd":106,"javaMb":160.4,"nativeMb":371.9,"pssMb":455.2,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":2,"opMs":317,"threads":25,"fd":106,"javaMb":212.4,"nativeMb":371.9,"pssMb":507.3,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":3,"opMs":352,"threads":25,"fd":106,"javaMb":28,"nativeMb":371.9,"pssMb":350,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":4,"opMs":313,"threads":25,"fd":106,"javaMb":68.6,"nativeMb":372,"pssMb":349.9,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":5,"opMs":327,"threads":25,"fd":106,"javaMb":39.4,"nativeMb":372,"pssMb":361.3,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":6,"opMs":316,"threads":25,"fd":106,"javaMb":68.6,"nativeMb":372,"pssMb":390.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":7,"opMs":307,"threads":25,"fd":106,"javaMb":68.6,"nativeMb":372,"pssMb":390.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":8,"opMs":323,"threads":25,"fd":106,"javaMb":68.6,"nativeMb":372,"pssMb":390.4,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":9,"opMs":322,"threads":25,"fd":106,"javaMb":68.6,"nativeMb":372,"pssMb":352.1,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":10,"opMs":334,"threads":25,"fd":106,"javaMb":45.2,"nativeMb":372,"pssMb":367,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":11,"opMs":324,"threads":25,"fd":106,"javaMb":28,"nativeMb":372,"pssMb":349.8,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":12,"opMs":315,"threads":22,"fd":106,"javaMb":33.7,"nativeMb":371.8,"pssMb":355.6,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":13,"opMs":315,"threads":22,"fd":106,"javaMb":68.6,"nativeMb":371.8,"pssMb":390.5,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}
+I/OcrPhase1(20632): PROBE {"which":"large-ort","iter":14,"opMs":319,"threads":22,"fd":106,"javaMb":68.6,"nativeMb":371.8,"pssMb":390.5,"thread":"Instr: androidx.test.runner.AndroidJUnitRunner"}

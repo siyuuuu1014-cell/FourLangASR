@@ -511,3 +511,30 @@ DT_SONAME/DT_NEEDED 的 ELF 工具，但这属于健壮性改进，不是本 bug
 压力测试 `OrtOfficialStressTest`（≥200 次大张量推理 + 反复建/释放 session + 线程/FD/PSS/native/耗时）
 已就绪；目标 APK 已装真机，测试 APK 安装过程中设备 USB 掉线，**对照尚未跑出结果**。
 设备恢复后按用户分支逻辑判定：官方也挂→进方案(c)；官方不挂→查补丁/加载链路/JNI 桥；两者都稳→复核复现条件。
+
+## 2B-0 方案(a) 对照结果（已执行，真机 OPPO PLW110 / Android 16）
+
+隔离模块 `ortcmp`（只含官方 onnxruntime-android:1.27.0，无 sherpa/opencv/vosk/tflite），
+模型经 Gradle `syncOrtcmpModels`+`verifyOrtcmpModels` 校验与主 App 同源同 sha256；
+输入、SessionOptions(BASIC,intra-op=4)、每轮 1 det[1,3,960,1280] + 5 rec[1,3,48,800] 完全一致。
+
+| 构建 | 测试 | 结果 | 挂起前资源 |
+|---|---|---|---|
+| 修改版 libort4jrt.so | 复用 session 持续推理 | **挂起 @iter 15**（完成 0–14） | native ~372MB(arena) / threads 25→22 / fd 106 平 |
+| 官方官方 AAR 1.27.0 | 复用 session 持续推理 | **挂起 @iter 13**（完成 0–12） | native ~372MB / threads 25→22 / fd 106 平 |
+| 官方官方 AAR 1.27.0 | 反复建/销 session | **挂起 @iter 11**（完成 0–10） | native ~13.8MB / threads 16 / fd 106 平 |
+
+**结论（证据支持，非预设）**：官方未改版与修改版**都挂**，且挂在同一迭代量级、资源曲线一致 →
+- 不是双 ORT 改名/补丁的问题（官方原版一样挂）；
+- 不是 OpenCV / sherpa 共存问题（ortcmp 不加载它们）；
+- 不是进程隔离问题（已是最小 OCR-only 进程）；
+- 挂起前线程/FD/native/PSS **无持续增长**（不是内存/FD/线程泄漏，是 ORT 内部线程池在反复大张量推理后停滞）。
+→ 指向 **ORT 1.27.0 自身的线程池/会话在该模型+大张量负载下的问题**（与具体 ORT 版本/构建配置相关）。
+
+**验收现状（如实）**：
+- 官方与修改版**都有真机结果**；都**未跑满 200 轮**（分别卡在 ~13/~11），这不是测试没写好，而是被 ORT 挂起本身阻断——200 轮验收在本轮**未达成**。
+- ORT 版本对照（方案 c）尚未做：需再引其它官方 ORT 版本 AAR 到 `ortcmp` 复测。
+- ASR/Vosk/LID 共存回归（a4a/b/c）通过；翻译泄漏回归用例已写，但本机无 734MB 翻译包，**假定跳过、未验证**。
+
+**下一步（方案 c）**：在 `ortcmp` 里依次替换官方 ORT 版本（如 1.22 / 1.23 / 1.26 等）与构建配置
+（intra-op=1、disable spinning、不同 arena），用同一 200 轮脚本定位"哪个版本/配置不挂"，再决定生产路线。

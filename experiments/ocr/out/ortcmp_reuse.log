@@ -1,0 +1,29 @@
+10-30 14:23:36.962 21965 21986 I OrtStress: ENV reuse device=OPPO/PLW110 sdk=36 abi=arm64-v8a iters=200 stallMs=15000
+10-30 14:23:37.285 21965 21986 I OrtStress: START reuse iter=0 threads=25 fd=106
+10-30 14:23:37.696 21965 21986 I OrtStress: END reuse iter=0 opMs=352 threads=25 fd=106 pss=282.0MB native=372.0MB
+10-30 14:23:37.697 21965 21986 I OrtStress: START reuse iter=1 threads=25 fd=106
+10-30 14:23:38.092 21965 21986 I OrtStress: END reuse iter=1 opMs=323 threads=25 fd=106 pss=444.1MB native=372.0MB
+10-30 14:23:38.093 21965 21986 I OrtStress: START reuse iter=2 threads=25 fd=106
+10-30 14:23:38.463 21965 21986 I OrtStress: END reuse iter=2 opMs=309 threads=25 fd=106 pss=496.2MB native=372.0MB
+10-30 14:23:38.464 21965 21986 I OrtStress: START reuse iter=3 threads=25 fd=106
+10-30 14:23:38.860 21965 21986 I OrtStress: END reuse iter=3 opMs=336 threads=25 fd=106 pss=339.0MB native=372.0MB
+10-30 14:23:38.860 21965 21986 I OrtStress: START reuse iter=4 threads=25 fd=106
+10-30 14:23:39.250 21965 21986 I OrtStress: END reuse iter=4 opMs=328 threads=25 fd=106 pss=338.6MB native=372.1MB
+10-30 14:23:39.250 21965 21986 I OrtStress: START reuse iter=5 threads=25 fd=106
+10-30 14:23:39.635 21965 21986 I OrtStress: END reuse iter=5 opMs=323 threads=25 fd=106 pss=355.8MB native=372.1MB
+10-30 14:23:39.636 21965 21986 I OrtStress: START reuse iter=6 threads=25 fd=106
+10-30 14:23:40.018 21965 21986 I OrtStress: END reuse iter=6 opMs=314 threads=25 fd=106 pss=338.6MB native=372.1MB
+10-30 14:23:40.019 21965 21986 I OrtStress: START reuse iter=7 threads=25 fd=106
+10-30 14:23:40.405 21965 21986 I OrtStress: END reuse iter=7 opMs=320 threads=25 fd=106 pss=355.8MB native=372.1MB
+10-30 14:23:40.406 21965 21986 I OrtStress: START reuse iter=8 threads=25 fd=106
+10-30 14:23:40.795 21965 21986 I OrtStress: END reuse iter=8 opMs=324 threads=25 fd=106 pss=332.9MB native=372.1MB
+10-30 14:23:40.795 21965 21986 I OrtStress: START reuse iter=9 threads=25 fd=106
+10-30 14:23:41.179 21965 21986 I OrtStress: END reuse iter=9 opMs=322 threads=25 fd=106 pss=379.3MB native=372.1MB
+10-30 14:23:41.179 21965 21986 I OrtStress: START reuse iter=10 threads=25 fd=106
+10-30 14:23:41.575 21965 21986 I OrtStress: END reuse iter=10 opMs=323 threads=25 fd=106 pss=332.9MB native=372.1MB
+10-30 14:23:41.577 21965 21986 I OrtStress: START reuse iter=11 threads=25 fd=106
+10-30 14:23:41.953 21965 21986 I OrtStress: END reuse iter=11 opMs=315 threads=22 fd=106 pss=379.3MB native=371.9MB
+10-30 14:23:41.954 21965 21986 I OrtStress: START reuse iter=12 threads=22 fd=106
+10-30 14:23:42.336 21965 21986 I OrtStress: END reuse iter=12 opMs=317 threads=22 fd=106 pss=338.7MB native=371.9MB
+10-30 14:23:42.337 21965 21986 I OrtStress: START reuse iter=13 threads=22 fd=106
+[halt] rc=124 pid=21965
