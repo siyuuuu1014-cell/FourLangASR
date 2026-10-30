@@ -58,9 +58,14 @@ class KitTranslationEngine(
         val opts = OrtSession.SessionOptions()
         // 必须 BASIC：ORT EXTENDED 的 TransposeDQWeightsForMatMulNBits
         // 对"子图内 DQ 引用主图 int8 权重"有 bug（包内 README 已实测）
-        opts.setOptimizationLevel(OrtSession.SessionOptions.OptLevel.BASIC_OPT)
-        opts.setIntraOpNumThreads(numThreads)
-        return env.createSession(path.absolutePath, opts)
+        return try {
+            opts.setOptimizationLevel(OrtSession.SessionOptions.OptLevel.BASIC_OPT)
+            opts.setIntraOpNumThreads(numThreads)
+            env.createSession(path.absolutePath, opts)
+        } finally {
+            // SessionOptions 持有 native 内存，createSession 会复制其内容，必须关闭。
+            opts.close()
+        }
     }
 
     private fun ensureLoaded(): NativeState {
@@ -73,30 +78,37 @@ class KitTranslationEngine(
                 "本地模型未就绪：缺 ${encoderFile.name}/${decoderFile.name}"
             }
             val decSession = makeSession(st.env, decoderFile)
-            val names = decSession.inputInfo.keys.filter { it.startsWith("past_key_values.") }
-            val isDecoder = BooleanArray(names.size)
-            var decCount = 0
-            var encCount = 0
-            for (i in names.indices) {
-                // past_key_values.{layer}.{decoder|encoder}.{key|value}
-                val parts = names[i].split(".")
-                when {
-                    parts.size == 4 && parts[2] == "decoder" -> {
-                        isDecoder[i] = true
-                        decCount++
+            try {
+                val names = decSession.inputInfo.keys.filter { it.startsWith("past_key_values.") }
+                val isDecoder = BooleanArray(names.size)
+                var decCount = 0
+                var encCount = 0
+                for (i in names.indices) {
+                    // past_key_values.{layer}.{decoder|encoder}.{key|value}
+                    val parts = names[i].split(".")
+                    when {
+                        parts.size == 4 && parts[2] == "decoder" -> {
+                            isDecoder[i] = true
+                            decCount++
+                        }
+                        parts.size == 4 && parts[2] == "encoder" -> encCount++
                     }
-                    parts.size == 4 && parts[2] == "encoder" -> encCount++
                 }
+                val expected = config.decoderLayers * 2
+                check(decCount == expected && encCount == expected) {
+                    "past 张量数与 MANIFEST 不符：dec=$decCount enc=$encCount 期望各 $expected"
+                }
+                // 先建好所有 session 再落状态：任一步失败都在 catch 里关掉已建的，避免泄漏。
+                val encSession = makeSession(st.env, encoderFile)
+                st.dec = decSession
+                st.enc = encSession
+                st.pastInputNames = names
+                st.pastInputIsDecoder = isDecoder
+                native = st
+            } catch (t: Throwable) {
+                runCatching { decSession.close() }
+                throw t
             }
-            val expected = config.decoderLayers * 2
-            check(decCount == expected && encCount == expected) {
-                "past 张量数与 MANIFEST 不符：dec=$decCount enc=$encCount 期望各 $expected"
-            }
-            st.dec = decSession
-            st.enc = makeSession(st.env, encoderFile)
-            st.pastInputNames = names
-            st.pastInputIsDecoder = isDecoder
-            native = st
             Log.d(
                 "KitTranslation",
                 "${config.modelId}: sessions loaded in ${SystemClock.elapsedRealtime() - t0}ms (threads=$numThreads)",
@@ -348,6 +360,9 @@ class KitTranslationEngine(
                     decPast.forEach { it.close() }
                     decPast = present.first
                     pastDec = decPast
+                    // 后续步（use_cache=true）的 encoder KV 是占位张量，encoder 侧已冻结，
+                    // 不再使用 → 立即释放，否则每步泄漏 decoderLayers*2 个原生张量。
+                    present.second.forEach { runCatching { it.close() } }
                     next = nxt
                 }
 
