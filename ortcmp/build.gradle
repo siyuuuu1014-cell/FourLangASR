@@ -1,0 +1,50 @@
+// 阶段2B-0 方案(a) 隔离对照模块：只依赖官方 onnxruntime-android:1.27.0 AAR，
+// 不引入 sherpa / opencv / vosk / tflite / 翻译，用来在纯净进程里跑大张量连续推理，
+// 与主 App 里打过补丁的 libort4jrt.so 做行为对照。
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.ortcmp.stress'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.ortcmp.stress"
+        // 官方 onnxruntime-android:1.27.0 AAR 要求 minSdk>=24（这本身就是与主 App minSdk23 的兼容性差异）。
+        // 隔离对照模块只在这台 Android16 真机上跑，取 24 无碍。
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        ndk { abiFilters 'arm64-v8a' }
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            // 保持 debuggable，便于必要时附加调试
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions { jvmTarget = '17' }
+
+    packagingOptions {
+        // 官方 AAR 里可能带多个 abi，只留 arm64
+        jniLibs { useLegacyPackaging = false }
+    }
+}
+
+dependencies {
+    // 官方未修改的 ORT Android AAR（含 classes.jar + libonnxruntime.so + libonnxruntime4j_jni.so）
+    implementation 'com.microsoft.onnxruntime:onnxruntime-android:1.27.0'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
+    androidTestImplementation 'androidx.test:core:1.5.0'
+    androidTestImplementation 'junit:junit:4.13.2'
+}

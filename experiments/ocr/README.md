@@ -484,3 +484,30 @@ ONNX Runtime 原生库 `libort4jrt.so`（ORT 1.27）内部线程池，在"反复
 - Golden 回归：b2 在诊断开关复位后仍通过（IoU 0.964 / CER 0.009 / 顺序单调）。
 - 结论：**未找到不改原生库即可稳定跑 >~14 次大推理的方案**；根因锁定在 libort4jrt.so 内部，
   需运行时兼容性评估 + 函数级栈取证后再修。
+
+## 2B-0 方案(a) 追加：setup_dual_ort.py 的 ELF 改动审计（已执行）
+
+工具：`experiments/ocr/ort_patch_diff.py`（pyelftools 逐字节 diff + section 定位）。
+对照：官方 `onnxruntime-android:1.27.0` AAR 解出的 `libonnxruntime.so` / `libonnxruntime4j_jni.so`
+vs 仓库里已打补丁的 `libort4jrt.so` / 改过 NEEDED 的桥。
+
+- 官方 lib 里字符串 `libonnxruntime.so` 只出现 **1 次**，位于 `.dynstr` 的 SONAME（0x26a4）。
+- 官方桥里字符串也只出现 **1 次**，是 DT_NEEDED（0x4d3b）。
+- 两个文件被 `bytes.replace` 改动**各 13 字节、均在 .dynstr**，其余字节完全一致（size 相同）。
+- 改后动态段正确：lib DT_SONAME=`libort4jrt.so`；bridge DT_NEEDED=`libort4jrt.so`。
+
+**结论**：`patch_all()` 虽是对整文件 `bytes.replace`，但在当前这两个文件上每个只命中一处，
+实际是外科式修改，**没有误伤其它字符串/数据**。因此"补丁破坏了二进制导致挂起"不成立。
+（该写法仍脆弱：一旦上游哪天在 .rodata 里也出现同名字符串就会被误改。建议后续换成只改
+DT_SONAME/DT_NEEDED 的 ELF 工具，但这属于健壮性改进，不是本 bug 的因。）
+
+**兼容性发现**：官方 `com.microsoft.onnxruntime:onnxruntime-android:1.27.0` 的 manifest 要求
+**minSdk 24**，而主 App 是 **minSdk 23**。这解释了为何项目当初没有直接引 AAR、而是抽
+`classes.jar` + 自改 `.so` 接线；方案(a) 若要落到生产，会撞上 minSdk 抬到 24 的约束（需单独评估）。
+
+## 2B-0 方案(a) 待补：官方原版 vs 修改版 200 次对照（未完成）
+
+已建隔离模块 `ortcmp`（仅依赖官方 AAR，不含 sherpa/opencv/vosk/tflite/翻译），
+压力测试 `OrtOfficialStressTest`（≥200 次大张量推理 + 反复建/释放 session + 线程/FD/PSS/native/耗时）
+已就绪；目标 APK 已装真机，测试 APK 安装过程中设备 USB 掉线，**对照尚未跑出结果**。
+设备恢复后按用户分支逻辑判定：官方也挂→进方案(c)；官方不挂→查补丁/加载链路/JNI 桥；两者都稳→复核复现条件。

@@ -70,3 +70,12 @@ app/src/androidTest/assets/ocr/
 experiments/ocr/scene_eval/images/
 experiments/ocr/scene_eval/out/
 experiments/ocr/scene_eval/labels.csv
+
+# 阶段2B-0：下载的官方 ORT AAR 与解出的 .so（~90MB 第三方二进制）不入库
+experiments/ocr/.ort/
+# 阶段2B-0 隔离对照模块：模型权重副本与构建产物不入库（源码/脚本入库）
+ortcmp/src/androidTest/assets/ocr/
+# 临时截图 / uiautomator dump
+experiments/ocr/out/g.png
+experiments/ocr/out/g.xml
+

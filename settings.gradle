@@ -16,3 +16,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "FourLangAsrMobile"
 include(":app")
+// 阶段2B-0 方案(a)：官方 ORT AAR 隔离对照模块（不参与生产 App）
+include(":ortcmp")
