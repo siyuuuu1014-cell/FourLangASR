@@ -35,6 +35,9 @@ class OCREngine(
     recConfigAsset: String = "models/rec/inference.yml",
 ) {
     private val ortManager = ORTSessionManager(context, engineConfig)
+    // 生命周期护栏：run() 持读锁、release() 持写锁，保证 release 不会在推理进行中关闭 Session
+    // （OcrRuntime.releaseAll 与并发 run 的竞争）。读锁允许多个并发 run。
+    private val lifecycle = java.util.concurrent.locks.ReentrantReadWriteLock()
     private val detectionEngine: DetectionEngine
     private val recognitionEngine: RecognitionEngine
     val coldLoadTimeMs: Long get() = ortManager.coldLoadTimeMs
@@ -53,24 +56,34 @@ class OCREngine(
     }
 
     fun run(bitmap: Bitmap, profile: DbPostProcessProfile? = null): OCREngineResult {
-        val srcMat = BitmapUtils.bitmapToBGRMat(bitmap)
-        return try {
-            runWithOwnedMat(srcMat, profile)
+        val rl = lifecycle.readLock(); rl.lock()
+        try {
+            val srcMat = BitmapUtils.bitmapToBGRMat(bitmap)
+            return try {
+                runWithOwnedMat(srcMat, profile)
+            } finally {
+                srcMat.release()
+            }
         } finally {
-            srcMat.release()
+            rl.unlock()
         }
     }
 
     fun run(imageBytes: ByteArray, profile: DbPostProcessProfile? = null): OCREngineResult {
-        val srcMat = BitmapUtils.imdecodeBGR(imageBytes)
-        if (srcMat.empty()) {
-            srcMat.release()
-            throw OCRError.InvalidImage()
-        }
-        return try {
-            runWithOwnedMat(srcMat, profile)
+        val rl = lifecycle.readLock(); rl.lock()
+        try {
+            val srcMat = BitmapUtils.imdecodeBGR(imageBytes)
+            if (srcMat.empty()) {
+                srcMat.release()
+                throw OCRError.InvalidImage()
+            }
+            return try {
+                runWithOwnedMat(srcMat, profile)
+            } finally {
+                srcMat.release()
+            }
         } finally {
-            srcMat.release()
+            rl.unlock()
         }
     }
 
@@ -209,6 +222,12 @@ class OCREngine(
     }
 
     fun release() {
-        ortManager.release()
+        // 写锁：等待所有在跑的 run() 结束再关 Session，避免 use-after-close。
+        val wl = lifecycle.writeLock(); wl.lock()
+        try {
+            ortManager.release()
+        } finally {
+            wl.unlock()
+        }
     }
 }

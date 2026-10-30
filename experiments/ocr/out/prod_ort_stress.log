@@ -1,0 +1,407 @@
+--------- beginning of main
+10-30 15:51:46.492  4385  4385 I ProdOrtStress: ENV device=OPPO/PLW110 sdk=36 abi=arm64-v8a isDebuggerConnected=false waitingForDebugger=false jdwp=absent(iters=200)
+10-30 15:51:46.507  4385  8244 I ProdOrtStress: MODELS det.sha256=193bab7a04fca699a6c82e6abb5b81bdb28177f0abd4062552b04908dafb19f8 rec.sha256=9ef676d6ed3c88256a2d92c640c44f25b0c40947e111b14b8be8f594091563e6 detBytes=1780590 recBytes=4462639
+10-30 15:51:46.700  4385  8244 I ProdOrtStress: LOADED_LIBS=[]
+10-30 15:51:46.943  4385  8244 I ProdOrtStress: LOADED_LIBS=[]
+10-30 15:51:47.230  4385  8244 I ProdOrtStress: INPUT det=[1,3,960,1280] rec=[1,3,48,800] perRound=1det+5rec
+10-30 15:51:47.231  4385  8244 I ProdOrtStress: ROUND START iter=0 threads=38 fd=155
+10-30 15:51:47.627  4385  8244 I ProdOrtStress: ROUND END iter=0 opMs=369 threads=38 fd=155 pss=302MB native=380MB
+10-30 15:51:47.628  4385  8244 I ProdOrtStress: ROUND START iter=1 threads=38 fd=155
+10-30 15:51:47.953  4385  8244 I ProdOrtStress: ROUND END iter=1 opMs=295 threads=38 fd=155 pss=465MB native=380MB
+10-30 15:51:47.954  4385  8244 I ProdOrtStress: ROUND START iter=2 threads=38 fd=155
+10-30 15:51:48.262  4385  8244 I ProdOrtStress: ROUND END iter=2 opMs=275 threads=38 fd=155 pss=517MB native=380MB
+10-30 15:51:48.263  4385  8244 I ProdOrtStress: ROUND START iter=3 threads=38 fd=155
+10-30 15:51:48.593  4385  8244 I ProdOrtStress: ROUND END iter=3 opMs=299 threads=38 fd=153 pss=405MB native=380MB
+10-30 15:51:48.594  4385  8244 I ProdOrtStress: ROUND START iter=4 threads=38 fd=153
+10-30 15:51:48.901  4385  8244 I ProdOrtStress: ROUND END iter=4 opMs=275 threads=38 fd=153 pss=457MB native=380MB
+10-30 15:51:48.902  4385  8244 I ProdOrtStress: ROUND START iter=5 threads=38 fd=153
+10-30 15:51:49.222  4385  8244 I ProdOrtStress: ROUND END iter=5 opMs=284 threads=38 fd=153 pss=410MB native=380MB
+10-30 15:51:49.223  4385  8244 I ProdOrtStress: ROUND START iter=6 threads=38 fd=153
+10-30 15:51:49.529  4385  8244 I ProdOrtStress: ROUND END iter=6 opMs=273 threads=38 fd=153 pss=462MB native=380MB
+10-30 15:51:49.530  4385  8244 I ProdOrtStress: ROUND START iter=7 threads=38 fd=153
+10-30 15:51:49.836  4385  8244 I ProdOrtStress: ROUND END iter=7 opMs=273 threads=38 fd=153 pss=410MB native=380MB
+10-30 15:51:49.837  4385  8244 I ProdOrtStress: ROUND START iter=8 threads=38 fd=153
+10-30 15:51:50.150  4385  8244 I ProdOrtStress: ROUND END iter=8 opMs=278 threads=38 fd=153 pss=462MB native=380MB
+10-30 15:51:50.151  4385  8244 I ProdOrtStress: ROUND START iter=9 threads=38 fd=153
+10-30 15:51:50.459  4385  8244 I ProdOrtStress: ROUND END iter=9 opMs=277 threads=38 fd=153 pss=410MB native=380MB
+10-30 15:51:50.460  4385  8244 I ProdOrtStress: ROUND START iter=10 threads=38 fd=153
+10-30 15:51:50.768  4385  8244 I ProdOrtStress: ROUND END iter=10 opMs=275 threads=37 fd=153 pss=462MB native=380MB
+10-30 15:51:50.769  4385  8244 I ProdOrtStress: ROUND START iter=11 threads=37 fd=153
+10-30 15:51:51.083  4385  8244 I ProdOrtStress: ROUND END iter=11 opMs=280 threads=37 fd=153 pss=410MB native=380MB
+10-30 15:51:51.084  4385  8244 I ProdOrtStress: ROUND START iter=12 threads=37 fd=153
+10-30 15:51:51.387  4385  8244 I ProdOrtStress: ROUND END iter=12 opMs=267 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:51.388  4385  8244 I ProdOrtStress: ROUND START iter=13 threads=34 fd=153
+10-30 15:51:51.697  4385  8244 I ProdOrtStress: ROUND END iter=13 opMs=277 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:51.698  4385  8244 I ProdOrtStress: ROUND START iter=14 threads=34 fd=153
+10-30 15:51:52.003  4385  8244 I ProdOrtStress: ROUND END iter=14 opMs=272 threads=34 fd=153 pss=463MB native=380MB
+10-30 15:51:52.004  4385  8244 I ProdOrtStress: ROUND START iter=15 threads=34 fd=153
+10-30 15:51:52.310  4385  8244 I ProdOrtStress: ROUND END iter=15 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:52.310  4385  8244 I ProdOrtStress: ROUND START iter=16 threads=34 fd=153
+10-30 15:51:52.621  4385  8244 I ProdOrtStress: ROUND END iter=16 opMs=277 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:52.622  4385  8244 I ProdOrtStress: ROUND START iter=17 threads=34 fd=153
+10-30 15:51:52.929  4385  8244 I ProdOrtStress: ROUND END iter=17 opMs=275 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:52.930  4385  8244 I ProdOrtStress: ROUND START iter=18 threads=34 fd=153
+10-30 15:51:53.236  4385  8244 I ProdOrtStress: ROUND END iter=18 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:53.237  4385  8244 I ProdOrtStress: ROUND START iter=19 threads=34 fd=153
+10-30 15:51:53.560  4385  8244 I ProdOrtStress: ROUND END iter=19 opMs=286 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:53.561  4385  8244 I ProdOrtStress: ROUND START iter=20 threads=34 fd=153
+10-30 15:51:53.879  4385  8244 I ProdOrtStress: ROUND END iter=20 opMs=284 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:53.881  4385  8244 I ProdOrtStress: ROUND START iter=21 threads=34 fd=153
+10-30 15:51:54.181  4385  8244 I ProdOrtStress: ROUND END iter=21 opMs=264 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:54.182  4385  8244 I ProdOrtStress: ROUND START iter=22 threads=34 fd=153
+10-30 15:51:54.492  4385  8244 I ProdOrtStress: ROUND END iter=22 opMs=281 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:54.493  4385  8244 I ProdOrtStress: ROUND START iter=23 threads=34 fd=153
+10-30 15:51:54.798  4385  8244 I ProdOrtStress: ROUND END iter=23 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:54.798  4385  8244 I ProdOrtStress: ROUND START iter=24 threads=34 fd=153
+10-30 15:51:55.115  4385  8244 I ProdOrtStress: ROUND END iter=24 opMs=282 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:55.116  4385  8244 I ProdOrtStress: ROUND START iter=25 threads=34 fd=153
+10-30 15:51:55.415  4385  8244 I ProdOrtStress: ROUND END iter=25 opMs=265 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:55.415  4385  8244 I ProdOrtStress: ROUND START iter=26 threads=34 fd=153
+10-30 15:51:55.720  4385  8244 I ProdOrtStress: ROUND END iter=26 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:55.721  4385  8244 I ProdOrtStress: ROUND START iter=27 threads=34 fd=153
+10-30 15:51:56.037  4385  8244 I ProdOrtStress: ROUND END iter=27 opMs=280 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:56.037  4385  8244 I ProdOrtStress: ROUND START iter=28 threads=34 fd=153
+10-30 15:51:56.340  4385  8244 I ProdOrtStress: ROUND END iter=28 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:56.341  4385  8244 I ProdOrtStress: ROUND START iter=29 threads=34 fd=153
+10-30 15:51:56.647  4385  8244 I ProdOrtStress: ROUND END iter=29 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:56.648  4385  8244 I ProdOrtStress: ROUND START iter=30 threads=34 fd=153
+10-30 15:51:56.949  4385  8244 I ProdOrtStress: ROUND END iter=30 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:56.950  4385  8244 I ProdOrtStress: ROUND START iter=31 threads=34 fd=153
+10-30 15:51:57.261  4385  8244 I ProdOrtStress: ROUND END iter=31 opMs=274 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:57.262  4385  8244 I ProdOrtStress: ROUND START iter=32 threads=34 fd=153
+10-30 15:51:57.576  4385  8244 I ProdOrtStress: ROUND END iter=32 opMs=280 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:57.577  4385  8244 I ProdOrtStress: ROUND START iter=33 threads=34 fd=153
+10-30 15:51:57.887  4385  8244 I ProdOrtStress: ROUND END iter=33 opMs=274 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:57.889  4385  8244 I ProdOrtStress: ROUND START iter=34 threads=34 fd=153
+10-30 15:51:58.197  4385  8244 I ProdOrtStress: ROUND END iter=34 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:58.198  4385  8244 I ProdOrtStress: ROUND START iter=35 threads=34 fd=153
+10-30 15:51:58.503  4385  8244 I ProdOrtStress: ROUND END iter=35 opMs=274 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:58.505  4385  8244 I ProdOrtStress: ROUND START iter=36 threads=34 fd=153
+10-30 15:51:58.808  4385  8244 I ProdOrtStress: ROUND END iter=36 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:58.809  4385  8244 I ProdOrtStress: ROUND START iter=37 threads=34 fd=153
+10-30 15:51:59.116  4385  8244 I ProdOrtStress: ROUND END iter=37 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:59.117  4385  8244 I ProdOrtStress: ROUND START iter=38 threads=34 fd=153
+10-30 15:51:59.430  4385  8244 I ProdOrtStress: ROUND END iter=38 opMs=278 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:51:59.431  4385  8244 I ProdOrtStress: ROUND START iter=39 threads=34 fd=153
+10-30 15:51:59.738  4385  8244 I ProdOrtStress: ROUND END iter=39 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:51:59.739  4385  8244 I ProdOrtStress: ROUND START iter=40 threads=34 fd=153
+10-30 15:52:00.044  4385  8244 I ProdOrtStress: ROUND END iter=40 opMs=277 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:00.045  4385  8244 I ProdOrtStress: ROUND START iter=41 threads=34 fd=153
+10-30 15:52:00.350  4385  8244 I ProdOrtStress: ROUND END iter=41 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:00.350  4385  8244 I ProdOrtStress: ROUND START iter=42 threads=34 fd=153
+10-30 15:52:00.666  4385  8244 I ProdOrtStress: ROUND END iter=42 opMs=281 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:00.667  4385  8244 I ProdOrtStress: ROUND START iter=43 threads=34 fd=153
+10-30 15:52:00.978  4385  8244 I ProdOrtStress: ROUND END iter=43 opMs=277 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:00.978  4385  8244 I ProdOrtStress: ROUND START iter=44 threads=34 fd=153
+10-30 15:52:01.274  4385  8244 I ProdOrtStress: ROUND END iter=44 opMs=266 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:01.275  4385  8244 I ProdOrtStress: ROUND START iter=45 threads=34 fd=153
+10-30 15:52:01.579  4385  8244 I ProdOrtStress: ROUND END iter=45 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:01.581  4385  8244 I ProdOrtStress: ROUND START iter=46 threads=34 fd=153
+10-30 15:52:01.884  4385  8244 I ProdOrtStress: ROUND END iter=46 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:01.886  4385  8244 I ProdOrtStress: ROUND START iter=47 threads=34 fd=153
+10-30 15:52:02.194  4385  8244 I ProdOrtStress: ROUND END iter=47 opMs=274 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:02.195  4385  8244 I ProdOrtStress: ROUND START iter=48 threads=34 fd=153
+10-30 15:52:02.501  4385  8244 I ProdOrtStress: ROUND END iter=48 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:02.502  4385  8244 I ProdOrtStress: ROUND START iter=49 threads=34 fd=153
+10-30 15:52:02.811  4385  8244 I ProdOrtStress: ROUND END iter=49 opMs=271 threads=34 fd=153 pss=405MB native=380MB
+10-30 15:52:02.812  4385  8244 I ProdOrtStress: ROUND START iter=50 threads=34 fd=153
+10-30 15:52:03.122  4385  8244 I ProdOrtStress: ROUND END iter=50 opMs=276 threads=34 fd=153 pss=457MB native=380MB
+10-30 15:52:03.123  4385  8244 I ProdOrtStress: ROUND START iter=51 threads=34 fd=153
+10-30 15:52:03.432  4385  8244 I ProdOrtStress: ROUND END iter=51 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:03.433  4385  8244 I ProdOrtStress: ROUND START iter=52 threads=34 fd=153
+10-30 15:52:03.747  4385  8244 I ProdOrtStress: ROUND END iter=52 opMs=279 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:03.749  4385  8244 I ProdOrtStress: ROUND START iter=53 threads=34 fd=153
+10-30 15:52:04.051  4385  8244 I ProdOrtStress: ROUND END iter=53 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:04.052  4385  8244 I ProdOrtStress: ROUND START iter=54 threads=34 fd=153
+10-30 15:52:04.357  4385  8244 I ProdOrtStress: ROUND END iter=54 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:04.358  4385  8244 I ProdOrtStress: ROUND START iter=55 threads=34 fd=153
+10-30 15:52:04.661  4385  8244 I ProdOrtStress: ROUND END iter=55 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:04.662  4385  8244 I ProdOrtStress: ROUND START iter=56 threads=34 fd=153
+10-30 15:52:04.966  4385  8244 I ProdOrtStress: ROUND END iter=56 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:04.967  4385  8244 I ProdOrtStress: ROUND START iter=57 threads=34 fd=153
+10-30 15:52:05.276  4385  8244 I ProdOrtStress: ROUND END iter=57 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:05.276  4385  8244 I ProdOrtStress: ROUND START iter=58 threads=34 fd=153
+10-30 15:52:05.579  4385  8244 I ProdOrtStress: ROUND END iter=58 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:05.581  4385  8244 I ProdOrtStress: ROUND START iter=59 threads=34 fd=153
+10-30 15:52:05.891  4385  8244 I ProdOrtStress: ROUND END iter=59 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:05.892  4385  8244 I ProdOrtStress: ROUND START iter=60 threads=34 fd=153
+10-30 15:52:06.199  4385  8244 I ProdOrtStress: ROUND END iter=60 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:06.199  4385  8244 I ProdOrtStress: ROUND START iter=61 threads=34 fd=153
+10-30 15:52:06.510  4385  8244 I ProdOrtStress: ROUND END iter=61 opMs=279 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:06.510  4385  8244 I ProdOrtStress: ROUND START iter=62 threads=34 fd=153
+10-30 15:52:06.813  4385  8244 I ProdOrtStress: ROUND END iter=62 opMs=270 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:06.814  4385  8244 I ProdOrtStress: ROUND START iter=63 threads=34 fd=153
+10-30 15:52:07.111  4385  8244 I ProdOrtStress: ROUND END iter=63 opMs=265 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:07.113  4385  8244 I ProdOrtStress: ROUND START iter=64 threads=34 fd=153
+10-30 15:52:07.415  4385  8244 I ProdOrtStress: ROUND END iter=64 opMs=264 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:07.417  4385  8244 I ProdOrtStress: ROUND START iter=65 threads=34 fd=153
+10-30 15:52:07.723  4385  8244 I ProdOrtStress: ROUND END iter=65 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:07.725  4385  8244 I ProdOrtStress: ROUND START iter=66 threads=34 fd=153
+10-30 15:52:08.031  4385  8244 I ProdOrtStress: ROUND END iter=66 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:08.032  4385  8244 I ProdOrtStress: ROUND START iter=67 threads=34 fd=153
+10-30 15:52:08.332  4385  8244 I ProdOrtStress: ROUND END iter=67 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:08.333  4385  8244 I ProdOrtStress: ROUND START iter=68 threads=34 fd=153
+10-30 15:52:08.646  4385  8244 I ProdOrtStress: ROUND END iter=68 opMs=275 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:08.647  4385  8244 I ProdOrtStress: ROUND START iter=69 threads=34 fd=153
+10-30 15:52:08.958  4385  8244 I ProdOrtStress: ROUND END iter=69 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:08.959  4385  8244 I ProdOrtStress: ROUND START iter=70 threads=34 fd=153
+10-30 15:52:09.269  4385  8244 I ProdOrtStress: ROUND END iter=70 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:09.269  4385  8244 I ProdOrtStress: ROUND START iter=71 threads=34 fd=153
+10-30 15:52:09.569  4385  8244 I ProdOrtStress: ROUND END iter=71 opMs=267 threads=34 fd=153 pss=405MB native=380MB
+10-30 15:52:09.570  4385  8244 I ProdOrtStress: ROUND START iter=72 threads=34 fd=153
+10-30 15:52:09.873  4385  8244 I ProdOrtStress: ROUND END iter=72 opMs=266 threads=34 fd=153 pss=457MB native=380MB
+10-30 15:52:09.874  4385  8244 I ProdOrtStress: ROUND START iter=73 threads=34 fd=153
+10-30 15:52:10.189  4385  8244 I ProdOrtStress: ROUND END iter=73 opMs=277 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:10.190  4385  8244 I ProdOrtStress: ROUND START iter=74 threads=34 fd=153
+10-30 15:52:10.491  4385  8244 I ProdOrtStress: ROUND END iter=74 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:10.493  4385  8244 I ProdOrtStress: ROUND START iter=75 threads=34 fd=153
+10-30 15:52:10.792  4385  8244 I ProdOrtStress: ROUND END iter=75 opMs=265 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:10.793  4385  8244 I ProdOrtStress: ROUND START iter=76 threads=34 fd=153
+10-30 15:52:11.098  4385  8244 I ProdOrtStress: ROUND END iter=76 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:11.099  4385  8244 I ProdOrtStress: ROUND START iter=77 threads=34 fd=153
+10-30 15:52:11.409  4385  8244 I ProdOrtStress: ROUND END iter=77 opMs=275 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:11.410  4385  8244 I ProdOrtStress: ROUND START iter=78 threads=34 fd=153
+10-30 15:52:11.719  4385  8244 I ProdOrtStress: ROUND END iter=78 opMs=274 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:11.721  4385  8244 I ProdOrtStress: ROUND START iter=79 threads=34 fd=153
+10-30 15:52:12.023  4385  8244 I ProdOrtStress: ROUND END iter=79 opMs=270 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:12.024  4385  8244 I ProdOrtStress: ROUND START iter=80 threads=34 fd=153
+10-30 15:52:12.322  4385  8244 I ProdOrtStress: ROUND END iter=80 opMs=264 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:12.323  4385  8244 I ProdOrtStress: ROUND START iter=81 threads=34 fd=153
+10-30 15:52:12.633  4385  8244 I ProdOrtStress: ROUND END iter=81 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:12.634  4385  8244 I ProdOrtStress: ROUND START iter=82 threads=34 fd=153
+10-30 15:52:12.945  4385  8244 I ProdOrtStress: ROUND END iter=82 opMs=277 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:12.946  4385  8244 I ProdOrtStress: ROUND START iter=83 threads=34 fd=153
+10-30 15:52:13.254  4385  8244 I ProdOrtStress: ROUND END iter=83 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:13.254  4385  8244 I ProdOrtStress: ROUND START iter=84 threads=34 fd=153
+10-30 15:52:13.558  4385  8244 I ProdOrtStress: ROUND END iter=84 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:13.559  4385  8244 I ProdOrtStress: ROUND START iter=85 threads=34 fd=153
+10-30 15:52:13.869  4385  8244 I ProdOrtStress: ROUND END iter=85 opMs=275 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:13.870  4385  8244 I ProdOrtStress: ROUND START iter=86 threads=34 fd=153
+10-30 15:52:14.174  4385  8244 I ProdOrtStress: ROUND END iter=86 opMs=270 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:14.174  4385  8244 I ProdOrtStress: ROUND START iter=87 threads=34 fd=153
+10-30 15:52:14.475  4385  8244 I ProdOrtStress: ROUND END iter=87 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:14.476  4385  8244 I ProdOrtStress: ROUND START iter=88 threads=34 fd=153
+10-30 15:52:14.778  4385  8244 I ProdOrtStress: ROUND END iter=88 opMs=267 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:14.779  4385  8244 I ProdOrtStress: ROUND START iter=89 threads=34 fd=153
+10-30 15:52:15.083  4385  8244 I ProdOrtStress: ROUND END iter=89 opMs=270 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:15.085  4385  8244 I ProdOrtStress: ROUND START iter=90 threads=34 fd=153
+10-30 15:52:15.389  4385  8244 I ProdOrtStress: ROUND END iter=90 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:15.390  4385  8244 I ProdOrtStress: ROUND START iter=91 threads=34 fd=153
+10-30 15:52:15.695  4385  8244 I ProdOrtStress: ROUND END iter=91 opMs=272 threads=34 fd=153 pss=405MB native=380MB
+10-30 15:52:15.696  4385  8244 I ProdOrtStress: ROUND START iter=92 threads=34 fd=153
+10-30 15:52:16.001  4385  8244 I ProdOrtStress: ROUND END iter=92 opMs=267 threads=34 fd=153 pss=457MB native=380MB
+10-30 15:52:16.002  4385  8244 I ProdOrtStress: ROUND START iter=93 threads=34 fd=153
+10-30 15:52:16.307  4385  8244 I ProdOrtStress: ROUND END iter=93 opMs=274 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:16.308  4385  8244 I ProdOrtStress: ROUND START iter=94 threads=34 fd=153
+10-30 15:52:16.608  4385  8244 I ProdOrtStress: ROUND END iter=94 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:16.609  4385  8244 I ProdOrtStress: ROUND START iter=95 threads=34 fd=153
+10-30 15:52:16.909  4385  8244 I ProdOrtStress: ROUND END iter=95 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:16.910  4385  8244 I ProdOrtStress: ROUND START iter=96 threads=34 fd=153
+10-30 15:52:17.213  4385  8244 I ProdOrtStress: ROUND END iter=96 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:17.214  4385  8244 I ProdOrtStress: ROUND START iter=97 threads=34 fd=153
+10-30 15:52:17.527  4385  8244 I ProdOrtStress: ROUND END iter=97 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:17.527  4385  8244 I ProdOrtStress: ROUND START iter=98 threads=34 fd=153
+10-30 15:52:17.831  4385  8244 I ProdOrtStress: ROUND END iter=98 opMs=270 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:17.833  4385  8244 I ProdOrtStress: ROUND START iter=99 threads=34 fd=153
+10-30 15:52:18.150  4385  8244 I ProdOrtStress: ROUND END iter=99 opMs=284 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:18.151  4385  8244 I ProdOrtStress: ROUND START iter=100 threads=34 fd=153
+10-30 15:52:18.456  4385  8244 I ProdOrtStress: ROUND END iter=100 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:18.457  4385  8244 I ProdOrtStress: ROUND START iter=101 threads=34 fd=153
+10-30 15:52:18.767  4385  8244 I ProdOrtStress: ROUND END iter=101 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:18.770  4385  8244 I ProdOrtStress: ROUND START iter=102 threads=34 fd=153
+10-30 15:52:19.077  4385  8244 I ProdOrtStress: ROUND END iter=102 opMs=274 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:19.078  4385  8244 I ProdOrtStress: ROUND START iter=103 threads=34 fd=153
+10-30 15:52:19.386  4385  8244 I ProdOrtStress: ROUND END iter=103 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:19.387  4385  8244 I ProdOrtStress: ROUND START iter=104 threads=34 fd=153
+10-30 15:52:19.695  4385  8244 I ProdOrtStress: ROUND END iter=104 opMs=275 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:19.696  4385  8244 I ProdOrtStress: ROUND START iter=105 threads=34 fd=153
+10-30 15:52:19.996  4385  8244 I ProdOrtStress: ROUND END iter=105 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:19.997  4385  8244 I ProdOrtStress: ROUND START iter=106 threads=34 fd=153
+10-30 15:52:20.299  4385  8244 I ProdOrtStress: ROUND END iter=106 opMs=267 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:20.301  4385  8244 I ProdOrtStress: ROUND START iter=107 threads=34 fd=153
+10-30 15:52:20.606  4385  8244 I ProdOrtStress: ROUND END iter=107 opMs=270 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:20.606  4385  8244 I ProdOrtStress: ROUND START iter=108 threads=34 fd=153
+10-30 15:52:20.914  4385  8244 I ProdOrtStress: ROUND END iter=108 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:20.915  4385  8244 I ProdOrtStress: ROUND START iter=109 threads=34 fd=153
+10-30 15:52:21.227  4385  8244 I ProdOrtStress: ROUND END iter=109 opMs=280 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:21.227  4385  8244 I ProdOrtStress: ROUND START iter=110 threads=34 fd=153
+10-30 15:52:21.538  4385  8244 I ProdOrtStress: ROUND END iter=110 opMs=276 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:21.539  4385  8244 I ProdOrtStress: ROUND START iter=111 threads=34 fd=153
+10-30 15:52:21.841  4385  8244 I ProdOrtStress: ROUND END iter=111 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:21.841  4385  8244 I ProdOrtStress: ROUND START iter=112 threads=34 fd=153
+10-30 15:52:22.152  4385  8244 I ProdOrtStress: ROUND END iter=112 opMs=278 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:22.153  4385  8244 I ProdOrtStress: ROUND START iter=113 threads=34 fd=153
+10-30 15:52:22.462  4385  8244 I ProdOrtStress: ROUND END iter=113 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:22.463  4385  8244 I ProdOrtStress: ROUND START iter=114 threads=34 fd=153
+10-30 15:52:22.764  4385  8244 I ProdOrtStress: ROUND END iter=114 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:22.765  4385  8244 I ProdOrtStress: ROUND START iter=115 threads=34 fd=153
+10-30 15:52:23.068  4385  8244 I ProdOrtStress: ROUND END iter=115 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:23.069  4385  8244 I ProdOrtStress: ROUND START iter=116 threads=34 fd=153
+10-30 15:52:23.373  4385  8244 I ProdOrtStress: ROUND END iter=116 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:23.374  4385  8244 I ProdOrtStress: ROUND START iter=117 threads=34 fd=153
+10-30 15:52:23.674  4385  8244 I ProdOrtStress: ROUND END iter=117 opMs=265 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:23.675  4385  8244 I ProdOrtStress: ROUND START iter=118 threads=34 fd=153
+10-30 15:52:23.984  4385  8244 I ProdOrtStress: ROUND END iter=118 opMs=274 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:23.985  4385  8244 I ProdOrtStress: ROUND START iter=119 threads=34 fd=153
+10-30 15:52:24.291  4385  8244 I ProdOrtStress: ROUND END iter=119 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:24.293  4385  8244 I ProdOrtStress: ROUND START iter=120 threads=34 fd=153
+10-30 15:52:24.597  4385  8244 I ProdOrtStress: ROUND END iter=120 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:24.598  4385  8244 I ProdOrtStress: ROUND START iter=121 threads=34 fd=153
+10-30 15:52:24.905  4385  8244 I ProdOrtStress: ROUND END iter=121 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:24.907  4385  8244 I ProdOrtStress: ROUND START iter=122 threads=34 fd=153
+10-30 15:52:25.206  4385  8244 I ProdOrtStress: ROUND END iter=122 opMs=264 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:25.207  4385  8244 I ProdOrtStress: ROUND START iter=123 threads=34 fd=153
+10-30 15:52:25.510  4385  8244 I ProdOrtStress: ROUND END iter=123 opMs=266 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:25.510  4385  8244 I ProdOrtStress: ROUND START iter=124 threads=34 fd=153
+10-30 15:52:25.821  4385  8244 I ProdOrtStress: ROUND END iter=124 opMs=278 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:25.822  4385  8244 I ProdOrtStress: ROUND START iter=125 threads=34 fd=153
+10-30 15:52:26.127  4385  8244 I ProdOrtStress: ROUND END iter=125 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:26.127  4385  8244 I ProdOrtStress: ROUND START iter=126 threads=34 fd=153
+10-30 15:52:26.432  4385  8244 I ProdOrtStress: ROUND END iter=126 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:26.433  4385  8244 I ProdOrtStress: ROUND START iter=127 threads=34 fd=153
+10-30 15:52:26.730  4385  8244 I ProdOrtStress: ROUND END iter=127 opMs=267 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:26.731  4385  8244 I ProdOrtStress: ROUND START iter=128 threads=34 fd=153
+10-30 15:52:27.038  4385  8244 I ProdOrtStress: ROUND END iter=128 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:27.038  4385  8244 I ProdOrtStress: ROUND START iter=129 threads=34 fd=153
+10-30 15:52:27.342  4385  8244 I ProdOrtStress: ROUND END iter=129 opMs=270 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:27.343  4385  8244 I ProdOrtStress: ROUND START iter=130 threads=34 fd=153
+10-30 15:52:27.645  4385  8244 I ProdOrtStress: ROUND END iter=130 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:27.646  4385  8244 I ProdOrtStress: ROUND START iter=131 threads=34 fd=153
+10-30 15:52:27.951  4385  8244 I ProdOrtStress: ROUND END iter=131 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:27.952  4385  8244 I ProdOrtStress: ROUND START iter=132 threads=34 fd=153
+10-30 15:52:28.259  4385  8244 I ProdOrtStress: ROUND END iter=132 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:28.261  4385  8244 I ProdOrtStress: ROUND START iter=133 threads=34 fd=153
+10-30 15:52:28.571  4385  8244 I ProdOrtStress: ROUND END iter=133 opMs=277 threads=34 fd=153 pss=404MB native=380MB
+10-30 15:52:28.573  4385  8244 I ProdOrtStress: ROUND START iter=134 threads=34 fd=153
+10-30 15:52:28.879  4385  8244 I ProdOrtStress: ROUND END iter=134 opMs=271 threads=34 fd=153 pss=456MB native=380MB
+10-30 15:52:28.881  4385  8244 I ProdOrtStress: ROUND START iter=135 threads=34 fd=153
+10-30 15:52:29.191  4385  8244 I ProdOrtStress: ROUND END iter=135 opMs=276 threads=34 fd=153 pss=387MB native=380MB
+10-30 15:52:29.191  4385  8244 I ProdOrtStress: ROUND START iter=136 threads=34 fd=153
+10-30 15:52:29.496  4385  8244 I ProdOrtStress: ROUND END iter=136 opMs=272 threads=34 fd=153 pss=439MB native=380MB
+10-30 15:52:29.497  4385  8244 I ProdOrtStress: ROUND START iter=137 threads=34 fd=153
+10-30 15:52:29.803  4385  8244 I ProdOrtStress: ROUND END iter=137 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:29.804  4385  8244 I ProdOrtStress: ROUND START iter=138 threads=34 fd=153
+10-30 15:52:30.117  4385  8244 I ProdOrtStress: ROUND END iter=138 opMs=278 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:30.118  4385  8244 I ProdOrtStress: ROUND START iter=139 threads=34 fd=153
+10-30 15:52:30.424  4385  8244 I ProdOrtStress: ROUND END iter=139 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:30.425  4385  8244 I ProdOrtStress: ROUND START iter=140 threads=34 fd=153
+10-30 15:52:30.731  4385  8244 I ProdOrtStress: ROUND END iter=140 opMs=274 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:30.732  4385  8244 I ProdOrtStress: ROUND START iter=141 threads=34 fd=153
+10-30 15:52:31.034  4385  8244 I ProdOrtStress: ROUND END iter=141 opMs=267 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:31.035  4385  8244 I ProdOrtStress: ROUND START iter=142 threads=34 fd=153
+10-30 15:52:31.329  4385  8244 I ProdOrtStress: ROUND END iter=142 opMs=262 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:31.330  4385  8244 I ProdOrtStress: ROUND START iter=143 threads=34 fd=153
+10-30 15:52:31.634  4385  8244 I ProdOrtStress: ROUND END iter=143 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:31.635  4385  8244 I ProdOrtStress: ROUND START iter=144 threads=34 fd=153
+10-30 15:52:31.942  4385  8244 I ProdOrtStress: ROUND END iter=144 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:31.943  4385  8244 I ProdOrtStress: ROUND START iter=145 threads=34 fd=153
+10-30 15:52:32.244  4385  8244 I ProdOrtStress: ROUND END iter=145 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:32.245  4385  8244 I ProdOrtStress: ROUND START iter=146 threads=34 fd=153
+10-30 15:52:32.551  4385  8244 I ProdOrtStress: ROUND END iter=146 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:32.553  4385  8244 I ProdOrtStress: ROUND START iter=147 threads=34 fd=153
+10-30 15:52:32.853  4385  8244 I ProdOrtStress: ROUND END iter=147 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:32.854  4385  8244 I ProdOrtStress: ROUND START iter=148 threads=34 fd=153
+10-30 15:52:33.158  4385  8244 I ProdOrtStress: ROUND END iter=148 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:33.159  4385  8244 I ProdOrtStress: ROUND START iter=149 threads=34 fd=153
+10-30 15:52:33.459  4385  8244 I ProdOrtStress: ROUND END iter=149 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:33.460  4385  8244 I ProdOrtStress: ROUND START iter=150 threads=34 fd=153
+10-30 15:52:33.763  4385  8244 I ProdOrtStress: ROUND END iter=150 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:33.764  4385  8244 I ProdOrtStress: ROUND START iter=151 threads=34 fd=153
+10-30 15:52:34.070  4385  8244 I ProdOrtStress: ROUND END iter=151 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:34.071  4385  8244 I ProdOrtStress: ROUND START iter=152 threads=34 fd=153
+10-30 15:52:34.369  4385  8244 I ProdOrtStress: ROUND END iter=152 opMs=267 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:34.370  4385  8244 I ProdOrtStress: ROUND START iter=153 threads=34 fd=153
+10-30 15:52:34.676  4385  8244 I ProdOrtStress: ROUND END iter=153 opMs=270 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:34.677  4385  8244 I ProdOrtStress: ROUND START iter=154 threads=34 fd=153
+10-30 15:52:34.987  4385  8244 I ProdOrtStress: ROUND END iter=154 opMs=276 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:34.989  4385  8244 I ProdOrtStress: ROUND START iter=155 threads=34 fd=153
+10-30 15:52:35.289  4385  8244 I ProdOrtStress: ROUND END iter=155 opMs=268 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:35.290  4385  8244 I ProdOrtStress: ROUND START iter=156 threads=34 fd=153
+10-30 15:52:35.600  4385  8244 I ProdOrtStress: ROUND END iter=156 opMs=276 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:35.601  4385  8244 I ProdOrtStress: ROUND START iter=157 threads=34 fd=153
+10-30 15:52:35.915  4385  8244 I ProdOrtStress: ROUND END iter=157 opMs=278 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:35.915  4385  8244 I ProdOrtStress: ROUND START iter=158 threads=34 fd=153
+10-30 15:52:36.223  4385  8244 I ProdOrtStress: ROUND END iter=158 opMs=274 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:36.225  4385  8244 I ProdOrtStress: ROUND START iter=159 threads=34 fd=153
+10-30 15:52:36.528  4385  8244 I ProdOrtStress: ROUND END iter=159 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:36.529  4385  8244 I ProdOrtStress: ROUND START iter=160 threads=34 fd=153
+10-30 15:52:36.837  4385  8244 I ProdOrtStress: ROUND END iter=160 opMs=275 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:36.838  4385  8244 I ProdOrtStress: ROUND START iter=161 threads=34 fd=153
+10-30 15:52:37.148  4385  8244 I ProdOrtStress: ROUND END iter=161 opMs=279 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:37.149  4385  8244 I ProdOrtStress: ROUND START iter=162 threads=34 fd=153
+10-30 15:52:37.458  4385  8244 I ProdOrtStress: ROUND END iter=162 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:37.459  4385  8244 I ProdOrtStress: ROUND START iter=163 threads=34 fd=153
+10-30 15:52:37.764  4385  8244 I ProdOrtStress: ROUND END iter=163 opMs=271 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:37.765  4385  8244 I ProdOrtStress: ROUND START iter=164 threads=34 fd=153
+10-30 15:52:38.064  4385  8244 I ProdOrtStress: ROUND END iter=164 opMs=263 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:38.065  4385  8244 I ProdOrtStress: ROUND START iter=165 threads=34 fd=153
+10-30 15:52:38.373  4385  8244 I ProdOrtStress: ROUND END iter=165 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:38.374  4385  8244 I ProdOrtStress: ROUND START iter=166 threads=34 fd=153
+10-30 15:52:38.674  4385  8244 I ProdOrtStress: ROUND END iter=166 opMs=266 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:38.675  4385  8244 I ProdOrtStress: ROUND START iter=167 threads=34 fd=153
+10-30 15:52:38.971  4385  8244 I ProdOrtStress: ROUND END iter=167 opMs=265 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:38.972  4385  8244 I ProdOrtStress: ROUND START iter=168 threads=34 fd=153
+10-30 15:52:39.278  4385  8244 I ProdOrtStress: ROUND END iter=168 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:39.279  4385  8244 I ProdOrtStress: ROUND START iter=169 threads=34 fd=153
+10-30 15:52:39.585  4385  8244 I ProdOrtStress: ROUND END iter=169 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:39.586  4385  8244 I ProdOrtStress: ROUND START iter=170 threads=34 fd=153
+10-30 15:52:39.887  4385  8244 I ProdOrtStress: ROUND END iter=170 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:39.888  4385  8244 I ProdOrtStress: ROUND START iter=171 threads=34 fd=153
+10-30 15:52:40.195  4385  8244 I ProdOrtStress: ROUND END iter=171 opMs=275 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:40.196  4385  8244 I ProdOrtStress: ROUND START iter=172 threads=34 fd=153
+10-30 15:52:40.499  4385  8244 I ProdOrtStress: ROUND END iter=172 opMs=268 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:40.499  4385  8244 I ProdOrtStress: ROUND START iter=173 threads=34 fd=153
+10-30 15:52:40.804  4385  8244 I ProdOrtStress: ROUND END iter=173 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:40.805  4385  8244 I ProdOrtStress: ROUND START iter=174 threads=34 fd=153
+10-30 15:52:41.112  4385  8244 I ProdOrtStress: ROUND END iter=174 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:41.114  4385  8244 I ProdOrtStress: ROUND START iter=175 threads=34 fd=153
+10-30 15:52:41.414  4385  8244 I ProdOrtStress: ROUND END iter=175 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:41.415  4385  8244 I ProdOrtStress: ROUND START iter=176 threads=34 fd=153
+10-30 15:52:41.718  4385  8244 I ProdOrtStress: ROUND END iter=176 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:41.719  4385  8244 I ProdOrtStress: ROUND START iter=177 threads=34 fd=153
+10-30 15:52:42.022  4385  8244 I ProdOrtStress: ROUND END iter=177 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:42.023  4385  8244 I ProdOrtStress: ROUND START iter=178 threads=34 fd=153
+10-30 15:52:42.317  4385  8244 I ProdOrtStress: ROUND END iter=178 opMs=266 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:42.317  4385  8244 I ProdOrtStress: ROUND START iter=179 threads=34 fd=153
+10-30 15:52:42.614  4385  8244 I ProdOrtStress: ROUND END iter=179 opMs=267 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:42.614  4385  8244 I ProdOrtStress: ROUND START iter=180 threads=34 fd=153
+10-30 15:52:42.928  4385  8244 I ProdOrtStress: ROUND END iter=180 opMs=280 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:42.929  4385  8244 I ProdOrtStress: ROUND START iter=181 threads=34 fd=153
+10-30 15:52:43.234  4385  8244 I ProdOrtStress: ROUND END iter=181 opMs=273 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:43.235  4385  8244 I ProdOrtStress: ROUND START iter=182 threads=34 fd=153
+10-30 15:52:43.539  4385  8244 I ProdOrtStress: ROUND END iter=182 opMs=271 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:43.540  4385  8244 I ProdOrtStress: ROUND START iter=183 threads=34 fd=153
+10-30 15:52:43.852  4385  8244 I ProdOrtStress: ROUND END iter=183 opMs=275 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:43.853  4385  8244 I ProdOrtStress: ROUND START iter=184 threads=34 fd=153
+10-30 15:52:44.163  4385  8244 I ProdOrtStress: ROUND END iter=184 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:44.165  4385  8244 I ProdOrtStress: ROUND START iter=185 threads=34 fd=153
+10-30 15:52:44.476  4385  8244 I ProdOrtStress: ROUND END iter=185 opMs=279 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:44.477  4385  8244 I ProdOrtStress: ROUND START iter=186 threads=34 fd=153
+10-30 15:52:44.787  4385  8244 I ProdOrtStress: ROUND END iter=186 opMs=277 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:44.788  4385  8244 I ProdOrtStress: ROUND START iter=187 threads=34 fd=153
+10-30 15:52:45.101  4385  8244 I ProdOrtStress: ROUND END iter=187 opMs=281 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:45.102  4385  8244 I ProdOrtStress: ROUND START iter=188 threads=34 fd=153
+10-30 15:52:45.413  4385  8244 I ProdOrtStress: ROUND END iter=188 opMs=275 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:45.414  4385  8244 I ProdOrtStress: ROUND START iter=189 threads=34 fd=153
+10-30 15:52:45.714  4385  8244 I ProdOrtStress: ROUND END iter=189 opMs=267 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:45.715  4385  8244 I ProdOrtStress: ROUND START iter=190 threads=34 fd=153
+10-30 15:52:46.018  4385  8244 I ProdOrtStress: ROUND END iter=190 opMs=269 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:46.019  4385  8244 I ProdOrtStress: ROUND START iter=191 threads=34 fd=153
+10-30 15:52:46.331  4385  8244 I ProdOrtStress: ROUND END iter=191 opMs=276 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:46.331  4385  8244 I ProdOrtStress: ROUND START iter=192 threads=34 fd=153
+10-30 15:52:46.639  4385  8244 I ProdOrtStress: ROUND END iter=192 opMs=272 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:46.641  4385  8244 I ProdOrtStress: ROUND START iter=193 threads=34 fd=153
+10-30 15:52:46.959  4385  8244 I ProdOrtStress: ROUND END iter=193 opMs=289 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:46.960  4385  8244 I ProdOrtStress: ROUND START iter=194 threads=34 fd=153
+10-30 15:52:47.257  4385  8244 I ProdOrtStress: ROUND END iter=194 opMs=266 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:47.257  4385  8244 I ProdOrtStress: ROUND START iter=195 threads=34 fd=153
+10-30 15:52:47.562  4385  8244 I ProdOrtStress: ROUND END iter=195 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:47.563  4385  8244 I ProdOrtStress: ROUND START iter=196 threads=34 fd=153
+10-30 15:52:47.871  4385  8244 I ProdOrtStress: ROUND END iter=196 opMs=275 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:47.872  4385  8244 I ProdOrtStress: ROUND START iter=197 threads=34 fd=153
+10-30 15:52:48.178  4385  8244 I ProdOrtStress: ROUND END iter=197 opMs=269 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:48.179  4385  8244 I ProdOrtStress: ROUND START iter=198 threads=34 fd=153
+10-30 15:52:48.483  4385  8244 I ProdOrtStress: ROUND END iter=198 opMs=273 threads=34 fd=153 pss=462MB native=380MB
+10-30 15:52:48.484  4385  8244 I ProdOrtStress: ROUND START iter=199 threads=34 fd=153
+10-30 15:52:48.790  4385  8244 I ProdOrtStress: ROUND END iter=199 opMs=272 threads=34 fd=153 pss=410MB native=380MB
+10-30 15:52:48.790  4385  8244 I ProdOrtStress: DONE completed=200

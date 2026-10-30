@@ -584,3 +584,84 @@ ORT 1.27.0 + 同模型 + 200 轮大张量推理稳定通过。**
 
 - 挂起（instrument）：`am instrument ... -e class ...OrtOfficialStressTest#officialReuseSessionInference`
 - 通过（无调试器）：`am start -n com.ortcmp.stress/.Placeholder --ei iters 200`，日志 tag `NonInstrStress`
+
+---
+
+# OCR Migration Review（基线 dev@721eda0，本轮基线 721eda0 之后）
+
+## 1. 当前 OCR 模块结构（尚在 androidTest，未进 main）
+
+- `app/src/androidTest/java/com/example/fourlangasr/ocr/paddle/` —— 官方 PP-OCR 管线的 Kotlin 移植：
+  `engine/`(OCREngine/DetectionEngine/RecognitionEngine/ORTSessionManager)、`preprocess/`、`postprocess/`(DB 后处理/CTC/裁剪)、
+  `util/`(OpenCV/Bitmap/Mat)。`ORSessionManager` 本地改了两处：BASIC_OPT、诊断开关（默认关）。
+- `.../ocr/runtime/OcrRuntime.kt` —— 语言 profile 与引擎池（zh/en/uz 共享同一 tiny det+rec；预留 cyrillic rec）。
+- `app/src/main/java/com/example/fourlangasr/ocr/text/` —— **已在 main**（`UzbekText`/`TextNormalizer`），生产可用的文本三态与翻译输入规范化。
+- 新增：`OCREngine` 生命周期护栏（读/写锁），见 §5。
+
+## 2. 正式 App 依赖与 native 加载关系
+
+- ORT Java：`app/libs/onnxruntime-1.27.0-classes.jar`（`implementation`）。
+- OCR + **翻译** 共用：`jniLibs/libonnxruntime4j_jni.so`（补丁桥，DT_NEEDED=libort4jrt.so）+ `jniLibs/libort4jrt.so`（改名的官方 ORT 1.27.0）。
+- ASR：sherpa AAR 自带 `libonnxruntime.so`（`libsherpa-onnx-jni.so` 依赖它）。
+- 即"双 ORT"实际是：**ASR=sherpa 的 libonnxruntime.so；OCR 与翻译=共享 libort4jrt.so**。
+- 加载验证（`OrtProdStressActivity` 实跑后 /proc/maps）：只映射了 `libort4jrt.so` + `libonnxruntime4j_jni.so`；
+  **未**加载 sherpa 的 libonnxruntime.so / OpenCV / Vosk / TFLite（纯 OCR-ORT 场景）。
+
+## 3. 生产运行库 200 轮（任务二，最高优先级）—— 通过
+
+正式 App debug 专用入口 `app/src/debug/.../debug/OrtProdStressActivity`（无 UI、`am start` 触发、**无 instrumentation/JDWP**），
+用**实际生产库**（libort4jrt.so + 补丁桥），同模型（sha256 与 androidTest 一致）、det[1,3,960,1280]+5×rec[1,3,48,800]、1det+5rec：
+
+- **200/200 完成，~60s**；threads 34 / FD 153 / native ~380MB / PSS 410–462MB 平稳；`isDebuggerConnected=false`。
+- 复核了"上一阶段所有 instrument 下 4–20 轮挂起"：同一负载在**无 instrumentation**（App 内后台线程）下稳定 200 轮。
+  结论维持：挂起是 `am instrument`/JDWP 调试环境假象，非 ORT/生产运行库问题。
+
+## 4. 完整 OCR 端到端验收（任务三）—— 通过（真实 OCREngine）
+
+`OcrMigrationReviewTest.e2e_realPhotos` 调用真正的 `OCREngine.run`（解码→det→DB→四角裁剪→rec→CTC→阅读顺序→释放）：
+
+| 图 | 类型 | 行数 | degraded | wall |
+|---|---|---|---|---|
+| print_00/02 | 合成印刷 | 5 | false | 324/236ms |
+| smoke_zh_street | 真实街景照片 | 4 | false | 241ms |
+| smoke_en_street | 真实街景照片 | 4 | false | 319ms |
+| hand_00 | 横线纸手写 | 24 | false | 895ms |
+
+精度对拍 `b2`（printed tier）仍通过：IoU 0.964 / 行 CER 0.009 / 顺序单调。**未用 user 实拍 ≥100 张做真实街景 CER**（无数据，标注未验证）。
+
+## 5. 生命周期竞争（任务三重点）—— 已修 + 验证
+
+- 原状：`OcrRuntime.releaseAll()`（@Synchronized on runtime）与并发 `OCREngine.run()` **无共同锁**，释放可能在推理中关 Session（use-after-close）。
+- 最小修复：`OCREngine` 增 `ReentrantReadWriteLock`；`run()` 持读锁、`release()` 持写锁（等待在跑的 run 结束再关 session）。
+- 验证 `releaseDuringRunDoesNotCrash`：run 进行中调 `releaseAll()`，release 阻塞 ~306ms 等 run 完成，无异常、run 线程结束。通过。
+
+## 6. 兼容性与共存（任务四）
+
+- minSdk：App=23；官方 ORT AAR 要求 **24** → 继续保留"抽 classes.jar + 自改 .so"方式，不引 AAR（避免抬 minSdk）。**保留现有双 ORT 方案，未替换任何 native 库。**
+- ASR/Vosk/LID 共存 `a4a/a4b/a4c` 重新通过（OCREngine 加锁后无回归）。
+- 翻译资源修复（present.second/SessionOptions/session 异常路径）已改；但**本机无 734MB 翻译包，回归用例 Assume 跳过，未验证——不计为通过**。
+- ASR+OCR+翻译峰值内存：**未测**（无翻译包），不得声称已通过。
+
+## 7. 内存与性能
+
+- 生产 ORT 200 轮：native ~380MB（arena 默认开；关 arena 可降至 ~25MB，见 2B0 记录）、PSS 410–462MB、线程/FD 平稳无增长。
+- 端到端真实照片：单张 236–895ms（手写 24 行最慢），印刷/街景 ~240–320ms。
+
+## 8. 未完成 / 风险
+
+- 未用真实用户实拍 ≥100 张做街景 CER/漏检分布（缺数据）。
+- 翻译资源修复与 ASR+OCR+翻译峰值内存**未验证**（无翻译包）。
+- OCR 代码仍在 androidTest（生产入口未迁移）；`OCREngine` 的读写锁是面向迁移的护栏。
+- JDWP 长循环假象的 ART 内部机制未完全定位（不影响生产；长压测须用 App 内入口）。
+
+## 9. 正式迁移方案（待批准后执行，本轮不做）
+
+1. 将 `ocr/paddle`、`ocr/runtime` 从 androidTest 移入 `main`（`ocr/text` 已在 main），并加 `debugImplementation`/`implementation` opencv 依需要。
+2. 相册导入/拍照入口 + 校对 UI + 接 `TranslationService`（独立模块，不并入语音 ConversationPipeline）。
+3. 保持双 ORT 不动；OCR 与翻译共用 libort4jrt.so 的现状不变。
+4. 迁移后跑：Golden 对拍、真实照片验收、ASR/翻译/TTS 回归、内存峰值（含翻译包）。
+
+### 迁移文件清单（预期）
+- 搬移：`ocr/paddle/**`、`ocr/runtime/**`（androidTest → main）。
+- 保留：`main/ocr/text/**`、`jniLibs/libort4jrt.so`、`libonnxruntime4j_jni.so`、`libs/onnxruntime-1.27.0-classes.jar`。
+- 新增（正式集成）：相册/拍照入口、校对 UI、OCR↔TranslationService 桥接。

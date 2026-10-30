@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <!-- 仅 debug 构建存在的生产运行库压力测试入口（无 UI 依赖，am start 触发）。 -->
+        <activity
+            android:name=".debug.OrtProdStressActivity"
+            android:exported="true"
+ />
+    </application>
+</manifest>

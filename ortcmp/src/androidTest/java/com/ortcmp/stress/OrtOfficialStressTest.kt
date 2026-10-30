@@ -40,6 +40,9 @@ class OrtOfficialStressTest {
     private fun readAsset(path: String): ByteArray =
         InstrumentationRegistry.getInstrumentation().context.assets.open(path).use { it.readBytes() }
 
+    private fun sha256(b: ByteArray): String =
+        java.security.MessageDigest.getInstance("SHA-256").digest(b).joinToString("") { "%02x".format(it) }
+
     private fun threadCount() = File("/proc/self/task").listFiles()?.size ?: -1
     private fun fdCount() = File("/proc/self/fd").listFiles()?.size ?: -1
     private fun pssMb(): Double { val mi = Debug.MemoryInfo(); Debug.getMemoryInfo(mi); return mi.totalPss / 1024.0 }
@@ -79,16 +82,21 @@ class OrtOfficialStressTest {
     }
 
     private fun startWatchdog(which: String): AutoCloseable {
-        val hb = AtomicLong(System.currentTimeMillis())
+        // 心跳用真实进度（lastCompletedIter）驱动：只有它停滞超过 stallMs 才判定"疑似挂起"，
+        // 不再用一个从不更新的时间戳（旧实现会误报）。也不把"超时"直接等同"native 死锁"。
         val fired = AtomicBoolean(false); val stop = AtomicBoolean(false)
+        var seen = lastCompletedIter
+        var idleMs = 0L
         val t = Thread {
             while (!stop.get()) {
                 try { Thread.sleep(1_000) } catch (e: InterruptedException) { break }
-                val idle = System.currentTimeMillis() - hb.get()
-                if (idle > stallMs && fired.compareAndSet(false, true)) {
-                    Log.e(tag, "HANGDUMP $which config=$config idleMs=$idle lastStartedIter=$lastStartedIter " +
-                        "lastCompletedIter=$lastCompletedIter lastStep='$lastStep' threads=${threadCount()} fd=${fdCount()} " +
-                        "pss=${r1(pssMb())}MB native=${r1(nativeMb())}MB device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT}")
+                val cur = lastCompletedIter
+                if (cur != seen) { seen = cur; idleMs = 0 } else { idleMs += 1000 }
+                if (idleMs > stallMs && fired.compareAndSet(false, true)) {
+                    Log.e(tag, "STALL $which config=$config idleMs=$idleMs lastStartedIter=$lastStartedIter " +
+                        "lastCompletedIter=$lastCompletedIter lastStep='$lastStep' debugger=${Debug.isDebuggerConnected()} " +
+                        "threads=${threadCount()} fd=${fdCount()} pss=${r1(pssMb())}MB native=${r1(nativeMb())}MB " +
+                        "device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT}")
                 }
             }
         }
@@ -99,11 +107,13 @@ class OrtOfficialStressTest {
     @Test
     fun officialReuseSessionInference() {
         val (opts, applied) = buildOptions()
+        val detBytes = readAsset(DET); val recBytes = readAsset(REC)
         Log.i(tag, "ENV reuse ortVersion=${BuildConfig.ORT_VERSION} config=$config applied=$applied entries=${opts.configEntries} " +
-            "device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT} iters=$iters stallMs=$stallMs")
+            "debugger=${Debug.isDebuggerConnected()}/${Debug.waitingForDebugger()} detSha=${sha256(detBytes)} recSha=${sha256(recBytes)} " +
+            "inputs=det[1,3,960,1280]+5xrec[1,3,48,800] device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT} iters=$iters stallMs=$stallMs")
         val env = OrtEnvironment.getEnvironment()
-        lastStep = "session.create.det"; val det = env.createSession(readAsset(DET), opts)
-        lastStep = "session.create.rec"; val rec = env.createSession(readAsset(REC), opts)
+        lastStep = "session.create.det"; val det = env.createSession(detBytes, opts)
+        lastStep = "session.create.rec"; val rec = env.createSession(recBytes, opts)
         opts.close()
         val detName = det.inputNames.iterator().next(); val recName = rec.inputNames.iterator().next()
         val din = FloatArray(1 * 3 * 960 * 1280) { (it % 251) / 255f }; val dshape = longArrayOf(1, 3, 960, 1280)
@@ -130,15 +140,17 @@ class OrtOfficialStressTest {
                 Log.i(tag, "ROUND END reuse config=$config iter=$i opMs=$dt threads=${threadCount()} fd=${fdCount()} pss=${r1(pssMb())}MB native=${r1(nativeMb())}MB")
             }
         } finally { wd.close(); detT?.close(); recT?.close(); det.close(); rec.close() }
-        writeReport("official_reuse_${config}.json", "reuse", applied, rows)
+        writeReport("official_reuse_v${BuildConfig.ORT_VERSION}_${config}.json", "reuse", applied, rows)
     }
 
     @Test
     fun officialSessionChurn() {
         val (opts0, applied) = buildOptions(); opts0.close() // 仅用于确认配置合法
-        Log.i(tag, "ENV churn ortVersion=${BuildConfig.ORT_VERSION} config=$config applied=$applied device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT} iters=$iters")
-        val env = OrtEnvironment.getEnvironment()
         val detBytes = readAsset(DET); val recBytes = readAsset(REC)
+        Log.i(tag, "ENV churn ortVersion=${BuildConfig.ORT_VERSION} config=$config applied=$applied " +
+            "debugger=${Debug.isDebuggerConnected()}/${Debug.waitingForDebugger()} detSha=${sha256(detBytes)} recSha=${sha256(recBytes)} " +
+            "inputs=det[1,3,960,1280]+5xrec[1,3,48,800] device=${Build.MANUFACTURER}/${Build.MODEL} sdk=${Build.VERSION.SDK_INT} iters=$iters")
+        val env = OrtEnvironment.getEnvironment()
         val din = FloatArray(1 * 3 * 960 * 1280) { (it % 251) / 255f }; val dshape = longArrayOf(1, 3, 960, 1280)
         val rin = FloatArray(1 * 3 * 48 * 800) { (it % 251) / 255f - 0.5f }; val rshape = longArrayOf(1, 3, 48, 800)
         val rows = JSONArray(); val wd = startWatchdog("churn")
@@ -164,7 +176,7 @@ class OrtOfficialStressTest {
                 Log.i(tag, "ROUND END churn config=$config iter=$i opMs=$dt threads=${threadCount()} fd=${fdCount()} native=${r1(nativeMb())}MB")
             }
         } finally { wd.close() }
-        writeReport("official_churn_${config}.json", "churn", applied, rows)
+        writeReport("official_churn_v${BuildConfig.ORT_VERSION}_${config}.json", "churn", applied, rows)
     }
 
     /** 复用预建输入张量的推理（不 create/close 输入张量），仍读取输出，用于隔离分配抖动。 */

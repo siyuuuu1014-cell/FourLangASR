@@ -1,0 +1,2 @@
+7950ec2000-79528d2000 r-xp 21487000 fe:50 379779                         /data/app/~~yClxfiNJnZU3z8kQavknzA==/com.example.fourlangasr-IhlqQVaemUFIf-ZwU-Kbcw==/base.apk
+79573d1000-79573e5000 r-xp 00008000 fe:50 379779                         /data/app/~~yClxfiNJnZU3z8kQavknzA==/com.example.fourlangasr-IhlqQVaemUFIf-ZwU-Kbcw==/base.apk
