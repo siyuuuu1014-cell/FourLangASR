@@ -1,0 +1,13 @@
+--------- beginning of main
+10-30 14:45:35.975 25100 25122 I OrtStress: ENV reuse ortVersion=1.27.0 config=intra1 applied={"intra_op":1,"config":"intra1"} entries={} device=OPPO/PLW110 sdk=36 iters=200 stallMs=12000
+10-30 14:45:36.259 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=0 threads=19 fd=106
+10-30 14:45:37.290 25100 25122 I OrtStress: ROUND END reuse config=intra1 iter=0 opMs=969 threads=19 fd=106 pss=281.2MB native=371.6MB
+10-30 14:45:37.291 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=1 threads=19 fd=106
+10-30 14:45:38.307 25100 25122 I OrtStress: ROUND END reuse config=intra1 iter=1 opMs=956 threads=19 fd=106 pss=374.1MB native=371.8MB
+10-30 14:45:38.308 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=2 threads=19 fd=106
+10-30 14:45:39.290 25100 25122 I OrtStress: ROUND END reuse config=intra1 iter=2 opMs=927 threads=19 fd=106 pss=332.1MB native=371.8MB
+10-30 14:45:39.290 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=3 threads=19 fd=106
+10-30 14:45:40.247 25100 25122 I OrtStress: ROUND END reuse config=intra1 iter=3 opMs=895 threads=19 fd=106 pss=373.8MB native=371.8MB
+10-30 14:45:40.248 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=4 threads=19 fd=106
+10-30 14:45:41.205 25100 25122 I OrtStress: ROUND END reuse config=intra1 iter=4 opMs=898 threads=16 fd=106 pss=337.9MB native=371.6MB
+10-30 14:45:41.205 25100 25122 I OrtStress: ROUND START reuse config=intra1 iter=5 threads=16 fd=106

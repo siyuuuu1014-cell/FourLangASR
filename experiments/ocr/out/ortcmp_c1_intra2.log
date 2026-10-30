@@ -1,0 +1,19 @@
+--------- beginning of main
+10-30 14:43:32.837 24976 24998 I OrtStress: ENV reuse ortVersion=1.27.0 config=intra2 applied={"intra_op":2,"config":"intra2"} entries={} device=OPPO/PLW110 sdk=36 iters=200 stallMs=12000
+10-30 14:43:33.181 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=0 threads=21 fd=106
+10-30 14:43:33.850 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=0 opMs=607 threads=21 fd=106 pss=281.0MB native=371.7MB
+10-30 14:43:33.850 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=1 threads=21 fd=106
+10-30 14:43:34.456 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=1 opMs=541 threads=21 fd=106 pss=443.3MB native=371.7MB
+10-30 14:43:34.456 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=2 threads=21 fd=106
+10-30 14:43:35.075 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=2 opMs=546 threads=21 fd=106 pss=368.2MB native=372.0MB
+10-30 14:43:35.075 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=3 threads=21 fd=106
+10-30 14:43:35.689 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=3 opMs=546 threads=21 fd=106 pss=373.6MB native=372.0MB
+10-30 14:43:35.690 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=4 threads=21 fd=106
+10-30 14:43:36.297 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=4 opMs=539 threads=21 fd=106 pss=337.7MB native=372.0MB
+10-30 14:43:36.298 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=5 threads=21 fd=106
+10-30 14:43:36.899 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=5 opMs=537 threads=21 fd=106 pss=349.1MB native=372.0MB
+10-30 14:43:36.899 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=6 threads=21 fd=106
+10-30 14:43:37.511 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=6 opMs=540 threads=21 fd=106 pss=337.7MB native=372.0MB
+10-30 14:43:37.511 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=7 threads=21 fd=106
+10-30 14:43:38.123 24976 24998 I OrtStress: ROUND END reuse config=intra2 iter=7 opMs=548 threads=18 fd=106 pss=349.1MB native=371.7MB
+10-30 14:43:38.125 24976 24998 I OrtStress: ROUND START reuse config=intra2 iter=8 threads=18 fd=106

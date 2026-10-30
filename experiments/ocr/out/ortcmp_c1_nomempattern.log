@@ -1,0 +1,29 @@
+--------- beginning of main
+10-30 14:51:44.201 25533 25554 I OrtStress: ENV reuse ortVersion=1.27.0 config=nomempattern applied={"mem_pattern":false,"intra_op":4,"config":"nomempattern"} entries={} device=OPPO/PLW110 sdk=36 iters=200 stallMs=12000
+10-30 14:51:44.495 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=0 threads=25 fd=106
+10-30 14:51:44.919 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=0 opMs=358 threads=25 fd=106 pss=279.2MB native=372.1MB
+10-30 14:51:44.919 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=1 threads=25 fd=106
+10-30 14:51:45.305 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=1 opMs=322 threads=25 fd=106 pss=331.3MB native=372.0MB
+10-30 14:51:45.306 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=2 threads=25 fd=106
+10-30 14:51:45.700 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=2 opMs=326 threads=25 fd=106 pss=383.3MB native=372.0MB
+10-30 14:51:45.701 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=3 threads=25 fd=106
+10-30 14:51:46.106 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=3 opMs=346 threads=25 fd=106 pss=231.8MB native=372.0MB
+10-30 14:51:46.107 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=4 threads=25 fd=106
+10-30 14:51:46.510 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=4 opMs=328 threads=25 fd=106 pss=220.0MB native=372.2MB
+10-30 14:51:46.510 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=5 threads=25 fd=106
+10-30 14:51:46.892 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=5 opMs=322 threads=25 fd=106 pss=266.4MB native=372.2MB
+10-30 14:51:46.893 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=6 threads=25 fd=106
+10-30 14:51:47.287 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=6 opMs=330 threads=25 fd=106 pss=225.8MB native=372.2MB
+10-30 14:51:47.287 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=7 threads=25 fd=106
+10-30 14:51:47.670 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=7 opMs=317 threads=25 fd=106 pss=231.5MB native=372.2MB
+10-30 14:51:47.671 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=8 threads=25 fd=106
+10-30 14:51:48.050 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=8 opMs=317 threads=25 fd=106 pss=266.4MB native=372.2MB
+10-30 14:51:48.051 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=9 threads=25 fd=106
+10-30 14:51:48.451 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=9 opMs=331 threads=25 fd=106 pss=220.0MB native=372.2MB
+10-30 14:51:48.453 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=10 threads=25 fd=106
+10-30 14:51:48.830 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=10 opMs=318 threads=25 fd=106 pss=266.4MB native=372.2MB
+10-30 14:51:48.831 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=11 threads=25 fd=106
+10-30 14:51:49.223 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=11 opMs=328 threads=22 fd=106 pss=225.8MB native=371.9MB
+10-30 14:51:49.224 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=12 threads=22 fd=106
+10-30 14:51:49.606 25533 25554 I OrtStress: ROUND END reuse config=nomempattern iter=12 opMs=320 threads=22 fd=106 pss=243.0MB native=371.9MB
+10-30 14:51:49.607 25533 25554 I OrtStress: ROUND START reuse config=nomempattern iter=13 threads=22 fd=106

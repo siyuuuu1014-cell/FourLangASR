@@ -1,0 +1,29 @@
+--------- beginning of main
+10-30 14:49:41.471 25385 25407 I OrtStress: ENV reuse ortVersion=1.27.0 config=noarena applied={"cpu_arena":false,"intra_op":4,"config":"noarena"} entries={} device=OPPO/PLW110 sdk=36 iters=200 stallMs=12000
+10-30 14:49:41.775 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=0 threads=25 fd=106
+10-30 14:49:42.189 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=0 opMs=354 threads=25 fd=106 pss=293.1MB native=23.6MB
+10-30 14:49:42.190 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=1 threads=25 fd=106
+10-30 14:49:42.575 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=1 opMs=318 threads=25 fd=106 pss=427.4MB native=23.5MB
+10-30 14:49:42.577 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=2 threads=25 fd=106
+10-30 14:49:42.949 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=2 opMs=313 threads=25 fd=106 pss=479.5MB native=23.5MB
+10-30 14:49:42.950 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=3 threads=25 fd=106
+10-30 14:49:43.358 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=3 opMs=346 threads=25 fd=106 pss=327.6MB native=23.8MB
+10-30 14:49:43.359 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=4 threads=25 fd=106
+10-30 14:49:43.779 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=4 opMs=354 threads=25 fd=106 pss=321.8MB native=23.8MB
+10-30 14:49:43.779 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=5 threads=25 fd=106
+10-30 14:49:44.167 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=5 opMs=325 threads=25 fd=106 pss=333.2MB native=23.8MB
+10-30 14:49:44.167 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=6 threads=25 fd=106
+10-30 14:49:44.537 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=6 opMs=314 threads=25 fd=106 pss=321.8MB native=23.8MB
+10-30 14:49:44.537 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=7 threads=25 fd=106
+10-30 14:49:44.913 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=7 opMs=316 threads=25 fd=106 pss=333.2MB native=23.8MB
+10-30 14:49:44.914 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=8 threads=25 fd=106
+10-30 14:49:45.293 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=8 opMs=319 threads=25 fd=106 pss=336.3MB native=23.8MB
+10-30 14:49:45.293 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=9 threads=25 fd=106
+10-30 14:49:45.677 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=9 opMs=319 threads=25 fd=106 pss=321.8MB native=23.8MB
+10-30 14:49:45.677 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=10 threads=25 fd=106
+10-30 14:49:46.062 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=10 opMs=314 threads=25 fd=106 pss=339.0MB native=23.8MB
+10-30 14:49:46.063 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=11 threads=25 fd=106
+10-30 14:49:46.460 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=11 opMs=330 threads=22 fd=106 pss=316.1MB native=23.5MB
+10-30 14:49:46.461 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=12 threads=22 fd=106
+10-30 14:49:46.833 25385 25407 I OrtStress: ROUND END reuse config=noarena iter=12 opMs=310 threads=22 fd=106 pss=362.4MB native=23.5MB
+10-30 14:49:46.834 25385 25407 I OrtStress: ROUND START reuse config=noarena iter=13 threads=22 fd=106

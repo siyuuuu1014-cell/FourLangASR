@@ -538,3 +538,49 @@ DT_SONAME/DT_NEEDED 的 ELF 工具，但这属于健壮性改进，不是本 bug
 
 **下一步（方案 c）**：在 `ortcmp` 里依次替换官方 ORT 版本（如 1.22 / 1.23 / 1.26 等）与构建配置
 （intra-op=1、disable spinning、不同 arena），用同一 200 轮脚本定位"哪个版本/配置不挂"，再决定生产路线。
+
+## C1/C2 结论：挂起是 instrumentation/JDWP 环境问题，不是 ORT 运行时 Bug
+
+同一台 OPPO PLW110 / Android 16、同一模型（sha256 与主 App 一致）、同输入
+det[1,3,960,1280] + 5×rec[1,3,48,800]、同循环，仅改变"是否处于 am instrument"：
+
+### 在 `am instrument`（JDWP 调试环境）下 —— 全部挂起
+
+| 变量 | 结果 |
+|---|---|
+| ORT 1.22.0 | 挂 @9 |
+| ORT 1.27.0 官方 | 挂 @13 |
+| ORT 1.27.0 修改版(libort4jrt) | 挂 @15 |
+| ORT 1.31.1 官方 | 挂 @13 |
+| 配置 intra2 / intra1 / nospin / noarena / nomempattern / seq（1.27.0） | 分别挂 @7/@4/@12/@12/@12/@13 |
+| 复用输入张量（消除每轮 15MB 分配） | 仍挂 @13 |
+
+挂起时：进程在 `cpuset:/foreground`、**CPU 时间完全不推进**、所有线程 S 态；
+测试线程 PC 落在 **libc**（非 libonnxruntime 计算），ORT worker 停在 libc futex。即"被某处阻塞"，
+但**换版本/换配置/换分配方式都不解决**。
+
+### 不用 instrumentation（`am start` 启动 App，后台线程跑同一循环）—— 全部跑满 200 轮
+
+| 版本 | 结果 | 资源 |
+|---|---|---|
+| 官方 ORT 1.31.1 | **200/200，~60s** | threads 35 / fd 159 / native ~380MB / PSS 398–453MB 平稳 |
+| 官方 ORT 1.27.0（生产同版本） | **200/200，~62s** | threads 35 / fd 159 / native ~379MB / PSS 398–450MB 平稳 |
+
+**结论（决定性、可复现）**：之前"重复大张量推理挂起"是 **`am instrument` 触发的 JDWP/调试线程
+挂起与 ORT 原生线程池交互**造成的**测试环境假象**，不是 ORT 1.22–1.31 的运行时 Bug，也不是
+双 ORT 改名、OpenCV、进程隔离或内存/句柄泄漏问题。**去掉 instrument/JDWP 后，同一套
+ORT 1.27.0 + 同模型 + 200 轮大张量推理稳定通过。**
+
+### 影响与纠正
+
+- 阶段 2A/2B 中所有"重复推理挂起"观测都跑在 `am instrument` 下 → 均属该环境假象；
+  阶段 2A 的单次/少量推理性能与精度数据不受影响（那些是有效测量）。
+- 生产 App 的 OCR 在本进程后台线程执行、无 JDWP 调试器 → 不受此假象影响。
+- 遗留待证：为何 JDWP 会挂住（ART 线程挂起 vs ORT 原生线程），属调试工具链问题，
+  不影响生产；若以后要写长时间 OCR 压测，**必须用 App 内运行器（本模块 Placeholder）或
+  关闭调试器**，不能用 `am instrument` 跑长循环。
+
+### 复现命令
+
+- 挂起（instrument）：`am instrument ... -e class ...OrtOfficialStressTest#officialReuseSessionInference`
+- 通过（无调试器）：`am start -n com.ortcmp.stress/.Placeholder --ei iters 200`，日志 tag `NonInstrStress`

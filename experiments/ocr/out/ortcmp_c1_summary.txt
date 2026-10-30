@@ -1,0 +1,13 @@
+# C1 官方 ORT 1.27.0 配置对照（am instrument 下，全部挂起）
+config  result  maxCompletedIter(of 200)
+baseline  HANG  13
+intra2  HANG  7
+intra1  HANG  4
+nospin  HANG  12
+noarena  HANG  12
+nomempattern  HANG  12
+seq  HANG  13
+
+# 无 instrumentation（am start，非 JDWP）
+1.31.1: completed=200 DONE=1
+1.27.0: completed=200 DONE=1

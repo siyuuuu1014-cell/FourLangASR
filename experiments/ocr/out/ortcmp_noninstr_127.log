@@ -1,0 +1,403 @@
+--------- beginning of main
+10-30 15:27:26.669   742   742 I NonInstrStress: ENV device=OPPO/PLW110 sdk=36 iters=200 jdwp=none
+10-30 15:27:27.126   742  4347 I NonInstrStress: ROUND START iter=0 threads=39 fd=161
+10-30 15:27:27.555   742  4347 I NonInstrStress: ROUND END iter=0 opMs=397 threads=39 fd=161 pss=297MB native=380MB
+10-30 15:27:27.556   742  4347 I NonInstrStress: ROUND START iter=1 threads=39 fd=161
+10-30 15:27:27.977   742  4347 I NonInstrStress: ROUND END iter=1 opMs=389 threads=39 fd=161 pss=466MB native=379MB
+10-30 15:27:27.978   742  4347 I NonInstrStress: ROUND START iter=2 threads=39 fd=161
+10-30 15:27:28.298   742  4347 I NonInstrStress: ROUND END iter=2 opMs=288 threads=39 fd=161 pss=519MB native=379MB
+10-30 15:27:28.299   742  4347 I NonInstrStress: ROUND START iter=3 threads=39 fd=161
+10-30 15:27:28.617   742  4347 I NonInstrStress: ROUND END iter=3 opMs=285 threads=39 fd=161 pss=571MB native=380MB
+10-30 15:27:28.618   742  4347 I NonInstrStress: ROUND START iter=4 threads=39 fd=159
+10-30 15:27:28.937   742  4347 I NonInstrStress: ROUND END iter=4 opMs=287 threads=39 fd=159 pss=401MB native=380MB
+10-30 15:27:28.938   742  4347 I NonInstrStress: ROUND START iter=5 threads=39 fd=159
+10-30 15:27:29.260   742  4347 I NonInstrStress: ROUND END iter=5 opMs=288 threads=39 fd=159 pss=398MB native=380MB
+10-30 15:27:29.261   742  4347 I NonInstrStress: ROUND START iter=6 threads=39 fd=159
+10-30 15:27:29.563   742  4347 I NonInstrStress: ROUND END iter=6 opMs=272 threads=39 fd=159 pss=450MB native=380MB
+10-30 15:27:29.564   742  4347 I NonInstrStress: ROUND START iter=7 threads=39 fd=159
+10-30 15:27:29.878   742  4347 I NonInstrStress: ROUND END iter=7 opMs=282 threads=39 fd=159 pss=398MB native=380MB
+10-30 15:27:29.879   742  4347 I NonInstrStress: ROUND START iter=8 threads=39 fd=159
+10-30 15:27:30.192   742  4347 I NonInstrStress: ROUND END iter=8 opMs=284 threads=39 fd=159 pss=450MB native=380MB
+10-30 15:27:30.192   742  4347 I NonInstrStress: ROUND START iter=9 threads=39 fd=159
+10-30 15:27:30.494   742  4347 I NonInstrStress: ROUND END iter=9 opMs=270 threads=39 fd=159 pss=398MB native=380MB
+10-30 15:27:30.495   742  4347 I NonInstrStress: ROUND START iter=10 threads=39 fd=159
+10-30 15:27:30.812   742  4347 I NonInstrStress: ROUND END iter=10 opMs=281 threads=39 fd=159 pss=450MB native=380MB
+10-30 15:27:30.813   742  4347 I NonInstrStress: ROUND START iter=11 threads=38 fd=159
+10-30 15:27:31.113   742  4347 I NonInstrStress: ROUND END iter=11 opMs=269 threads=38 fd=159 pss=398MB native=380MB
+10-30 15:27:31.114   742  4347 I NonInstrStress: ROUND START iter=12 threads=38 fd=159
+10-30 15:27:31.425   742  4347 I NonInstrStress: ROUND END iter=12 opMs=278 threads=38 fd=159 pss=450MB native=380MB
+10-30 15:27:31.425   742  4347 I NonInstrStress: ROUND START iter=13 threads=38 fd=159
+10-30 15:27:31.742   742  4347 I NonInstrStress: ROUND END iter=13 opMs=286 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:31.743   742  4347 I NonInstrStress: ROUND START iter=14 threads=35 fd=159
+10-30 15:27:32.057   742  4347 I NonInstrStress: ROUND END iter=14 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:32.058   742  4347 I NonInstrStress: ROUND START iter=15 threads=35 fd=159
+10-30 15:27:32.367   742  4347 I NonInstrStress: ROUND END iter=15 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:32.369   742  4347 I NonInstrStress: ROUND START iter=16 threads=35 fd=159
+10-30 15:27:32.675   742  4347 I NonInstrStress: ROUND END iter=16 opMs=274 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:32.676   742  4347 I NonInstrStress: ROUND START iter=17 threads=35 fd=159
+10-30 15:27:32.990   742  4347 I NonInstrStress: ROUND END iter=17 opMs=283 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:32.991   742  4347 I NonInstrStress: ROUND START iter=18 threads=35 fd=159
+10-30 15:27:33.299   742  4347 I NonInstrStress: ROUND END iter=18 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:33.300   742  4347 I NonInstrStress: ROUND START iter=19 threads=35 fd=159
+10-30 15:27:33.613   742  4347 I NonInstrStress: ROUND END iter=19 opMs=283 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:33.614   742  4347 I NonInstrStress: ROUND START iter=20 threads=35 fd=159
+10-30 15:27:33.921   742  4347 I NonInstrStress: ROUND END iter=20 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:33.921   742  4347 I NonInstrStress: ROUND START iter=21 threads=35 fd=159
+10-30 15:27:34.237   742  4347 I NonInstrStress: ROUND END iter=21 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:34.238   742  4347 I NonInstrStress: ROUND START iter=22 threads=35 fd=159
+10-30 15:27:34.546   742  4347 I NonInstrStress: ROUND END iter=22 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:34.547   742  4347 I NonInstrStress: ROUND START iter=23 threads=35 fd=159
+10-30 15:27:34.853   742  4347 I NonInstrStress: ROUND END iter=23 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:34.854   742  4347 I NonInstrStress: ROUND START iter=24 threads=35 fd=159
+10-30 15:27:35.172   742  4347 I NonInstrStress: ROUND END iter=24 opMs=284 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:35.173   742  4347 I NonInstrStress: ROUND START iter=25 threads=35 fd=159
+10-30 15:27:35.484   742  4347 I NonInstrStress: ROUND END iter=25 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:35.485   742  4347 I NonInstrStress: ROUND START iter=26 threads=35 fd=159
+10-30 15:27:35.797   742  4347 I NonInstrStress: ROUND END iter=26 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:35.798   742  4347 I NonInstrStress: ROUND START iter=27 threads=35 fd=159
+10-30 15:27:36.110   742  4347 I NonInstrStress: ROUND END iter=27 opMs=282 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:36.110   742  4347 I NonInstrStress: ROUND START iter=28 threads=35 fd=159
+10-30 15:27:36.413   742  4347 I NonInstrStress: ROUND END iter=28 opMs=272 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:36.414   742  4347 I NonInstrStress: ROUND START iter=29 threads=35 fd=159
+10-30 15:27:36.723   742  4347 I NonInstrStress: ROUND END iter=29 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:36.724   742  4347 I NonInstrStress: ROUND START iter=30 threads=35 fd=159
+10-30 15:27:37.031   742  4347 I NonInstrStress: ROUND END iter=30 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:37.032   742  4347 I NonInstrStress: ROUND START iter=31 threads=35 fd=159
+10-30 15:27:37.355   742  4347 I NonInstrStress: ROUND END iter=31 opMs=290 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:37.356   742  4347 I NonInstrStress: ROUND START iter=32 threads=35 fd=159
+10-30 15:27:37.654   742  4347 I NonInstrStress: ROUND END iter=32 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:37.655   742  4347 I NonInstrStress: ROUND START iter=33 threads=35 fd=159
+10-30 15:27:37.957   742  4347 I NonInstrStress: ROUND END iter=33 opMs=270 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:37.958   742  4347 I NonInstrStress: ROUND START iter=34 threads=35 fd=159
+10-30 15:27:38.259   742  4347 I NonInstrStress: ROUND END iter=34 opMs=270 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:38.259   742  4347 I NonInstrStress: ROUND START iter=35 threads=35 fd=159
+10-30 15:27:38.569   742  4347 I NonInstrStress: ROUND END iter=35 opMs=276 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:38.570   742  4347 I NonInstrStress: ROUND START iter=36 threads=35 fd=159
+10-30 15:27:38.868   742  4347 I NonInstrStress: ROUND END iter=36 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:38.869   742  4347 I NonInstrStress: ROUND START iter=37 threads=35 fd=159
+10-30 15:27:39.177   742  4347 I NonInstrStress: ROUND END iter=37 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:39.178   742  4347 I NonInstrStress: ROUND START iter=38 threads=35 fd=159
+10-30 15:27:39.489   742  4347 I NonInstrStress: ROUND END iter=38 opMs=280 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:39.490   742  4347 I NonInstrStress: ROUND START iter=39 threads=35 fd=159
+10-30 15:27:39.800   742  4347 I NonInstrStress: ROUND END iter=39 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:39.801   742  4347 I NonInstrStress: ROUND START iter=40 threads=35 fd=159
+10-30 15:27:40.125   742  4347 I NonInstrStress: ROUND END iter=40 opMs=286 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:40.126   742  4347 I NonInstrStress: ROUND START iter=41 threads=35 fd=159
+10-30 15:27:40.435   742  4347 I NonInstrStress: ROUND END iter=41 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:40.436   742  4347 I NonInstrStress: ROUND START iter=42 threads=35 fd=159
+10-30 15:27:40.745   742  4347 I NonInstrStress: ROUND END iter=42 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:40.746   742  4347 I NonInstrStress: ROUND START iter=43 threads=35 fd=159
+10-30 15:27:41.047   742  4347 I NonInstrStress: ROUND END iter=43 opMs=270 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:41.048   742  4347 I NonInstrStress: ROUND START iter=44 threads=35 fd=159
+10-30 15:27:41.360   742  4347 I NonInstrStress: ROUND END iter=44 opMs=278 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:41.361   742  4347 I NonInstrStress: ROUND START iter=45 threads=35 fd=159
+10-30 15:27:41.685   742  4347 I NonInstrStress: ROUND END iter=45 opMs=290 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:41.686   742  4347 I NonInstrStress: ROUND START iter=46 threads=35 fd=159
+10-30 15:27:42.000   742  4347 I NonInstrStress: ROUND END iter=46 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:42.000   742  4347 I NonInstrStress: ROUND START iter=47 threads=35 fd=159
+10-30 15:27:42.300   742  4347 I NonInstrStress: ROUND END iter=47 opMs=269 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:42.301   742  4347 I NonInstrStress: ROUND START iter=48 threads=35 fd=159
+10-30 15:27:42.607   742  4347 I NonInstrStress: ROUND END iter=48 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:42.608   742  4347 I NonInstrStress: ROUND START iter=49 threads=35 fd=159
+10-30 15:27:42.919   742  4347 I NonInstrStress: ROUND END iter=49 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:42.920   742  4347 I NonInstrStress: ROUND START iter=50 threads=35 fd=159
+10-30 15:27:43.233   742  4347 I NonInstrStress: ROUND END iter=50 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:43.234   742  4347 I NonInstrStress: ROUND START iter=51 threads=35 fd=159
+10-30 15:27:43.554   742  4347 I NonInstrStress: ROUND END iter=51 opMs=284 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:43.555   742  4347 I NonInstrStress: ROUND START iter=52 threads=35 fd=159
+10-30 15:27:43.865   742  4347 I NonInstrStress: ROUND END iter=52 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:43.866   742  4347 I NonInstrStress: ROUND START iter=53 threads=35 fd=159
+10-30 15:27:44.180   742  4347 I NonInstrStress: ROUND END iter=53 opMs=283 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:44.181   742  4347 I NonInstrStress: ROUND START iter=54 threads=35 fd=159
+10-30 15:27:44.480   742  4347 I NonInstrStress: ROUND END iter=54 opMs=268 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:44.480   742  4347 I NonInstrStress: ROUND START iter=55 threads=35 fd=159
+10-30 15:27:44.793   742  4347 I NonInstrStress: ROUND END iter=55 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:44.794   742  4347 I NonInstrStress: ROUND START iter=56 threads=35 fd=159
+10-30 15:27:45.104   742  4347 I NonInstrStress: ROUND END iter=56 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:45.105   742  4347 I NonInstrStress: ROUND START iter=57 threads=35 fd=159
+10-30 15:27:45.409   742  4347 I NonInstrStress: ROUND END iter=57 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:45.410   742  4347 I NonInstrStress: ROUND START iter=58 threads=35 fd=159
+10-30 15:27:45.714   742  4347 I NonInstrStress: ROUND END iter=58 opMs=271 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:45.715   742  4347 I NonInstrStress: ROUND START iter=59 threads=35 fd=159
+10-30 15:27:46.026   742  4347 I NonInstrStress: ROUND END iter=59 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:46.027   742  4347 I NonInstrStress: ROUND START iter=60 threads=35 fd=159
+10-30 15:27:46.350   742  4347 I NonInstrStress: ROUND END iter=60 opMs=287 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:46.351   742  4347 I NonInstrStress: ROUND START iter=61 threads=35 fd=159
+10-30 15:27:46.661   742  4347 I NonInstrStress: ROUND END iter=61 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:46.662   742  4347 I NonInstrStress: ROUND START iter=62 threads=35 fd=159
+10-30 15:27:46.974   742  4347 I NonInstrStress: ROUND END iter=62 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:46.974   742  4347 I NonInstrStress: ROUND START iter=63 threads=35 fd=159
+10-30 15:27:47.296   742  4347 I NonInstrStress: ROUND END iter=63 opMs=287 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:47.297   742  4347 I NonInstrStress: ROUND START iter=64 threads=35 fd=159
+10-30 15:27:47.606   742  4347 I NonInstrStress: ROUND END iter=64 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:47.607   742  4347 I NonInstrStress: ROUND START iter=65 threads=35 fd=159
+10-30 15:27:47.918   742  4347 I NonInstrStress: ROUND END iter=65 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:47.919   742  4347 I NonInstrStress: ROUND START iter=66 threads=35 fd=159
+10-30 15:27:48.221   742  4347 I NonInstrStress: ROUND END iter=66 opMs=271 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:48.222   742  4347 I NonInstrStress: ROUND START iter=67 threads=35 fd=159
+10-30 15:27:48.532   742  4347 I NonInstrStress: ROUND END iter=67 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:48.533   742  4347 I NonInstrStress: ROUND START iter=68 threads=35 fd=159
+10-30 15:27:48.847   742  4347 I NonInstrStress: ROUND END iter=68 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:48.849   742  4347 I NonInstrStress: ROUND START iter=69 threads=35 fd=159
+10-30 15:27:49.165   742  4347 I NonInstrStress: ROUND END iter=69 opMs=285 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:49.166   742  4347 I NonInstrStress: ROUND START iter=70 threads=35 fd=159
+10-30 15:27:49.477   742  4347 I NonInstrStress: ROUND END iter=70 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:49.478   742  4347 I NonInstrStress: ROUND START iter=71 threads=35 fd=159
+10-30 15:27:49.793   742  4347 I NonInstrStress: ROUND END iter=71 opMs=282 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:49.794   742  4347 I NonInstrStress: ROUND START iter=72 threads=35 fd=159
+10-30 15:27:50.118   742  4347 I NonInstrStress: ROUND END iter=72 opMs=289 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:50.119   742  4347 I NonInstrStress: ROUND START iter=73 threads=35 fd=159
+10-30 15:27:50.424   742  4347 I NonInstrStress: ROUND END iter=73 opMs=272 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:50.426   742  4347 I NonInstrStress: ROUND START iter=74 threads=35 fd=159
+10-30 15:27:50.734   742  4347 I NonInstrStress: ROUND END iter=74 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:50.735   742  4347 I NonInstrStress: ROUND START iter=75 threads=35 fd=159
+10-30 15:27:51.050   742  4347 I NonInstrStress: ROUND END iter=75 opMs=285 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:51.051   742  4347 I NonInstrStress: ROUND START iter=76 threads=35 fd=159
+10-30 15:27:51.350   742  4347 I NonInstrStress: ROUND END iter=76 opMs=269 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:51.351   742  4347 I NonInstrStress: ROUND START iter=77 threads=35 fd=159
+10-30 15:27:51.650   742  4347 I NonInstrStress: ROUND END iter=77 opMs=269 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:51.651   742  4347 I NonInstrStress: ROUND START iter=78 threads=35 fd=159
+10-30 15:27:51.970   742  4347 I NonInstrStress: ROUND END iter=78 opMs=282 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:51.971   742  4347 I NonInstrStress: ROUND START iter=79 threads=35 fd=159
+10-30 15:27:52.275   742  4347 I NonInstrStress: ROUND END iter=79 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:52.276   742  4347 I NonInstrStress: ROUND START iter=80 threads=35 fd=159
+10-30 15:27:52.591   742  4347 I NonInstrStress: ROUND END iter=80 opMs=281 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:52.592   742  4347 I NonInstrStress: ROUND START iter=81 threads=35 fd=159
+10-30 15:27:52.897   742  4347 I NonInstrStress: ROUND END iter=81 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:52.899   742  4347 I NonInstrStress: ROUND START iter=82 threads=35 fd=159
+10-30 15:27:53.221   742  4347 I NonInstrStress: ROUND END iter=82 opMs=290 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:53.222   742  4347 I NonInstrStress: ROUND START iter=83 threads=35 fd=159
+10-30 15:27:53.522   742  4347 I NonInstrStress: ROUND END iter=83 opMs=270 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:53.523   742  4347 I NonInstrStress: ROUND START iter=84 threads=35 fd=159
+10-30 15:27:53.825   742  4347 I NonInstrStress: ROUND END iter=84 opMs=270 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:53.826   742  4347 I NonInstrStress: ROUND START iter=85 threads=35 fd=159
+10-30 15:27:54.128   742  4347 I NonInstrStress: ROUND END iter=85 opMs=270 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:54.129   742  4347 I NonInstrStress: ROUND START iter=86 threads=35 fd=159
+10-30 15:27:54.439   742  4347 I NonInstrStress: ROUND END iter=86 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:54.440   742  4347 I NonInstrStress: ROUND START iter=87 threads=35 fd=159
+10-30 15:27:54.742   742  4347 I NonInstrStress: ROUND END iter=87 opMs=268 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:54.742   742  4347 I NonInstrStress: ROUND START iter=88 threads=35 fd=159
+10-30 15:27:55.048   742  4347 I NonInstrStress: ROUND END iter=88 opMs=274 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:55.049   742  4347 I NonInstrStress: ROUND START iter=89 threads=35 fd=159
+10-30 15:27:55.352   742  4347 I NonInstrStress: ROUND END iter=89 opMs=268 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:55.353   742  4347 I NonInstrStress: ROUND START iter=90 threads=35 fd=159
+10-30 15:27:55.654   742  4347 I NonInstrStress: ROUND END iter=90 opMs=269 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:55.655   742  4347 I NonInstrStress: ROUND START iter=91 threads=35 fd=159
+10-30 15:27:55.964   742  4347 I NonInstrStress: ROUND END iter=91 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:55.965   742  4347 I NonInstrStress: ROUND START iter=92 threads=35 fd=159
+10-30 15:27:56.269   742  4347 I NonInstrStress: ROUND END iter=92 opMs=271 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:56.270   742  4347 I NonInstrStress: ROUND START iter=93 threads=35 fd=159
+10-30 15:27:56.573   742  4347 I NonInstrStress: ROUND END iter=93 opMs=271 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:56.574   742  4347 I NonInstrStress: ROUND START iter=94 threads=35 fd=159
+10-30 15:27:56.871   742  4347 I NonInstrStress: ROUND END iter=94 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:56.872   742  4347 I NonInstrStress: ROUND START iter=95 threads=35 fd=159
+10-30 15:27:57.178   742  4347 I NonInstrStress: ROUND END iter=95 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:57.179   742  4347 I NonInstrStress: ROUND START iter=96 threads=35 fd=159
+10-30 15:27:57.490   742  4347 I NonInstrStress: ROUND END iter=96 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:57.491   742  4347 I NonInstrStress: ROUND START iter=97 threads=35 fd=159
+10-30 15:27:57.800   742  4347 I NonInstrStress: ROUND END iter=97 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:57.801   742  4347 I NonInstrStress: ROUND START iter=98 threads=35 fd=159
+10-30 15:27:58.109   742  4347 I NonInstrStress: ROUND END iter=98 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:58.110   742  4347 I NonInstrStress: ROUND START iter=99 threads=35 fd=159
+10-30 15:27:58.423   742  4347 I NonInstrStress: ROUND END iter=99 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:58.423   742  4347 I NonInstrStress: ROUND START iter=100 threads=35 fd=159
+10-30 15:27:58.735   742  4347 I NonInstrStress: ROUND END iter=100 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:58.736   742  4347 I NonInstrStress: ROUND START iter=101 threads=35 fd=159
+10-30 15:27:59.036   742  4347 I NonInstrStress: ROUND END iter=101 opMs=269 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:59.037   742  4347 I NonInstrStress: ROUND START iter=102 threads=35 fd=159
+10-30 15:27:59.339   742  4347 I NonInstrStress: ROUND END iter=102 opMs=271 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:59.340   742  4347 I NonInstrStress: ROUND START iter=103 threads=35 fd=159
+10-30 15:27:59.655   742  4347 I NonInstrStress: ROUND END iter=103 opMs=284 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:27:59.657   742  4347 I NonInstrStress: ROUND START iter=104 threads=35 fd=159
+10-30 15:27:59.957   742  4347 I NonInstrStress: ROUND END iter=104 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:27:59.958   742  4347 I NonInstrStress: ROUND START iter=105 threads=35 fd=159
+10-30 15:28:00.270   742  4347 I NonInstrStress: ROUND END iter=105 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:00.271   742  4347 I NonInstrStress: ROUND START iter=106 threads=35 fd=159
+10-30 15:28:00.572   742  4347 I NonInstrStress: ROUND END iter=106 opMs=270 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:00.572   742  4347 I NonInstrStress: ROUND START iter=107 threads=35 fd=159
+10-30 15:28:00.876   742  4347 I NonInstrStress: ROUND END iter=107 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:00.876   742  4347 I NonInstrStress: ROUND START iter=108 threads=35 fd=159
+10-30 15:28:01.179   742  4347 I NonInstrStress: ROUND END iter=108 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:01.180   742  4347 I NonInstrStress: ROUND START iter=109 threads=35 fd=159
+10-30 15:28:01.485   742  4347 I NonInstrStress: ROUND END iter=109 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:01.486   742  4347 I NonInstrStress: ROUND START iter=110 threads=35 fd=159
+10-30 15:28:01.795   742  4347 I NonInstrStress: ROUND END iter=110 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:01.796   742  4347 I NonInstrStress: ROUND START iter=111 threads=35 fd=159
+10-30 15:28:02.102   742  4347 I NonInstrStress: ROUND END iter=111 opMs=276 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:02.102   742  4347 I NonInstrStress: ROUND START iter=112 threads=35 fd=159
+10-30 15:28:02.411   742  4347 I NonInstrStress: ROUND END iter=112 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:02.412   742  4347 I NonInstrStress: ROUND START iter=113 threads=35 fd=159
+10-30 15:28:02.723   742  4347 I NonInstrStress: ROUND END iter=113 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:02.724   742  4347 I NonInstrStress: ROUND START iter=114 threads=35 fd=159
+10-30 15:28:03.035   742  4347 I NonInstrStress: ROUND END iter=114 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:03.036   742  4347 I NonInstrStress: ROUND START iter=115 threads=35 fd=159
+10-30 15:28:03.340   742  4347 I NonInstrStress: ROUND END iter=115 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:03.341   742  4347 I NonInstrStress: ROUND START iter=116 threads=35 fd=159
+10-30 15:28:03.646   742  4347 I NonInstrStress: ROUND END iter=116 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:03.646   742  4347 I NonInstrStress: ROUND START iter=117 threads=35 fd=159
+10-30 15:28:03.960   742  4347 I NonInstrStress: ROUND END iter=117 opMs=276 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:03.961   742  4347 I NonInstrStress: ROUND START iter=118 threads=35 fd=159
+10-30 15:28:04.266   742  4347 I NonInstrStress: ROUND END iter=118 opMs=271 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:04.267   742  4347 I NonInstrStress: ROUND START iter=119 threads=35 fd=159
+10-30 15:28:04.580   742  4347 I NonInstrStress: ROUND END iter=119 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:04.581   742  4347 I NonInstrStress: ROUND START iter=120 threads=35 fd=159
+10-30 15:28:04.896   742  4347 I NonInstrStress: ROUND END iter=120 opMs=283 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:04.896   742  4347 I NonInstrStress: ROUND START iter=121 threads=35 fd=159
+10-30 15:28:05.202   742  4347 I NonInstrStress: ROUND END iter=121 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:05.203   742  4347 I NonInstrStress: ROUND START iter=122 threads=35 fd=159
+10-30 15:28:05.508   742  4347 I NonInstrStress: ROUND END iter=122 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:05.509   742  4347 I NonInstrStress: ROUND START iter=123 threads=35 fd=159
+10-30 15:28:05.817   742  4347 I NonInstrStress: ROUND END iter=123 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:05.818   742  4347 I NonInstrStress: ROUND START iter=124 threads=35 fd=159
+10-30 15:28:06.119   742  4347 I NonInstrStress: ROUND END iter=124 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:06.119   742  4347 I NonInstrStress: ROUND START iter=125 threads=35 fd=159
+10-30 15:28:06.423   742  4347 I NonInstrStress: ROUND END iter=125 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:06.425   742  4347 I NonInstrStress: ROUND START iter=126 threads=35 fd=159
+10-30 15:28:06.733   742  4347 I NonInstrStress: ROUND END iter=126 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:06.734   742  4347 I NonInstrStress: ROUND START iter=127 threads=35 fd=159
+10-30 15:28:07.048   742  4347 I NonInstrStress: ROUND END iter=127 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:07.049   742  4347 I NonInstrStress: ROUND START iter=128 threads=35 fd=159
+10-30 15:28:07.351   742  4347 I NonInstrStress: ROUND END iter=128 opMs=268 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:07.353   742  4347 I NonInstrStress: ROUND START iter=129 threads=35 fd=159
+10-30 15:28:07.667   742  4347 I NonInstrStress: ROUND END iter=129 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:07.668   742  4347 I NonInstrStress: ROUND START iter=130 threads=35 fd=159
+10-30 15:28:07.966   742  4347 I NonInstrStress: ROUND END iter=130 opMs=265 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:07.967   742  4347 I NonInstrStress: ROUND START iter=131 threads=35 fd=159
+10-30 15:28:08.272   742  4347 I NonInstrStress: ROUND END iter=131 opMs=272 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:08.273   742  4347 I NonInstrStress: ROUND START iter=132 threads=35 fd=159
+10-30 15:28:08.579   742  4347 I NonInstrStress: ROUND END iter=132 opMs=274 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:08.580   742  4347 I NonInstrStress: ROUND START iter=133 threads=35 fd=159
+10-30 15:28:08.888   742  4347 I NonInstrStress: ROUND END iter=133 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:08.889   742  4347 I NonInstrStress: ROUND START iter=134 threads=35 fd=159
+10-30 15:28:09.195   742  4347 I NonInstrStress: ROUND END iter=134 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:09.197   742  4347 I NonInstrStress: ROUND START iter=135 threads=35 fd=159
+10-30 15:28:09.518   742  4347 I NonInstrStress: ROUND END iter=135 opMs=286 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:09.519   742  4347 I NonInstrStress: ROUND START iter=136 threads=35 fd=159
+10-30 15:28:09.826   742  4347 I NonInstrStress: ROUND END iter=136 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:09.827   742  4347 I NonInstrStress: ROUND START iter=137 threads=35 fd=159
+10-30 15:28:10.132   742  4347 I NonInstrStress: ROUND END iter=137 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:10.133   742  4347 I NonInstrStress: ROUND START iter=138 threads=35 fd=159
+10-30 15:28:10.435   742  4347 I NonInstrStress: ROUND END iter=138 opMs=269 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:10.435   742  4347 I NonInstrStress: ROUND START iter=139 threads=35 fd=159
+10-30 15:28:10.735   742  4347 I NonInstrStress: ROUND END iter=139 opMs=268 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:10.736   742  4347 I NonInstrStress: ROUND START iter=140 threads=35 fd=159
+10-30 15:28:11.046   742  4347 I NonInstrStress: ROUND END iter=140 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:11.047   742  4347 I NonInstrStress: ROUND START iter=141 threads=35 fd=159
+10-30 15:28:11.359   742  4347 I NonInstrStress: ROUND END iter=141 opMs=277 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:11.361   742  4347 I NonInstrStress: ROUND START iter=142 threads=35 fd=159
+10-30 15:28:11.672   742  4347 I NonInstrStress: ROUND END iter=142 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:11.673   742  4347 I NonInstrStress: ROUND START iter=143 threads=35 fd=159
+10-30 15:28:11.983   742  4347 I NonInstrStress: ROUND END iter=143 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:11.983   742  4347 I NonInstrStress: ROUND START iter=144 threads=35 fd=159
+10-30 15:28:12.292   742  4347 I NonInstrStress: ROUND END iter=144 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:12.292   742  4347 I NonInstrStress: ROUND START iter=145 threads=35 fd=159
+10-30 15:28:12.605   742  4347 I NonInstrStress: ROUND END iter=145 opMs=279 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:12.606   742  4347 I NonInstrStress: ROUND START iter=146 threads=35 fd=159
+10-30 15:28:12.907   742  4347 I NonInstrStress: ROUND END iter=146 opMs=274 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:12.907   742  4347 I NonInstrStress: ROUND START iter=147 threads=35 fd=159
+10-30 15:28:13.212   742  4347 I NonInstrStress: ROUND END iter=147 opMs=270 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:13.213   742  4347 I NonInstrStress: ROUND START iter=148 threads=35 fd=159
+10-30 15:28:13.521   742  4347 I NonInstrStress: ROUND END iter=148 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:13.522   742  4347 I NonInstrStress: ROUND START iter=149 threads=35 fd=159
+10-30 15:28:13.829   742  4347 I NonInstrStress: ROUND END iter=149 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:13.830   742  4347 I NonInstrStress: ROUND START iter=150 threads=35 fd=159
+10-30 15:28:14.129   742  4347 I NonInstrStress: ROUND END iter=150 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:14.130   742  4347 I NonInstrStress: ROUND START iter=151 threads=35 fd=159
+10-30 15:28:14.438   742  4347 I NonInstrStress: ROUND END iter=151 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:14.439   742  4347 I NonInstrStress: ROUND START iter=152 threads=35 fd=159
+10-30 15:28:14.749   742  4347 I NonInstrStress: ROUND END iter=152 opMs=277 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:14.750   742  4347 I NonInstrStress: ROUND START iter=153 threads=35 fd=159
+10-30 15:28:15.055   742  4347 I NonInstrStress: ROUND END iter=153 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:15.056   742  4347 I NonInstrStress: ROUND START iter=154 threads=35 fd=159
+10-30 15:28:15.357   742  4347 I NonInstrStress: ROUND END iter=154 opMs=268 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:15.358   742  4347 I NonInstrStress: ROUND START iter=155 threads=35 fd=159
+10-30 15:28:15.675   742  4347 I NonInstrStress: ROUND END iter=155 opMs=280 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:15.677   742  4347 I NonInstrStress: ROUND START iter=156 threads=35 fd=159
+10-30 15:28:15.976   742  4347 I NonInstrStress: ROUND END iter=156 opMs=268 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:15.976   742  4347 I NonInstrStress: ROUND START iter=157 threads=35 fd=159
+10-30 15:28:16.285   742  4347 I NonInstrStress: ROUND END iter=157 opMs=276 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:16.286   742  4347 I NonInstrStress: ROUND START iter=158 threads=35 fd=159
+10-30 15:28:16.590   742  4347 I NonInstrStress: ROUND END iter=158 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:16.591   742  4347 I NonInstrStress: ROUND START iter=159 threads=35 fd=159
+10-30 15:28:16.900   742  4347 I NonInstrStress: ROUND END iter=159 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:16.901   742  4347 I NonInstrStress: ROUND START iter=160 threads=35 fd=159
+10-30 15:28:17.208   742  4347 I NonInstrStress: ROUND END iter=160 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:17.209   742  4347 I NonInstrStress: ROUND START iter=161 threads=35 fd=159
+10-30 15:28:17.513   742  4347 I NonInstrStress: ROUND END iter=161 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:17.514   742  4347 I NonInstrStress: ROUND START iter=162 threads=35 fd=159
+10-30 15:28:17.815   742  4347 I NonInstrStress: ROUND END iter=162 opMs=270 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:17.816   742  4347 I NonInstrStress: ROUND START iter=163 threads=35 fd=159
+10-30 15:28:18.115   742  4347 I NonInstrStress: ROUND END iter=163 opMs=267 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:18.116   742  4347 I NonInstrStress: ROUND START iter=164 threads=35 fd=159
+10-30 15:28:18.421   742  4347 I NonInstrStress: ROUND END iter=164 opMs=274 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:18.421   742  4347 I NonInstrStress: ROUND START iter=165 threads=35 fd=159
+10-30 15:28:18.725   742  4347 I NonInstrStress: ROUND END iter=165 opMs=272 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:18.726   742  4347 I NonInstrStress: ROUND START iter=166 threads=35 fd=159
+10-30 15:28:19.030   742  4347 I NonInstrStress: ROUND END iter=166 opMs=270 threads=35 fd=159 pss=451MB native=379MB
+10-30 15:28:19.031   742  4347 I NonInstrStress: ROUND START iter=167 threads=35 fd=159
+10-30 15:28:19.342   742  4347 I NonInstrStress: ROUND END iter=167 opMs=275 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:19.343   742  4347 I NonInstrStress: ROUND START iter=168 threads=35 fd=159
+10-30 15:28:19.650   742  4347 I NonInstrStress: ROUND END iter=168 opMs=271 threads=35 fd=159 pss=451MB native=379MB
+10-30 15:28:19.651   742  4347 I NonInstrStress: ROUND START iter=169 threads=35 fd=159
+10-30 15:28:19.959   742  4347 I NonInstrStress: ROUND END iter=169 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:19.961   742  4347 I NonInstrStress: ROUND START iter=170 threads=35 fd=159
+10-30 15:28:20.270   742  4347 I NonInstrStress: ROUND END iter=170 opMs=275 threads=35 fd=159 pss=451MB native=379MB
+10-30 15:28:20.271   742  4347 I NonInstrStress: ROUND START iter=171 threads=35 fd=159
+10-30 15:28:20.584   742  4347 I NonInstrStress: ROUND END iter=171 opMs=282 threads=35 fd=159 pss=399MB native=379MB
+10-30 15:28:20.585   742  4347 I NonInstrStress: ROUND START iter=172 threads=35 fd=159
+10-30 15:28:20.909   742  4347 I NonInstrStress: ROUND END iter=172 opMs=285 threads=35 fd=159 pss=451MB native=379MB
+10-30 15:28:20.910   742  4347 I NonInstrStress: ROUND START iter=173 threads=35 fd=159
+10-30 15:28:21.215   742  4347 I NonInstrStress: ROUND END iter=173 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:21.217   742  4347 I NonInstrStress: ROUND START iter=174 threads=35 fd=159
+10-30 15:28:21.515   742  4347 I NonInstrStress: ROUND END iter=174 opMs=268 threads=35 fd=159 pss=451MB native=379MB
+10-30 15:28:21.516   742  4347 I NonInstrStress: ROUND START iter=175 threads=35 fd=159
+10-30 15:28:21.820   742  4347 I NonInstrStress: ROUND END iter=175 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:21.821   742  4347 I NonInstrStress: ROUND START iter=176 threads=35 fd=159
+10-30 15:28:22.126   742  4347 I NonInstrStress: ROUND END iter=176 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:22.127   742  4347 I NonInstrStress: ROUND START iter=177 threads=35 fd=159
+10-30 15:28:22.429   742  4347 I NonInstrStress: ROUND END iter=177 opMs=269 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:22.430   742  4347 I NonInstrStress: ROUND START iter=178 threads=35 fd=159
+10-30 15:28:22.733   742  4347 I NonInstrStress: ROUND END iter=178 opMs=273 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:22.734   742  4347 I NonInstrStress: ROUND START iter=179 threads=35 fd=159
+10-30 15:28:23.048   742  4347 I NonInstrStress: ROUND END iter=179 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:23.049   742  4347 I NonInstrStress: ROUND START iter=180 threads=35 fd=159
+10-30 15:28:23.350   742  4347 I NonInstrStress: ROUND END iter=180 opMs=267 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:23.351   742  4347 I NonInstrStress: ROUND START iter=181 threads=35 fd=159
+10-30 15:28:23.656   742  4347 I NonInstrStress: ROUND END iter=181 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:23.656   742  4347 I NonInstrStress: ROUND START iter=182 threads=35 fd=159
+10-30 15:28:23.965   742  4347 I NonInstrStress: ROUND END iter=182 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:23.966   742  4347 I NonInstrStress: ROUND START iter=183 threads=35 fd=159
+10-30 15:28:24.269   742  4347 I NonInstrStress: ROUND END iter=183 opMs=271 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:24.270   742  4347 I NonInstrStress: ROUND START iter=184 threads=35 fd=159
+10-30 15:28:24.593   742  4347 I NonInstrStress: ROUND END iter=184 opMs=285 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:24.594   742  4347 I NonInstrStress: ROUND START iter=185 threads=35 fd=159
+10-30 15:28:24.902   742  4347 I NonInstrStress: ROUND END iter=185 opMs=278 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:24.903   742  4347 I NonInstrStress: ROUND START iter=186 threads=35 fd=159
+10-30 15:28:25.282   742  4347 I NonInstrStress: ROUND END iter=186 opMs=350 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:25.282   742  4347 I NonInstrStress: ROUND START iter=187 threads=35 fd=159
+10-30 15:28:25.614   742  4347 I NonInstrStress: ROUND END iter=187 opMs=300 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:25.614   742  4347 I NonInstrStress: ROUND START iter=188 threads=35 fd=159
+10-30 15:28:25.927   742  4347 I NonInstrStress: ROUND END iter=188 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:25.929   742  4347 I NonInstrStress: ROUND START iter=189 threads=35 fd=159
+10-30 15:28:26.231   742  4347 I NonInstrStress: ROUND END iter=189 opMs=272 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:26.231   742  4347 I NonInstrStress: ROUND START iter=190 threads=35 fd=159
+10-30 15:28:26.539   742  4347 I NonInstrStress: ROUND END iter=190 opMs=279 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:26.540   742  4347 I NonInstrStress: ROUND START iter=191 threads=35 fd=159
+10-30 15:28:26.853   742  4347 I NonInstrStress: ROUND END iter=191 opMs=281 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:26.854   742  4347 I NonInstrStress: ROUND START iter=192 threads=35 fd=159
+10-30 15:28:27.161   742  4347 I NonInstrStress: ROUND END iter=192 opMs=275 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:27.162   742  4347 I NonInstrStress: ROUND START iter=193 threads=35 fd=159
+10-30 15:28:27.475   742  4347 I NonInstrStress: ROUND END iter=193 opMs=283 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:27.476   742  4347 I NonInstrStress: ROUND START iter=194 threads=35 fd=159
+10-30 15:28:27.786   742  4347 I NonInstrStress: ROUND END iter=194 opMs=276 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:27.787   742  4347 I NonInstrStress: ROUND START iter=195 threads=35 fd=159
+10-30 15:28:28.095   742  4347 I NonInstrStress: ROUND END iter=195 opMs=276 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:28.096   742  4347 I NonInstrStress: ROUND START iter=196 threads=35 fd=159
+10-30 15:28:28.414   742  4347 I NonInstrStress: ROUND END iter=196 opMs=281 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:28.415   742  4347 I NonInstrStress: ROUND START iter=197 threads=35 fd=159
+10-30 15:28:28.723   742  4347 I NonInstrStress: ROUND END iter=197 opMs=274 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:28.724   742  4347 I NonInstrStress: ROUND START iter=198 threads=35 fd=159
+10-30 15:28:29.040   742  4347 I NonInstrStress: ROUND END iter=198 opMs=283 threads=35 fd=159 pss=450MB native=379MB
+10-30 15:28:29.041   742  4347 I NonInstrStress: ROUND START iter=199 threads=35 fd=159
+10-30 15:28:29.346   742  4347 I NonInstrStress: ROUND END iter=199 opMs=273 threads=35 fd=159 pss=398MB native=379MB
+10-30 15:28:29.346   742  4347 I NonInstrStress: DONE completed=200

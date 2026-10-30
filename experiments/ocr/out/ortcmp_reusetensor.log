@@ -1,0 +1,32 @@
+--------- beginning of main
+10-30 15:19:35.900 31997 32018 I OrtStress: ENV reuse ortVersion=1.31.1 config=baseline applied={"intra_op":4,"config":"baseline"} entries={} device=OPPO/PLW110 sdk=36 iters=200 stallMs=12000
+10-30 15:19:36.281 31997 32018 I OrtStress: reuseTensor=true
+10-30 15:19:36.282 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=0 threads=25 fd=106
+10-30 15:19:36.711 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=0 opMs=364 threads=25 fd=106 pss=281.9MB native=372.4MB
+10-30 15:19:36.713 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=1 threads=25 fd=106
+10-30 15:19:37.098 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=1 opMs=319 threads=25 fd=106 pss=427.8MB native=372.4MB
+10-30 15:19:37.098 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=2 threads=25 fd=106
+10-30 15:19:37.457 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=2 opMs=299 threads=25 fd=106 pss=463.7MB native=372.4MB
+10-30 15:19:37.458 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=3 threads=25 fd=106
+10-30 15:19:37.831 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=3 opMs=309 threads=25 fd=106 pss=368.1MB native=372.5MB
+10-30 15:19:37.833 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=4 threads=25 fd=106
+10-30 15:19:38.217 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=4 opMs=315 threads=25 fd=106 pss=362.5MB native=372.5MB
+10-30 15:19:38.218 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=5 threads=25 fd=106
+10-30 15:19:38.590 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=5 opMs=310 threads=25 fd=106 pss=365.1MB native=372.5MB
+10-30 15:19:38.591 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=6 threads=25 fd=106
+10-30 15:19:38.984 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=6 opMs=322 threads=25 fd=106 pss=351.9MB native=372.5MB
+10-30 15:19:38.986 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=7 threads=25 fd=106
+10-30 15:19:39.370 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=7 opMs=314 threads=25 fd=106 pss=346.7MB native=372.5MB
+10-30 15:19:39.371 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=8 threads=25 fd=106
+10-30 15:19:39.748 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=8 opMs=307 threads=25 fd=106 pss=346.7MB native=372.5MB
+10-30 15:19:39.749 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=9 threads=25 fd=106
+10-30 15:19:40.127 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=9 opMs=309 threads=25 fd=106 pss=357.2MB native=372.5MB
+10-30 15:19:40.127 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=10 threads=25 fd=106
+10-30 15:19:40.500 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=10 opMs=310 threads=25 fd=106 pss=370.9MB native=372.5MB
+10-30 15:19:40.501 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=11 threads=25 fd=106
+10-30 15:19:40.863 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=11 opMs=303 threads=22 fd=106 pss=382.5MB native=372.3MB
+10-30 15:19:40.864 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=12 threads=22 fd=106
+10-30 15:19:41.253 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=12 opMs=320 threads=22 fd=106 pss=382.5MB native=372.3MB
+10-30 15:19:41.254 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=13 threads=22 fd=106
+10-30 15:19:41.625 31997 32018 I OrtStress: ROUND END reuse config=baseline iter=13 opMs=304 threads=22 fd=106 pss=351.6MB native=372.3MB
+10-30 15:19:41.626 31997 32018 I OrtStress: ROUND START reuse config=baseline iter=14 threads=22 fd=106
